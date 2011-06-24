@@ -1,0 +1,6 @@
+[submodule "joemath"]
+	path = joemath
+	url = git://github.com/expipiplus1/joemath.git
+[submodule "glfw"]
+	path = glfw
+	url = git://glfw.git.sourceforge.net/gitroot/glfw/glfw
