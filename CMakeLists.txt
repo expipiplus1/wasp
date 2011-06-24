@@ -41,7 +41,7 @@ add_dependencies( wasp wasp_shaders )
 
 include_directories( ${joemath_INCLUDE_DIR} ${glfw_INCLUDE_DIR} ${CG_INCLUDE_DIR} )
 
-set( GL_LIBS ${OPENGL_LIBRARY} ${glfw_LIBRARY} ${CG_LIBRARY} ${CG_GL_LIBRARY} )
+set( GL_LIBS Xxf86vm ${OPENGL_LIBRARY} ${glfw_LIBRARY} ${CG_LIBRARY} ${CG_GL_LIBRARY} )
 
 if( CMAKE_COMPILER_IS_GNUCXX )
     list( APPEND GL_LIBS Xrandr )
