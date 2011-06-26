@@ -114,4 +114,9 @@ namespace NWasp
         //
         glfwPollEvents( );
     }
+
+    void CWindow::SetTitle( const char* title ) const
+    {
+        glfwSetWindowTitle( m_window, title );
+    }
 };
