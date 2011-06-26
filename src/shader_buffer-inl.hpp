@@ -36,16 +36,25 @@
 
 namespace NWasp
 {
-    extern CGcontext s_cgContext;
-    
     template <typename BufferStruct>
     CShaderBuffer<BufferStruct>* CShaderBuffer<BufferStruct>::s_instance = NULL;
     
     template<typename BufferStruct>
     CShaderBuffer<BufferStruct>::CShaderBuffer  ( )
     {
-        m_cgBuffer = cgCreateBuffer( s_cgContext, sizeof( BufferStruct ), &m_data, CG_BUFFER_USAGE_DYNAMIC_DRAW );
-        //cgSetEffectParameterBuffer( cgGetNamedEffectParameter( myCgEffect, "cbuffer1_Transform" ), transform_buffer );
+        m_cgBuffer = cgCreateBuffer( CCgContext::Instance( )->GetCgContext( ), sizeof( BufferStruct ), &m_data, CG_BUFFER_USAGE_DYNAMIC_DRAW );
+        
+        //
+        // Check for error
+        //
+        CGerror error;
+        const char* error_string = cgGetLastErrorString(&error);
+        if (error != CG_NO_ERROR)
+        {
+            std::cerr << "Cg Error creating buffer\n"
+                      << error_string << std::endl;
+        }
+        
     }
        
     template <typename BufferStruct>
@@ -71,6 +80,14 @@ namespace NWasp
     template <typename BufferStruct>
     bool                            CShaderBuffer<BufferStruct>::Update     ( ) const
     {
+        cgSetBufferData( m_cgBuffer, sizeof( BufferStruct ), &m_data );
         return true;
     }
+    
+    template <typename BufferStruct>
+    CGbuffer                        CShaderBuffer<BufferStruct>::GetCgBuffer( ) const
+    {
+        return m_cgBuffer;
+    }
+    
 };
