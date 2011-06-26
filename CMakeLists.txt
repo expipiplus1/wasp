@@ -14,9 +14,9 @@ find_package(                       OpenGL      REQUIRED )
 
 find_package(                       Cg          REQUIRED )
 
-add_subdirectory( joemath EXCLUDE_FROM_ALL "tests libjoemathShared" )
+add_subdirectory( joemath   EXCLUDE_FROM_ALL "tests libjoemathShared" )
 
-add_subdirectory( glfw EXCLUDE_FROM_ALL "examples libglfwShared" )
+add_subdirectory( glfw      EXCLUDE_FROM_ALL "examples libglfwShared" )
 
 set( joemath_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/joemath/include" )
 set( joemath_LIBRARY      libjoemathStatic )
@@ -31,6 +31,14 @@ set( glfw_LIBRARY         libglfwStatic )
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wall -g" )
 
 add_executable( wasp    src/main.cpp
+                        src/cg_context.hpp
+                        src/cg_context.cpp
+                        src/mesh.hpp
+                        src/mesh.cpp
+                        src/shader.hpp
+                        src/shader.cpp
+                        src/shader_buffer.hpp
+                        src/shader_buffer-inl.hpp
                         src/window.hpp
                         src/window.cpp )
 

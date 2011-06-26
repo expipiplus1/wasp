@@ -28,16 +28,40 @@
 
 #include <iostream>
 
+#include <Cg/cg.h>
+#include <joemath/joemath.hpp>
+#include "mesh.hpp"
+#include "shader.hpp"
+#include "shader_buffer.hpp"
 #include "window.hpp"
+
+using namespace NJoeMath;
 
 int main (int argc, char** argv)
 {
-    CWindow window;
+    NWasp::CWindow window;
     if ( !window.Init() )
         return 1;
     
+    NWasp::CShader red_shader;
+    red_shader.Load( "shaders/red.cgfx" );
+    
+    NWasp::CMesh mesh;
+    
+    NWasp::SCameraMatrixBuffer camera_buffer;
+    float4x4 modelViewProjection;
+    modelViewProjection = Projection( DegToRad( 45.0f ), 1.0f, 0.01f, 100.0f );
+    camera_buffer.m_modelViewProjection = modelViewProjection;
+    
+    NWasp::CCameraBuffer::Instance()->Set( camera_buffer );
+    
     while ( !window.IsWindowClosed( ) )
     {      
+        NWasp::CCameraBuffer::Instance()->Update( );
+        red_shader.Bind( );
+        
+        mesh.Render( );
+        
         window.Swap( );
     }
     
