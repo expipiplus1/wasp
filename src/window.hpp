@@ -43,6 +43,7 @@ namespace NWasp
         bool Init               ( );
         bool IsWindowClosed     ( ) const;
         void Swap               ( );
+        void SetTitle           ( const char* title ) const;
         
     private:
         bool m_initialized;

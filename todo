@@ -10,7 +10,6 @@ Layer system
 Material system
 Asset pipeline (new project)
 Create a shared header between shader_buffer and all the cgfx shaders containing common constant buffers as structs, might require some cmake jiggery pokery regarding copying files
-Set window title to framerate
 make CWindow a singleton, or have multiple windows?
 make cgcontext a singleton
 add a cg error callback

@@ -26,56 +26,36 @@
     or implied, of Joe Hermaszewski.
 */
 
-#include <iostream>
+#pragma once
 
-#include <Cg/cg.h>
-#include <joemath/joemath.hpp>
-#include "mesh.hpp"
-#include "shader.hpp"
-#include "shader_buffer.hpp"
-#include "window.hpp"
-#include "timer.hpp"
+#ifdef WIN32
+    #include <windows.h>
+#else
+    #include <sys/time.h>
+#endif
 
-using namespace NJoeMath;
-using namespace NWasp;
-
-int main (int argc, char** argv)
+namespace NTimer
 {
-    CWindow window;
-    if ( !window.Init() )
-        return 1;
-    
-    CShader red_shader;
-    red_shader.Load( "shaders/red.cgfx" );
-    
-    CMesh mesh;
-    
-    SCameraMatrixBuffer camera_buffer;
-    float4x4 modelViewProjection;
-    modelViewProjection = Projection( DegToRad( 45.0f ), 1.0f, 0.01f, 100.0f );
-    camera_buffer.m_modelViewProjection = modelViewProjection;
-    
-    CCameraBuffer::Instance()->Set( camera_buffer );
-    
-    NTimer::CTimer timer;
-
-    while ( !window.IsWindowClosed( ) )
-    {      
-        timer.Start( );
-
-        CCameraBuffer::Instance()->Update( );
-        red_shader.Bind( );
+    class CTimer
+    {
+    public:
+        CTimer                  ( );
+        ~CTimer                 ( );
         
-        mesh.Render( );
+        void   Start            ( );
+        void   Stop             ( );
+        double GetElapsedTime   ( ); 
         
-        window.Swap( );
+    private:
+        bool    m_running;
+#ifdef WIN32
+        double        m_recipFrequency;
+        LARGE_INTEGER m_startTime;
+        LARGE_INTEGER m_endTime;
+#else
+        timeval m_startTime;
+        timeval m_endTime;
+#endif
+    };
+};
 
-        timer.Stop( );
-
-        char title[64];
-        snprintf( title, 64, "Wasp -- %.2f fps", 1.0 / timer.GetElapsedTime() );
-        window.SetTitle( title );
-    }
-    
-    return 0;
-}
