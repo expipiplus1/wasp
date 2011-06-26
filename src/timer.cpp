@@ -57,22 +57,22 @@ CTimer::~CTimer()
 
 void CTimer::Start()
 {
-    m_running = true;
 #ifdef WIN32
     QueryPerformanceCounter(&m_startTime);
 #else
     gettimeofday(&m_startTime, NULL);
 #endif
+    m_running = true;
 }
 
 void CTimer::Stop()
 {
-    m_running = false;
 #ifdef WIN32
     QueryPerformanceCounter(&m_endTime);
 #else
     gettimeofday(&m_endTime, NULL);
 #endif
+    m_running = false;
 }
 
 double CTimer::GetElapsedTime()
