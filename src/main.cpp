@@ -73,7 +73,7 @@ int main (int argc, char** argv)
         timer.Stop( );
 
         char title[64];
-        sprintf( title, "Wasp -- %.2f fps", 1.0 / timer.GetElapsedTime() );
+        snprintf( title, 64, "Wasp -- %.2f fps", 1.0 / timer.GetElapsedTime() );
         window.SetTitle( title );
     }
     
