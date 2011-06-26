@@ -32,22 +32,24 @@
 
 #include <joemath/joemath.hpp>
 
-class CWindow
+namespace NWasp
 {
-public:
-    CWindow                 ( );
-    virtual ~CWindow        ( );
+    class CWindow
+    {
+    public:
+        CWindow                 ( );
+        virtual ~CWindow        ( );
 
-    bool Init               ( );
-    bool IsWindowClosed     ( ) const;
-    void Swap               ( );
-    
-private:
-    bool m_initialized;
+        bool Init               ( );
+        bool IsWindowClosed     ( ) const;
+        void Swap               ( );
+        
+    private:
+        bool m_initialized;
 
-    s32 m_width;
-    s32 m_height;
-    
-    GLFWwindow m_window;
+        s32 m_width;
+        s32 m_height;
+        
+        GLFWwindow m_window;
+    };
 };
-
