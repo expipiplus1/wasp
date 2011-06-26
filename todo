@@ -1,0 +1,25 @@
+Classes to implement:
+CFlyCamera  : A camera which can be piloted around the world
+CInput      : A singleton interfacing with glfw to grab mouse and keyboard input, recording state for keys to determine if it's changed in the last frame
+CTimer      : A thread safe timer, there is on in joemath/tests/speed_test, cross platform
+CFile       : A file handling class
+
+Other things to implement:
+NJoemath::NIntersect : Some intersection routines, ray sphere, ray triangle etc...
+Layer system
+Material system
+Asset pipeline (new project)
+Create a shared header between shader_buffer and all the cgfx shaders containing common constant buffers as structs, might require some cmake jiggery pokery regarding copying files
+Set window title to framerate
+make CWindow a singleton, or have multiple windows?
+make cgcontext a singleton
+add a cg error callback
+
+Evaluations:
+Networking options
+Box2d,
+Some sound library,
+nvidia shader debugger (windows only)
+
+Misc:
+Make the engine a library to be loaded by games, keep the game code apart from engine code
