@@ -35,12 +35,10 @@
 #include <GL/glfw3.h>
 #include <joemath/joemath.hpp>
 #include "cg_context.hpp"
+#include "shader_buffer.hpp"
 
 namespace NWasp
 {
-            bool        CShader::s_isContextInitialized = false;
-    extern  CGcontext   s_cgContext;
-    
     CShader::CShader    ( )
     {
     }
@@ -53,30 +51,11 @@ namespace NWasp
     {
         if ( !s_isContextInitialized )
         {
-            //
-            // Initialize the cg context
-            //
-            s_cgContext = cgCreateContext( );
             
-            CGerror error;
-            const char* error_string = cgGetLastErrorString(&error);
-            if (error != CG_NO_ERROR)
-            {
-                std::cerr << "Cg Error creating context\n"
-                          << error_string << std::endl;
-                return false;
-            }
-            
-            cgGLRegisterStates( s_cgContext );
-            cgGLSetManageTextureParameters( s_cgContext, CG_TRUE );
-            cgGLSetDebugMode( CG_TRUE );
-            cgSetParameterSettingMode( s_cgContext, CG_DEFERRED_PARAMETER_SETTING );
-             
-            s_isContextInitialized = true;
         }
         
         m_filename = filename;
-        m_cgEffect = cgCreateEffectFromFile( s_cgContext, filename.c_str(), NULL );
+        m_cgEffect = cgCreateEffectFromFile( CCgContext::Instance( )->GetCgContext( ), filename.c_str(), NULL );
         
         //
         // Check for error
@@ -87,9 +66,26 @@ namespace NWasp
         {
             std::cerr << "Cg Error loading file " << filename << "\n"
                       << error_string << "\n"
-                      << cgGetLastListing( s_cgContext ) << std::endl;
+                      << cgGetLastListing( CCgContext::Instance( )->GetCgContext( ) ) << std::endl;
             return false;
         }
+        
+        CGparameter p0 = cgGetFirstEffectParameter( m_cgEffect );
+        const char* b = cgGetParameterName( p0 );
+        
+        cgSetEffectParameterBuffer( cgGetNamedEffectParameter( m_cgEffect, "g_cameraBuffer" ), CCameraBuffer::Instance()->GetCgBuffer( ) ); 
+       
+        //
+        // Check for error
+        //
+        const char* error_string_2 = cgGetLastErrorString(&error);
+        if (error != CG_NO_ERROR)
+        {
+            std::cerr << "Cg Error setting camera buffer\n"
+                      << error_string_2 << std::endl;
+            return false;
+        }
+        
         return true;
     }
 
