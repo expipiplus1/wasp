@@ -28,8 +28,58 @@
 
 #include "cg_context.hpp"
 
+#include <iostream>
 #include <Cg/cg.h>
+#include <Cg/cgGL.h>
 
 namespace NWasp
 {
+    CCgContext* CCgContext::s_instance = NULL;
+    
+    CCgContext::CCgContext                  ( )
+    {
+        //
+        // Initialize the cg context
+        //
+        m_cgContext = cgCreateContext( );
+        
+        CGerror error;
+        const char* error_string = cgGetLastErrorString(&error);
+        if (error != CG_NO_ERROR)
+        {
+            std::cerr << "Cg Error creating context\n"
+                        << error_string << std::endl;
+        }
+        
+        cgGLRegisterStates( m_cgContext );
+        cgGLSetManageTextureParameters( m_cgContext, CG_TRUE );
+        cgGLSetDebugMode( CG_TRUE );
+        cgSetParameterSettingMode( m_cgContext, CG_DEFERRED_PARAMETER_SETTING );
+        
+        cgSetErrorCallback( CgErrorCallback );
+    }
+    
+    CCgContext*     CCgContext::Instance        ( )
+    {
+        if ( s_instance == NULL )
+            s_instance = new CCgContext( );
+        return s_instance;
+    }
+    
+    CGcontext       CCgContext::GetCgContext    ( ) const
+    {
+        return m_cgContext;
+    }
+    
+    void CgErrorCallback()
+    {
+        CGerror error;
+        const char* error_string = cgGetLastErrorString( &error );
+        std::cerr << "Cg Error:\n" 
+                  << error_string << std::endl;
+        const char* error_listing = cgGetLastListing( CCgContext::Instance( )->GetCgContext( ) );
+        if ( error_listing != NULL )
+            std::cerr << error_listing << std::endl;
+    }
+
 };

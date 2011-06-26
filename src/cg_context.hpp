@@ -32,5 +32,22 @@
 
 namespace NWasp
 {
-    static CGcontext s_cgContext;
+    class CCgContext
+    {
+    private:
+        CCgContext                  ( );
+        CCgContext                  ( const CCgContext& ) = delete;
+        CCgContext&  operator =     ( const CCgContext& ) = delete;
+        
+        static CCgContext* s_instance;
+    public: 
+        static CCgContext*  Instance        ( );
+        
+        CGcontext           GetCgContext    ( ) const;
+        
+    private:
+        CGcontext   m_cgContext;
+    };
+    
+    void CgErrorCallback    ( );
 };
