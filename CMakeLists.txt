@@ -14,9 +14,9 @@ find_package(                       OpenGL      REQUIRED )
 
 find_package(                       Cg          REQUIRED )
 
-add_subdirectory( joemath   EXCLUDE_FROM_ALL "tests libjoemathShared" )
+add_subdirectory( joemath EXCLUDE_FROM_ALL )
 
-add_subdirectory( glfw      EXCLUDE_FROM_ALL "examples libglfwShared" )
+add_subdirectory( glfw EXCLUDE_FROM_ALL )
 
 set( joemath_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/joemath/include" )
 set( joemath_LIBRARY      libjoemathStatic )
@@ -51,11 +51,13 @@ add_dependencies( wasp wasp_shaders )
 
 include_directories( ${joemath_INCLUDE_DIR} ${glfw_INCLUDE_DIR} ${CG_INCLUDE_DIR} )
 
-set( GL_LIBS Xxf86vm ${OPENGL_LIBRARY} ${glfw_LIBRARY} ${CG_LIBRARY} ${CG_GL_LIBRARY} )
+set( GL_LIBS ${OPENGL_LIBRARY} ${glfw_LIBRARY} ${CG_LIBRARY} ${CG_GL_LIBRARY} )
 
-if( CMAKE_COMPILER_IS_GNUCXX )
-    list( APPEND GL_LIBS Xrandr )
-endif( CMAKE_COMPILER_IS_GNUCXX )
+if( UNIX )
+    list( APPEND GL_LIBS Xrandr Xxf86vm )
+else( UNIX )
+    list( APPEND GL_LIBS opengl32 )
+endif( UNIX )
 
 target_link_libraries( wasp ${joemath_LIBRARY} ${GL_LIBS} )
 
