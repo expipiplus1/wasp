@@ -26,8 +26,8 @@
     or implied, of Joe Hermaszewski.
 */
 
+#include <cstdio>
 #include <iostream>
-
 #include <Cg/cg.h>
 #include <joemath/joemath.hpp>
 #include "mesh.hpp"
@@ -77,7 +77,7 @@ int main (int argc, char** argv)
         timer.Stop( );
 
         char title[64];
-        snprintf( title, 64, "Wasp -- %.2f fps", 1.0 / timer.GetElapsedTime() );
+        std::snprintf( title, 64, "Wasp -- %.2f fps", 1.0 / timer.GetElapsedTime() );
         window.SetTitle( title );
     }
     
