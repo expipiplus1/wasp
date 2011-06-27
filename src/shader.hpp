@@ -51,7 +51,5 @@ namespace NWasp
         std::string         m_name;
         std::string         m_filename;   
         CGeffect            m_cgEffect;
-        
-        static bool         s_isContextInitialized;
     };
 };

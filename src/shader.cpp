@@ -48,44 +48,10 @@ namespace NWasp
     }
 
     bool            CShader::Load    ( std::string filename )
-    {
-        if ( !s_isContextInitialized )
-        {
-            
-        }
-        
+    {        
         m_filename = filename;
         m_cgEffect = cgCreateEffectFromFile( CCgContext::Instance( )->GetCgContext( ), filename.c_str(), NULL );
-        
-        //
-        // Check for error
-        //
-        CGerror error;
-        const char* error_string = cgGetLastErrorString(&error);
-        if (error != CG_NO_ERROR)
-        {
-            std::cerr << "Cg Error loading file " << filename << "\n"
-                      << error_string << "\n"
-                      << cgGetLastListing( CCgContext::Instance( )->GetCgContext( ) ) << std::endl;
-            return false;
-        }
-        
-        CGparameter p0 = cgGetFirstEffectParameter( m_cgEffect );
-        const char* b = cgGetParameterName( p0 );
-        
-        cgSetEffectParameterBuffer( cgGetNamedEffectParameter( m_cgEffect, "g_cameraBuffer" ), CCameraBuffer::Instance()->GetCgBuffer( ) ); 
-       
-        //
-        // Check for error
-        //
-        const char* error_string_2 = cgGetLastErrorString(&error);
-        if (error != CG_NO_ERROR)
-        {
-            std::cerr << "Cg Error setting camera buffer\n"
-                      << error_string_2 << std::endl;
-            return false;
-        }
-        
+               
         return true;
     }
 
@@ -96,6 +62,8 @@ namespace NWasp
 
     void            CShader::Bind    ( ) const
     {
+        cgSetEffectParameterBuffer( cgGetNamedEffectParameter( m_cgEffect, "g_cameraBuffer" ), CCameraBuffer::Instance()->GetCgBuffer( ) ); 
+        
         CGtechnique technique = cgGetFirstTechnique( m_cgEffect );
         
         CGbool valid;
