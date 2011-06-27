@@ -43,18 +43,6 @@ namespace NWasp
     CShaderBuffer<BufferStruct>::CShaderBuffer  ( )
     {
         m_cgBuffer = cgCreateBuffer( CCgContext::Instance( )->GetCgContext( ), sizeof( BufferStruct ), &m_data, CG_BUFFER_USAGE_DYNAMIC_DRAW );
-        
-        //
-        // Check for error
-        //
-        CGerror error;
-        const char* error_string = cgGetLastErrorString(&error);
-        if (error != CG_NO_ERROR)
-        {
-            std::cerr << "Cg Error creating buffer\n"
-                      << error_string << std::endl;
-        }
-        
     }
        
     template <typename BufferStruct>
