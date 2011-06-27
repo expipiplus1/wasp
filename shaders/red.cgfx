@@ -50,9 +50,7 @@ VertexOutput vs(VertexInput input)
     VertexOutput output;
 
     output.position       = mul( input.position, g_cameraBuffer.m_modelViewProjection );
-
-    output.position = input.position;
-
+    
     return output;
 }
 
@@ -69,8 +67,8 @@ technique red
 {
     pass p0
     {
-        VertexProgram = compile arbvp1 vs();
-        FragmentProgram = compile arbfp1 ps();
+        VertexProgram = compile gp4vp vs();
+        FragmentProgram = compile gp4fp ps();
         DepthTestEnable = true;
         CullFaceEnable = false;
     }
