@@ -46,7 +46,7 @@ namespace NWasp
     {   
         glBegin( GL_LINE_STRIP );
             glVertex3f(0,0,0);
-            glVertex3f(1,1,1);
+            glVertex3f(0.8f,0.8f,0.8f);
         glEnd( );
         
         glBegin(GL_QUADS);
