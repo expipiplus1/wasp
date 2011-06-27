@@ -62,7 +62,7 @@ namespace NWasp
         
         void                                Set         ( const BufferStruct& data );
         const BufferStruct&                 Get         ( ) const;
-        bool                                Update      ( ) const;
+        void                                Update      ( ) const;
         CGbuffer                            GetCgBuffer ( ) const;
         
     private:

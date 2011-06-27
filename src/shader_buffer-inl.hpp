@@ -78,10 +78,9 @@ namespace NWasp
     }
     
     template <typename BufferStruct>
-    bool                            CShaderBuffer<BufferStruct>::Update     ( ) const
+    void                            CShaderBuffer<BufferStruct>::Update     ( ) const
     {
         cgSetBufferData( m_cgBuffer, sizeof( BufferStruct ), &m_data );
-        return true;
     }
     
     template <typename BufferStruct>
