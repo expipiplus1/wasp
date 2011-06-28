@@ -67,8 +67,8 @@ technique red
 {
     pass p0
     {
-        VertexProgram = compile gp4vp vs();
-        FragmentProgram = compile gp4fp ps();
+        VertexProgram = compile latest vs();
+        FragmentProgram = compile latest ps();
         DepthTestEnable = true;
         CullFaceEnable = false;
     }
