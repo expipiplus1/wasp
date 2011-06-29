@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
 
-## SOURCE_GROUP
+#
+# CMake Policies
+#
+cmake_policy(VERSION 2.8)
+
+#
+# SOURCE_GROUP
+#
 project( wasp )
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake/Modules/")
@@ -30,7 +37,7 @@ set( glfw_LIBRARY         libglfwStatic )
 
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wall -g" )
 
-add_executable( wasp    src/main.cpp
+set( wasp_sources       src/main.cpp
                         src/camera.hpp
                         src/camera.cpp
                         src/cg_context.hpp
@@ -50,10 +57,13 @@ add_executable( wasp    src/main.cpp
                         src/window.hpp
                         src/window.cpp )
 
+set( wasp_effect_sources    effects/global.cgh
+                            effects/blue.cgfx )
+
+add_executable( wasp    ${wasp_sources} ) 
+
 add_custom_target( wasp_shaders
-                   SOURCES   shaders/red.cgfx
-                             effects/global.cgh
-                             effects/blue.cgfx )
+                   SOURCES  ${wasp_effect_sources} )
 
 add_dependencies( wasp wasp_shaders )
 
@@ -73,21 +83,13 @@ target_link_libraries( wasp ${joemath_LIBRARY} ${GL_LIBS} )
 # Copy shaders
 #
 
-macro( update_shaders GLOBPAT DESTINATION )
-  file( GLOB SOURCE_SHADERS
-    RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-    ${GLOBPAT} )
-  foreach( FILENAME ${SOURCE_SHADERS} )
+foreach( FILENAME ${wasp_effect_sources} )
     set( SRC "${CMAKE_CURRENT_SOURCE_DIR}/${FILENAME}" )
-    set( DST "${DESTINATION}/${FILENAME}" )
+    set( DST "${CMAKE_BINARY_DIR}/${FILENAME}" )
 
     add_custom_command( TARGET wasp_shaders
                         COMMAND ${CG_COMPILER} -noentry -strict -glslWerror ${SRC}
                         COMMAND ${CMAKE_COMMAND} -E copy ${SRC} ${DST}
                         COMMENT "Checking ${SRC}" )
-  endforeach( )
-endmacro( )
-
-update_shaders( shaders/*.cgfx ${CMAKE_BINARY_DIR} )
-update_shaders( effects/*.cg*  ${CMAKE_BINARY_DIR} )
+endforeach( )
 
