@@ -39,10 +39,12 @@ add_executable( wasp    src/main.cpp
                         src/shader.cpp
                         src/shader_buffer.hpp
                         src/shader_buffer-inl.hpp
-                        src/window.hpp
-                        src/window.cpp
+                        src/time.hpp
+                        src/time.cpp
                         src/timer.hpp
-                        src/timer.cpp )
+                        src/timer.cpp
+                        src/window.hpp
+                        src/window.cpp )
 
 add_custom_target( wasp_shaders
                    SOURCES   shaders/red.cgfx
