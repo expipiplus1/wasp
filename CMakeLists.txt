@@ -37,12 +37,12 @@ add_executable( wasp    src/main.cpp
                         src/cg_context.cpp
                         src/mesh.hpp
                         src/mesh.cpp
+                        src/renderable.hpp
+                        src/renderable.cpp
+                        src/scene.hpp
+                        src/scene.cpp
                         src/shader.hpp
                         src/shader.cpp
-                        src/shader_buffer.hpp
-                        src/shader_buffer.cpp
-                        src/shader_camera_buffer.hpp
-                        src/shader_camera_buffer.cpp
                         src/time.hpp
                         src/time.cpp
                         src/timer.hpp
