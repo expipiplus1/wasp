@@ -31,6 +31,8 @@ set( glfw_LIBRARY         libglfwStatic )
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wall -g" )
 
 add_executable( wasp    src/main.cpp
+                        src/camera.hpp
+                        src/camera.cpp
                         src/cg_context.hpp
                         src/cg_context.cpp
                         src/mesh.hpp
@@ -38,7 +40,9 @@ add_executable( wasp    src/main.cpp
                         src/shader.hpp
                         src/shader.cpp
                         src/shader_buffer.hpp
-                        src/shader_buffer-inl.hpp
+                        src/shader_buffer.cpp
+                        src/shader_camera_buffer.hpp
+                        src/shader_camera_buffer.cpp
                         src/window.hpp
                         src/window.cpp
                         src/timer.hpp
