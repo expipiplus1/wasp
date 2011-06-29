@@ -26,14 +26,17 @@
     or implied, of Joe Hermaszewski.
 */
 
+const float3 color = float3( 1.0f, 0.0f, 0.0f );
+
 struct Camera
 {
     float4x4 m_modelView;
     float4x4 m_inverseModelView;
     float4x4 m_modelViewProjection;
-} g_cameraBuffer : BUFFER[0];
+};
 
-const float3 color = float3( 1.0f, 0.0f, 0.0f );
+uniform Camera g_cameraBuffer : BUFFER[0];
+
 
 struct VertexInput 
 {
