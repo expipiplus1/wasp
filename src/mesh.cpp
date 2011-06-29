@@ -31,6 +31,7 @@
 #include <Cg/cg.h>
 #include <GL/glfw3.h>
 #include <joemath/joemath.hpp>
+#include "time.hpp"
 
 namespace NWasp
 {
@@ -50,7 +51,7 @@ namespace NWasp
         float3 camera_position = float3(10.0f, 0.0f, -10.0f);
         float3 camera_target   = float3(0.0f, 0.0f, 0.0f); 
 
-        float4x4 model = Translate( float3(0.0f, 1.0f, 0.0f) );
+        float4x4 model = RotateZXY<float,4>( NTime::GetApplicationTime(), NTime::GetApplicationTime() / 2, NTime::GetApplicationTime() / 3 );
         float4x4 view  = View( camera_position, camera_target - camera_position, float3(0.0f, 1.0f, 0.0f));
         float4x4 projection = Projection( DegToRad( 90.0f ), 1.0f, 0.01f, 100.0f );
 
