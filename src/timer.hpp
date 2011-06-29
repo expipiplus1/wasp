@@ -29,12 +29,13 @@
 #pragma once
 
 #ifdef WIN32
+    #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
 #else
     #include <sys/time.h>
 #endif
 
-namespace NTimer
+namespace NTime
 {
     class CTimer
     {

@@ -47,7 +47,7 @@ int main (int argc, char** argv)
     
     CMesh mesh;
     
-    NTimer::CTimer timer;
+    NTime::CTimer timer;
 
     while ( !window.IsWindowClosed( ) )
     {      
