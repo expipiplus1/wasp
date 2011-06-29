@@ -45,30 +45,13 @@ int main (int argc, char** argv)
     if ( !window.Init() )
         return 1;
     
-    CShader red_shader;
-    red_shader.Load( "shaders/red.cgfx" );
-    
     CMesh mesh;
     
-    SCameraMatrixBuffer camera_buffer;
-    float4x4 projection = Projection( DegToRad( 90.0f ), 1.0f, 0.01f, 100.0f );
-    float4x4 model = Translate( float3(0.0f, 1.0f, 0.0f) );
-    float3 camera_position = float3(10.0f, 0.0f, -10.0f);
-    float3 camera_target   = float3(0.0f, 0.0f, 0.0f); 
-    float4x4 view  = View( camera_position, camera_target - camera_position, float3(0.0f, 1.0f, 0.0f));
-    camera_buffer.m_modelView = model * view;
-    camera_buffer.m_modelViewProjection = camera_buffer.m_modelView * projection;
-    
-    CCameraBuffer::Instance()->Set( camera_buffer );
-    CCameraBuffer::Instance()->Update( );
-    
-    NTimer::CTimer timer;
+    NTime::CTimer timer;
 
     while ( !window.IsWindowClosed( ) )
     {      
         timer.Start( );
-        
-        red_shader.Bind( );
         
         mesh.Render( );
         

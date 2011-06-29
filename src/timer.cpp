@@ -28,74 +28,64 @@
 
 #include "timer.hpp"
 
-#include <stdlib.h>
+#include <cstdlib>
 
-namespace NTimer
+namespace NTime
 {
-    
-CTimer::CTimer()
-{
-    m_running = false;
-    
-#ifdef WIN32
-    LARGE_INTEGER frequency;
-    QueryPerformanceFrequency(&frequency);
-    m_recipFrequency = 1.0 / double(frequency.QuadPart);
-    m_startTime.QuadPart = 0;
-    m_endTime.QuadPart = 0;
-#else
-    m_startTime.tv_sec = 0;
-    m_startTime.tv_usec = 0;
-    m_endTime.tv_sec =  0;
-    m_endTime.tv_usec = 0;
-#endif
-}
+    CTimer::CTimer()
+    {
+        m_running = false;
+        
+    #ifdef WIN32
+        LARGE_INTEGER frequency;
+        QueryPerformanceFrequency(&frequency);
+        m_recipFrequency = 1.0 / double(frequency.QuadPart);
+        m_startTime.QuadPart = 0;
+        m_endTime.QuadPart = 0;
+    #else
+        m_startTime.tv_sec = 0;
+        m_startTime.tv_usec = 0;
+        m_endTime.tv_sec =  0;
+        m_endTime.tv_usec = 0;
+    #endif
+    }
 
-CTimer::~CTimer()
-{
-}
+    CTimer::~CTimer()
+    {
+    }
 
-void CTimer::Start()
-{
-#ifdef WIN32
-    QueryPerformanceCounter(&m_startTime);
-#else
-    gettimeofday(&m_startTime, NULL);
-#endif
-    m_running = true;
-}
+    void CTimer::Start()
+    {
+    #ifdef WIN32
+        QueryPerformanceCounter(&m_startTime);
+    #else
+        gettimeofday(&m_startTime, NULL);
+    #endif
+        m_running = true;
+    }
 
-void CTimer::Stop()
-{
-#ifdef WIN32
-    QueryPerformanceCounter(&m_endTime);
-#else
-    gettimeofday(&m_endTime, NULL);
-#endif
-    m_running = false;
-}
-
-double CTimer::GetElapsedTime()
-{
-#ifdef WIN32
-
-    if(m_running)
-
+    void CTimer::Stop()
+    {
+    #ifdef WIN32
         QueryPerformanceCounter(&m_endTime);
-
-    
-    return double(m_endTime.QuadPart - m_startTime.QuadPart) * m_recipFrequency;
-#else
-
-    if(m_running)
-
+    #else
         gettimeofday(&m_endTime, NULL);
+    #endif
+        m_running = false;
+    }
 
-    
-    return (m_endTime.tv_sec - m_startTime.tv_sec) + double(m_endTime.tv_usec - m_startTime.tv_usec) * 0.0000001;
-#endif
-
-
-}
-
+    double CTimer::GetElapsedTime()
+    {
+    #ifdef WIN32
+        if(m_running)
+            QueryPerformanceCounter(&m_endTime);
+        
+        return double(m_endTime.QuadPart - m_startTime.QuadPart) * m_recipFrequency;
+    #else
+        if(m_running)
+            gettimeofday(&m_endTime, NULL);
+        
+        return (m_endTime.tv_sec - m_startTime.tv_sec) + double(m_endTime.tv_usec - m_startTime.tv_usec) * 0.0000001;
+    #endif
+    }
 };

@@ -26,53 +26,10 @@
     or implied, of Joe Hermaszewski.
 */
 
-const float3 color = float3( 1.0f, 0.0f, 0.0f );
+#pragma once
 
-struct Camera
+namespace NTime
 {
-    float4x4 m_modelView;
-    float4x4 m_inverseModelView;
-    float4x4 m_modelViewProjection;
+    double  GetApplicationTime  ();
 };
 
-uniform Camera g_cameraBuffer : BUFFER[0];
-
-
-struct VertexInput 
-{
-    float4 position : POSITION;
-};  
-
-struct VertexOutput
-{
-    float4 position       : POSITION;
-}; 
-
-VertexOutput vs(VertexInput input)
-{
-    VertexOutput output;
-
-    output.position       = mul( input.position, g_cameraBuffer.m_modelViewProjection );
-    
-    return output;
-}
-
-float4 ps(VertexOutput input) : COLOR
-{
-    float4 output;
-
-    output = float4( color, 1.0f );
-
-    return output;
-}
-
-technique red
-{
-    pass p0
-    {
-        VertexProgram = compile latest vs();
-        FragmentProgram = compile latest ps();
-        DepthTestEnable = true;
-        CullFaceEnable = false;
-    }
-}

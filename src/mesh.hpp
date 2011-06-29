@@ -29,6 +29,7 @@
 #pragma once
 
 #include <joemath/joemath.hpp>
+#include "shader.hpp"
 
 namespace NWasp
 {
@@ -41,6 +42,6 @@ namespace NWasp
         void    Render          ( );
         
     private:
-        
+        CShader m_shader; 
     };
 };

@@ -37,6 +37,8 @@
 #include "cg_context.hpp"
 #include "shader_buffer.hpp"
 
+using namespace NJoeMath;
+
 namespace NWasp
 {
     CShader::CShader    ( )
@@ -51,6 +53,16 @@ namespace NWasp
     {        
         m_filename = filename;
         m_cgEffect = cgCreateEffectFromFile( CCgContext::Instance( )->GetCgContext( ), filename.c_str(), NULL );
+
+        CGtechnique technique = cgGetFirstTechnique( m_cgEffect );
+        CGbool valid;
+        valid = cgValidateTechnique( technique );
+        
+        if (!valid)
+        {
+            std::cerr << "Couldn't validate technique" << std::endl;
+            return false;
+        }
                
         return true;
     }
@@ -62,19 +74,7 @@ namespace NWasp
 
     void            CShader::Bind    ( ) const
     {
-        cgSetEffectParameterBuffer( cgGetNamedEffectParameter( m_cgEffect, "g_cameraBuffer" ), CCameraBuffer::Instance()->GetCgBuffer( ) ); 
-        
         CGtechnique technique = cgGetFirstTechnique( m_cgEffect );
-        
-        CGbool valid;
-        valid = cgValidateTechnique( technique );
-        
-        if (!valid)
-        {
-            std::cerr << "Couldn't validate technique" << std::endl;
-            return;
-        }
-
         CGpass      pass = cgGetFirstPass( technique );
         cgSetPassState( pass );
     }
@@ -88,5 +88,11 @@ namespace NWasp
             return false;
         }
         return true;
+    }
+
+    void            CShader::SetModelViewProjection  ( const float4x4& modelViewProjection ) const
+    {
+        CGparameter mvp_param = cgGetEffectParameterBySemantic( m_cgEffect, "MODELVIEWPROJECTION" );
+        cgSetMatrixParameterfr( mvp_param, reinterpret_cast<const float*>(&modelViewProjection) );        
     }
 };

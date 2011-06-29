@@ -43,13 +43,17 @@ add_executable( wasp    src/main.cpp
                         src/shader_buffer.cpp
                         src/shader_camera_buffer.hpp
                         src/shader_camera_buffer.cpp
-                        src/window.hpp
-                        src/window.cpp
+                        src/time.hpp
+                        src/time.cpp
                         src/timer.hpp
-                        src/timer.cpp )
+                        src/timer.cpp
+                        src/window.hpp
+                        src/window.cpp )
 
 add_custom_target( wasp_shaders
-                   SOURCES   shaders/red.cgfx )
+                   SOURCES   shaders/red.cgfx
+                             effects/global.cgh
+                             effects/blue.cgfx )
 
 add_dependencies( wasp wasp_shaders )
 
@@ -59,9 +63,9 @@ set( GL_LIBS ${OPENGL_LIBRARY} ${glfw_LIBRARY} ${CG_LIBRARY} ${CG_GL_LIBRARY} )
 
 if( UNIX )
     list( APPEND GL_LIBS Xrandr Xxf86vm )
-else( UNIX )
+else()
     list( APPEND GL_LIBS opengl32 )
-endif( UNIX )
+endif()
 
 target_link_libraries( wasp ${joemath_LIBRARY} ${GL_LIBS} )
 
@@ -85,4 +89,5 @@ macro( update_shaders GLOBPAT DESTINATION )
 endmacro( )
 
 update_shaders( shaders/*.cgfx ${CMAKE_BINARY_DIR} )
+update_shaders( effects/*.cg*  ${CMAKE_BINARY_DIR} )
 

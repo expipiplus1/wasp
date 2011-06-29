@@ -26,17 +26,11 @@
     or implied, of Joe Hermaszewski.
 */
 
-const float3 color = float3( 1.0f, 0.0f, 0.0f );
+#include "global.cgh"
 
-struct Camera
-{
-    float4x4 m_modelView;
-    float4x4 m_inverseModelView;
-    float4x4 m_modelViewProjection;
-};
+const float3 blue = float3( 0.5f, 0.52f, 1.0f );
 
-uniform Camera g_cameraBuffer : BUFFER[0];
-
+uniform float4x4    g_modelViewProjection   : MODELVIEWPROJECTION;
 
 struct VertexInput 
 {
@@ -45,34 +39,32 @@ struct VertexInput
 
 struct VertexOutput
 {
-    float4 position       : POSITION;
+    float4 position : POSITION;
 }; 
 
-VertexOutput vs(VertexInput input)
+VertexOutput    passthrough_vs  ( VertexInput input )
 {
     VertexOutput output;
 
-    output.position       = mul( input.position, g_cameraBuffer.m_modelViewProjection );
+    output.position       = mul( input.position, g_modelViewProjection );
     
     return output;
 }
 
-float4 ps(VertexOutput input) : COLOR
+float4          color_ps        ( VertexOutput input ) : COLOR
 {
     float4 output;
 
-    output = float4( color, 1.0f );
+    output = float4( blue, 1.0f );
 
     return output;
 }
 
-technique red
+technique technique0
 {
-    pass p0
+    pass pass0
     {
-        VertexProgram = compile latest vs();
-        FragmentProgram = compile latest ps();
-        DepthTestEnable = true;
-        CullFaceEnable = false;
+        VertexProgram   = compile latest passthrough_vs( );
+        FragmentProgram = compile latest color_ps( );
     }
 }
