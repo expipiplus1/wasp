@@ -28,29 +28,32 @@
 
 #include "window.hpp"
 
+#include <cassert>
 #include <iostream>
 #include <GL/glfw3.h>
 #include <joemath/joemath.hpp>
 
 namespace NWasp
 {
+    CWindow* CWindow::s_instance = NULL;
+
     const u32   INIT_WIDTH  = 640;
     const u32   INIT_HEIGHT = 640;
     const char* INIT_WINDOW_TITLE = "wasp";
 
     CWindow::CWindow( )
     {
-        m_initialized = false;
     }
 
     CWindow::~CWindow( )
     {
-        if ( m_initialized )
-            glfwTerminate( );
     }
 
-    bool CWindow::Init( )
+    bool        CWindow::Create     ( )
     {
+        assert( s_instance == NULL );
+        s_instance = new CWindow();
+
         s32 error;
         
         //
@@ -62,36 +65,44 @@ namespace NWasp
         if ( error != GLFW_NO_ERROR )
         {
             std::cerr << "GLFW initialization failed: " << glfwErrorString( error ) << std::endl;
-            glfwTerminate( );
+            Destroy(); 
             return false;
         }
         
-        m_window = glfwOpenWindow( INIT_WIDTH, INIT_HEIGHT, GLFW_WINDOWED, INIT_WINDOW_TITLE, NULL );
-        if ( !m_window )
+        s_instance->m_window = glfwOpenWindow( INIT_WIDTH, INIT_HEIGHT, GLFW_WINDOWED, INIT_WINDOW_TITLE, NULL );
+        if ( !s_instance->m_window )
         {
             std::cerr << "GLFW window creation failed: " << glfwErrorString( error ) << std::endl;
-            glfwTerminate( );
+            Destroy(); 
             return false;
         }
         
-        glfwGetWindowSize( m_window, &m_width, &m_height );
+        glfwGetWindowSize( s_instance->m_window, &s_instance->m_width, &s_instance->m_height );
 
-        glfwEnable( m_window, GLFW_STICKY_KEYS );
+        glfwEnable( s_instance->m_window, GLFW_STICKY_KEYS );
         
         glfwSwapInterval( 1 );
-        
-        glClearColor ( 1.0f, 0.93f, 0.44f, 1.0f );
-        
-        m_initialized = true;
-        
+
         return true;
+    }
+
+    CWindow*    CWindow::Instance   ( )
+    {
+        assert( s_instance != NULL );
+        return s_instance;
+    }
+
+    void        CWindow::Destroy    ( )
+    {
+        assert( s_instance != NULL );
+        glfwTerminate( );
+
+        delete s_instance;
+        s_instance = NULL;
     }
 
     bool CWindow::IsWindowClosed() const
     {
-        if ( !m_initialized )
-            return true;
-        
         return ( !glfwIsWindow( m_window ) ||
                 glfwGetKey( m_window, GLFW_KEY_ESCAPE ) == GLFW_PRESS ||
                 glfwGetKey( m_window, 'Q' )             == GLFW_PRESS );
@@ -99,9 +110,6 @@ namespace NWasp
 
     void CWindow::Swap()
     {
-        if ( !m_initialized )
-            return;
-
         //
         // Swap buffers
         //

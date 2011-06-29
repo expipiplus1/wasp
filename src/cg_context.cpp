@@ -28,6 +28,7 @@
 
 #include "cg_context.hpp"
 
+#include <cassert>
 #include <iostream>
 #include <Cg/cg.h>
 #include <Cg/cgGL.h>
@@ -38,10 +39,21 @@ namespace NWasp
     
     CCgContext::CCgContext                  ( )
     {
+    }
+
+    CCgContext::~CCgContext                 ( )
+    {
+    }
+
+    bool            CCgContext::Create          ( )
+    {
+        assert( s_instance == NULL );
+        s_instance = new CCgContext();
+
         //
         // Initialize the cg context
         //
-        m_cgContext = cgCreateContext( );
+        s_instance->m_cgContext = cgCreateContext( );
         
         CGerror error;
         const char* error_string = cgGetLastErrorString(&error);
@@ -49,21 +61,30 @@ namespace NWasp
         {
             std::cerr << "Cg Error creating context\n"
                         << error_string << std::endl;
+            return false;
         }
         
-        cgGLRegisterStates( m_cgContext );
-        cgGLSetManageTextureParameters( m_cgContext, CG_TRUE );
+        cgGLRegisterStates( s_instance->m_cgContext );
+        cgGLSetManageTextureParameters( s_instance->m_cgContext, CG_TRUE );
         cgGLSetDebugMode( CG_TRUE );
-        cgSetParameterSettingMode( m_cgContext, CG_DEFERRED_PARAMETER_SETTING );
+        cgSetParameterSettingMode( s_instance->m_cgContext, CG_DEFERRED_PARAMETER_SETTING );
         
         cgSetErrorCallback( CgErrorCallback );
+
+        return true;
     }
     
     CCgContext*     CCgContext::Instance        ( )
     {
-        if ( s_instance == NULL )
-            s_instance = new CCgContext( );
+        assert( s_instance != NULL );
         return s_instance;
+    }
+
+    void            CCgContext::Destroy         ( )
+    {
+        assert( s_instance != NULL );
+        delete s_instance;
+        s_instance = NULL;
     }
     
     CGcontext       CCgContext::GetCgContext    ( ) const
@@ -71,7 +92,7 @@ namespace NWasp
         return m_cgContext;
     }
     
-    void CgErrorCallback()
+    void CCgContext::CgErrorCallback()
     {
         CGerror error;
         const char* error_string = cgGetLastErrorString( &error );

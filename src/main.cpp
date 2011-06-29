@@ -30,39 +30,49 @@
 #include <iostream>
 #include <Cg/cg.h>
 #include <joemath/joemath.hpp>
+#include "cg_context.hpp"
 #include "mesh.hpp"
+#include "scene.hpp"
 #include "shader.hpp"
-#include "shader_buffer.hpp"
-#include "window.hpp"
 #include "timer.hpp"
+#include "window.hpp"
 
 using namespace NJoeMath;
 using namespace NWasp;
 
 int main (int argc, char** argv)
 {
-    CWindow window;
-    if ( !window.Init() )
+    if ( !CWindow::Create() )
         return 1;
+
+    if ( !CCgContext::Create() )
+        return 2;
+
+    if ( !CScene::Create() )
+        return 3;
     
     CMesh mesh;
     
     NTime::CTimer timer;
 
-    while ( !window.IsWindowClosed( ) )
+    while ( !CWindow::Instance()->IsWindowClosed( ) )
     {      
         timer.Start( );
         
         mesh.Render( );
         
-        window.Swap( );
+        CWindow::Instance()->Swap( );
 
         timer.Stop( );
 
         char title[64];
         std::snprintf( title, 64, "Wasp -- %.2f fps", 1.0 / timer.GetElapsedTime() );
-        window.SetTitle( title );
+        CWindow::Instance()->SetTitle( title );
     }
+    
+    CScene::Destroy();
+    CCgContext::Destroy();
+    CWindow::Destroy();
     
     return 0;
 }

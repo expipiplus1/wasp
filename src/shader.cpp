@@ -35,7 +35,6 @@
 #include <GL/glfw3.h>
 #include <joemath/joemath.hpp>
 #include "cg_context.hpp"
-#include "shader_buffer.hpp"
 
 using namespace NJoeMath;
 
@@ -93,6 +92,6 @@ namespace NWasp
     void            CShader::SetModelViewProjection  ( const float4x4& modelViewProjection ) const
     {
         CGparameter mvp_param = cgGetEffectParameterBySemantic( m_cgEffect, "MODELVIEWPROJECTION" );
-        cgSetMatrixParameterfr( mvp_param, reinterpret_cast<const float*>(&modelViewProjection) );        
+        cgSetMatrixParameterfr( mvp_param, reinterpret_cast<const float*>(&modelViewProjection) );
     }
 };

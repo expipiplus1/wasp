@@ -36,9 +36,17 @@ namespace NWasp
 {
     class CWindow
     {
-    public:
+    private:
         CWindow                 ( );
-        virtual ~CWindow        ( );
+        ~CWindow                ( );
+        CWindow                 ( const CWindow& ) = delete;
+        CWindow& operator =     ( const CWindow& ) = delete;
+
+        static CWindow* s_instance;
+    public:
+        static bool     Create      ( );
+        static CWindow* Instance    ( );
+        static void     Destroy     ( );
 
         bool Init               ( );
         bool IsWindowClosed     ( ) const;
@@ -46,8 +54,6 @@ namespace NWasp
         void SetTitle           ( const char* title ) const;
         
     private:
-        bool m_initialized;
-
         s32 m_width;
         s32 m_height;
         
