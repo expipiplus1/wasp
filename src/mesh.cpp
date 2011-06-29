@@ -28,13 +28,16 @@
 
 #include "mesh.hpp"
 
+#include <Cg/cg.h>
 #include <GL/glfw3.h>
 #include <joemath/joemath.hpp>
 
 namespace NWasp
 {
     CMesh::CMesh            ( )
+    :m_shader()
     {
+        m_shader.Load( "effects/blue.cgfx" );
     }
     
     CMesh::~CMesh           ( )
@@ -44,6 +47,19 @@ namespace NWasp
     
     void    CMesh::Render   ( )
     {   
+        float3 camera_position = float3(10.0f, 0.0f, -10.0f);
+        float3 camera_target   = float3(0.0f, 0.0f, 0.0f); 
+
+        float4x4 model = Translate( float3(0.0f, 1.0f, 0.0f) );
+        float4x4 view  = View( camera_position, camera_target - camera_position, float3(0.0f, 1.0f, 0.0f));
+        float4x4 projection = Projection( DegToRad( 90.0f ), 1.0f, 0.01f, 100.0f );
+
+        float4x4 modelViewProjection = model * view * projection;
+
+        m_shader.SetModelViewProjection( modelViewProjection );
+
+        m_shader.Bind();
+
         glBegin( GL_LINE_STRIP );
             glVertex3f(0,0,0);
             glVertex3f(0.8f,0.8f,0.8f);

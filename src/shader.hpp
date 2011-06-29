@@ -32,6 +32,8 @@
 #include <Cg/cg.h>
 #include <joemath/joemath.hpp>
 
+using namespace NJoeMath;
+
 namespace NWasp
 {
     class CShader
@@ -46,6 +48,8 @@ namespace NWasp
         
         void                Bind    ( ) const;
         bool                Reload  ( );
+
+        void                SetModelViewProjection  ( const float4x4& modelViewProjection ) const;
         
     private:
         std::string         m_name;
