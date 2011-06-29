@@ -28,18 +28,32 @@
 
 #pragma once
 
+#include "shader_buffer.hpp"
+
+#include <joemath/joemath.hpp>
+#include "camera.hpp"
+
+using namespace NJoeMath;
+
 namespace NWasp
 {
-    class CShaderBuffer
+    class CShaderCameraBuffer : public CShaderBuffer
     {
-    protected:
-        CShaderBuffer               ( );
     private:
-        CShaderBuffer&  operator =  ( const CShaderBuffer& ) = delete;
-        CShaderBuffer               ( const CShaderBuffer& ) = delete;
-        
-    public: 
-        virtual void                        Update      ( ) const = 0;
+        CShaderCameraBuffer               ( );
+        CShaderCameraBuffer&  operator =  ( const CShaderCameraBuffer& ) = delete;
+        CShaderCameraBuffer               ( const CShaderCameraBuffer& ) = delete;
+        static  CShaderCameraBuffer* s_instance;
+   
+    public:
+        static  CShaderCameraBuffer* Instance   ( );
+
+        void                SetCamera   ( const CCamera* camera );
+        const   CCamera*    GetCamera   ( ) const;
+        virtual void        Update      ( ) const;
+ 
+    private:
+        const CCamera*  m_camera;
     };
 };
 

@@ -26,20 +26,41 @@
     or implied, of Joe Hermaszewski.
 */
 
-#pragma once
+#include "shader_camera_buffer.hpp"
+
+#include <Cg/cg.h>
+#include <joemath/joemath.hpp>
+
+using namespace NJoeMath;
 
 namespace NWasp
 {
-    class CShaderBuffer
+    CShaderCameraBuffer* CShaderCameraBuffer::s_instance = NULL;
+
+    CShaderCameraBuffer::CShaderCameraBuffer    ( )
     {
-    protected:
-        CShaderBuffer               ( );
-    private:
-        CShaderBuffer&  operator =  ( const CShaderBuffer& ) = delete;
-        CShaderBuffer               ( const CShaderBuffer& ) = delete;
+    }
+
+    CShaderCameraBuffer*    CShaderCameraBuffer::Instance   ( )
+    {
+        if( s_instance == NULL )
+            s_instance = new CShaderCameraBuffer( );
+        return s_instance;
+    }
+
+    void                    CShaderCameraBuffer::SetCamera  ( const CCamera* camera )
+    {
+        m_camera = camera;
+    }
+
+    const CCamera*          CShaderCameraBuffer::GetCamera  ( ) const
+    {
+        return m_camera;
+    }
+
+    void                    CShaderCameraBuffer::Update     ( ) const
+    {
         
-    public: 
-        virtual void                        Update      ( ) const = 0;
-    };
+    }
 };
 

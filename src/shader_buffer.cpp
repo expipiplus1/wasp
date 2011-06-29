@@ -26,20 +26,12 @@
     or implied, of Joe Hermaszewski.
 */
 
-#pragma once
+#include "shader_buffer.hpp"
 
 namespace NWasp
 {
-    class CShaderBuffer
+    CShaderBuffer::CShaderBuffer               ( )
     {
-    protected:
-        CShaderBuffer               ( );
-    private:
-        CShaderBuffer&  operator =  ( const CShaderBuffer& ) = delete;
-        CShaderBuffer               ( const CShaderBuffer& ) = delete;
-        
-    public: 
-        virtual void                        Update      ( ) const = 0;
-    };
+    }
 };
 
