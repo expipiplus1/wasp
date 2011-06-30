@@ -58,6 +58,7 @@ set( wasp_sources       src/main.cpp
                         src/window.cpp )
 
 set( wasp_effect_sources    effects/global.cgh
+                            effects/phong.cgfx 
                             effects/blue.cgfx )
 
 add_executable( wasp    ${wasp_sources} ) 

@@ -1,0 +1,96 @@
+/*
+    Copyright 2011 Joe Hermaszewski. All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without modification, are
+    permitted provided that the following conditions are met:
+
+    1. Redistributions of source code must retain the above copyright notice, this list of
+    conditions and the following disclaimer.
+
+    2. Redistributions in binary form must reproduce the above copyright notice, this list
+    of conditions and the following disclaimer in the documentation and/or other materials
+    provided with the distribution.
+
+    THIS SOFTWARE IS PROVIDED BY Joe Hermaszewski "AS IS" AND ANY EXPRESS OR IMPLIED
+    WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+    FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL Joe Hermaszewski OR
+    CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+    SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+    ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+    NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+    ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+    The views and conclusions contained in the software and documentation are those of the
+    authors and should not be interpreted as representing official policies, either expressed
+    or implied, of Joe Hermaszewski.
+*/
+
+#include "global.cgh"
+
+uniform float3      g_ambient                   : AMBIENTCOLOR;
+uniform float3      g_diffuse                   : DIFFUSECOLOR;
+uniform float       g_exponent                  : SPECULAREXPONENT;
+uniform float3      g_lightPosition             : LIGHTPOSITION;
+
+uniform float4x4    g_modelViewProjection       : MODELVIEWPROJECTION;
+uniform float4x4    g_modelView                 : MODELVIEW;
+uniform float4x4    g_model                     : MODEL;
+
+struct VertexInput 
+{
+    float4 position : POSITION : ATTR0;
+    float3 normal   : NORMAL   : ATTR1;
+};  
+
+struct VertexOutput
+{
+    float4 position         : POSITION;
+    float3 normal           : TEXCOORD0;
+    float3 lightDirection   : TEXCOORD1;
+    float3 viewDirection    : TEXCOORD2;
+}; 
+
+VertexOutput    phong_vs    ( VertexInput input )
+{
+    VertexOutput output;
+
+    output.position       = mul( input.position, g_modelViewProjection );
+    output.normal         = mul( input.normal, float3x3( g_model ) );
+
+    float3 world_position = mul( input.position, g_model ).xyz;
+    output.viewDirection  = world_position - g_cameraPosition;
+    output.lightDirection = world_position - g_lightPosition;
+    
+    return output;
+}
+
+float4          phong_ps    ( VertexOutput input ) : COLOR
+{
+    float4 output;
+
+    float3 n = normalize( input.normal );
+    float3 v = normalize( input.viewDirection );  
+    float3 r = reflect( v, n );
+    float3 l = normalize( input.lightDirection );
+
+    //return float4( n, 1.0f );
+
+    float3 ambient  = g_ambient * g_diffuse;
+    float3 diffuse  = saturate( dot( l, n ) ) * g_diffuse;
+    float3 specular = pow( saturate( dot( l, r ) ), g_exponent );
+    
+    return float4( ambient + diffuse + specular, 1.0f );
+}
+
+technique technique0
+{
+    pass pass0
+    {
+        VertexProgram   = compile latest phong_vs( );
+        FragmentProgram = compile latest phong_ps( );
+        CullFaceEnable  = true;
+        CullFace        = back;
+        DepthTestEnable = true;
+    }
+}
