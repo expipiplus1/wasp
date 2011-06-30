@@ -34,7 +34,7 @@ uniform float4x4    g_modelViewProjection   : MODELVIEWPROJECTION;
 
 struct VertexInput 
 {
-    float4 position : POSITION;
+    float4 position : ATTR0 : POSITION;
 };  
 
 struct VertexOutput
