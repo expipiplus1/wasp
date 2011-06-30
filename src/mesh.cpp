@@ -40,7 +40,8 @@ namespace NWasp
     CMesh::CMesh            ( )
     :m_shader()
     {
-        m_shader.Load( "effects/blue.cgfx" );
+        m_shader.Load( "effects/phong.cgfx" );
+
         glGenBuffers( 1, &m_vbo );
         glGenBuffers( 1, &m_ibo );
         glGenVertexArrays( 1, &m_vao ); 
@@ -74,8 +75,8 @@ namespace NWasp
         glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * NUM_TRIANGLES * 3, &g_bunnyIndices[0], GL_STATIC_DRAW );
 
         
-        glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 24, (void*)0  );
-        glVertexAttribPointer( 1, 3, GL_FLOAT, GL_TRUE,  24, (void*)12 );
+        glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 24, (void*)0   );
+        glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, 24, (void*)12 );
         glEnableVertexAttribArray( 0 );
         glEnableVertexAttribArray( 1 );
 
@@ -91,16 +92,24 @@ namespace NWasp
     
     void    CMesh::Render   ( )
     {   
-        float3 camera_position = float3(1.0f, 0.0f, -3.0f);
-        float3 camera_target   = float3(0.0f, 0.0f, 0.0f); 
+        float3 camera_position = float3(1.0f, 0.0f, -2.0f);
+        float3 camera_target   = float3(0.0f, 0.35f, 0.0f); 
 
-        float4x4 model = RotateZXY<float,4>( NTime::GetApplicationTime(), NTime::GetApplicationTime() / 2, NTime::GetApplicationTime() / 3 ) * Scale( float4(10.0f, 10.0f, 10.0f, 1.0f) );
+        float4x4 model = RotateZXY<float,4>( 0.0f, NTime::GetApplicationTime() / 2.0, 0.0f )
+                       * (Scale( float4(-10.0f, -10.0f, 10.0f, 1.0f) ) 
+                       * Translate( float3(0.0f, 1.25f, 0.3f) ) );
+                       
         float4x4 view  = View( camera_position, camera_target - camera_position, float3(0.0f, 1.0f, 0.0f));
         float4x4 projection = Projection( DegToRad( 90.0f ), 1.0f, 0.01f, 100.0f );
 
         float4x4 modelViewProjection = model * view * projection;
 
         m_shader.SetModelViewProjection( modelViewProjection );
+        m_shader.SetModel              ( model );
+        m_shader.SetParameterBySemantic( float3(0.1f, 0.1f, 0.1f), "AMBIENTCOLOR" );
+        m_shader.SetParameterBySemantic( float3(0.5f, 0.5f, 1.0f), "DIFFUSECOLOR" );
+        m_shader.SetParameterBySemantic( float3(100.1f, 400.1f, 400.1f), "LIGHTPOSITION" );
+        m_shader.SetParameterBySemantic( 52.0f,                    "SPECULAREXPONENT" );
 
         m_shader.Bind();
 
