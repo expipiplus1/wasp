@@ -28,6 +28,8 @@
 
 #pragma once
 
+#define GL_GLEXT_PROTOTYPES
+#include <GL/glfw3.h>
 #include <joemath/joemath.hpp>
 #include "shader.hpp"
 
@@ -43,5 +45,9 @@ namespace NWasp
         
     private:
         CShader m_shader; 
+
+        GLuint  m_vbo;
+        GLuint  m_ibo;
+        GLuint  m_vao;
     };
 };

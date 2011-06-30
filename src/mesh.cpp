@@ -33,12 +33,55 @@
 #include <joemath/joemath.hpp>
 #include "time.hpp"
 
+#include "bunny.h"
+
 namespace NWasp
 {
     CMesh::CMesh            ( )
     :m_shader()
     {
         m_shader.Load( "effects/blue.cgfx" );
+        glGenBuffers( 1, &m_vbo );
+        glGenBuffers( 1, &m_ibo );
+        glGenVertexArrays( 1, &m_vao ); 
+
+        glBindVertexArray( m_vao );
+        
+        //
+        // Load the vbo data
+        //
+        
+        float* vertices = new float[NUM_POINTS * 3 * 2];
+        for( u32 i = 0; i < NUM_POINTS; ++i)
+        {
+            vertices[i*3*2 + 0 + 0*3] = g_bunnyPositions[i*3 + 0];
+            vertices[i*3*2 + 1 + 0*3] = g_bunnyPositions[i*3 + 1];
+            vertices[i*3*2 + 2 + 0*3] = g_bunnyPositions[i*3 + 2];
+
+            vertices[i*3*2 + 0 + 1*3] = g_bunnyNormals[i*3 + 0];
+            vertices[i*3*2 + 1 + 1*3] = g_bunnyNormals[i*3 + 1];
+            vertices[i*3*2 + 2 + 1*3] = g_bunnyNormals[i*3 + 2];
+        }
+
+        glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
+        glBufferData( GL_ARRAY_BUFFER, sizeof(float) * NUM_POINTS * 2 * 3, vertices, GL_STATIC_DRAW );
+        delete[] vertices;
+
+        //
+        // Load the index data
+        //
+        glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_ibo );
+        glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * NUM_TRIANGLES * 3, &g_bunnyIndices[0], GL_STATIC_DRAW );
+
+        
+        glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 24, (void*)0  );
+        glVertexAttribPointer( 1, 3, GL_FLOAT, GL_TRUE,  24, (void*)12 );
+        glEnableVertexAttribArray( 0 );
+        glEnableVertexAttribArray( 1 );
+
+        glBindVertexArray( 0 );
+        glBindBuffer( GL_ARRAY_BUFFER, 0 );
+        glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
     }
     
     CMesh::~CMesh           ( )
@@ -48,10 +91,10 @@ namespace NWasp
     
     void    CMesh::Render   ( )
     {   
-        float3 camera_position = float3(10.0f, 0.0f, -10.0f);
+        float3 camera_position = float3(1.0f, 0.0f, -3.0f);
         float3 camera_target   = float3(0.0f, 0.0f, 0.0f); 
 
-        float4x4 model = RotateZXY<float,4>( NTime::GetApplicationTime(), NTime::GetApplicationTime() / 2, NTime::GetApplicationTime() / 3 );
+        float4x4 model = RotateZXY<float,4>( NTime::GetApplicationTime(), NTime::GetApplicationTime() / 2, NTime::GetApplicationTime() / 3 ) * Scale( float4(10.0f, 10.0f, 10.0f, 1.0f) );
         float4x4 view  = View( camera_position, camera_target - camera_position, float3(0.0f, 1.0f, 0.0f));
         float4x4 projection = Projection( DegToRad( 90.0f ), 1.0f, 0.01f, 100.0f );
 
@@ -61,50 +104,14 @@ namespace NWasp
 
         m_shader.Bind();
 
-        glBegin( GL_LINE_STRIP );
-            glVertex3f(0,0,0);
-            glVertex3f(0.8f,0.8f,0.8f);
-        glEnd( );
-        
-        glBegin(GL_QUADS);
+        glBindVertexArray( m_vao );
+        glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
+        glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_ibo );
 
-            // Front Face
-            glNormal3f(0, 0, 1);
-            glVertex3f(-1.0f, -1.0f,  2.0f);
-            glVertex3f( 1.0f, -1.0f,  2.0f);
-            glVertex3f( 1.0f,  1.0f,  2.0f);
-            glVertex3f(-1.0f,  1.0f,  2.0f);
-            // Back Face
-            glNormal3f(0, 0, -1);
-            glVertex3f(-1.0f, -1.0f, -2.0f);
-            glVertex3f(-1.0f,  1.0f, -2.0f);
-            glVertex3f( 1.0f,  1.0f, -2.0f);
-            glVertex3f( 1.0f, -1.0f, -2.0f);
-            // Top Face
-            glNormal3f(0, 1, 0);
-            glVertex3f(-1.0f,  1.0f, -2.0f);
-            glVertex3f(-1.0f,  1.0f,  2.0f);
-            glVertex3f( 1.0f,  1.0f,  2.0f);
-            glVertex3f( 1.0f,  1.0f, -2.0f);
-            // Bottom Face
-            glNormal3f(0, -1, 0);
-            glVertex3f(-1.0f, -1.0f, -2.0f);
-            glVertex3f( 1.0f, -1.0f, -2.0f);
-            glVertex3f( 1.0f, -1.0f,  2.0f);
-            glVertex3f(-1.0f, -1.0f,  2.0f);
-            // Right face
-            glNormal3f(1, 0, 0);
-            glVertex3f( 1.0f, -1.0f, -2.0f);
-            glVertex3f( 1.0f,  1.0f, -2.0f);
-            glVertex3f( 1.0f,  1.0f,  2.0f);
-            glVertex3f( 1.0f, -1.0f,  2.0f);
-            // Left Face
-            glNormal3f(-1, 0, 0);
-            glVertex3f(-1.0f, -1.0f, -2.0f);
-            glVertex3f(-1.0f, -1.0f,  2.0f);
-            glVertex3f(-1.0f,  1.0f,  2.0f);
-            glVertex3f(-1.0f,  1.0f, -2.0f);
+        glDrawElements( GL_TRIANGLES, NUM_TRIANGLES * 3, GL_UNSIGNED_INT, 0 );
 
-        glEnd();
+        glBindVertexArray( 0 );
+        glBindBuffer( GL_ARRAY_BUFFER, 0 );
+        glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
     }
 };
