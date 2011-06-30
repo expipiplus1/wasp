@@ -89,9 +89,27 @@ namespace NWasp
         return true;
     }
 
-    void            CShader::SetModelViewProjection  ( const float4x4& modelViewProjection ) const
+    void            CShader::SetModelViewProjection ( const float4x4& modelViewProjection ) const
     {
-        CGparameter mvp_param = cgGetEffectParameterBySemantic( m_cgEffect, "MODELVIEWPROJECTION" );
-        cgSetMatrixParameterfr( mvp_param, reinterpret_cast<const float*>(&modelViewProjection) );
+        CGparameter param = cgGetEffectParameterBySemantic( m_cgEffect, "MODELVIEWPROJECTION" );
+        cgSetMatrixParameterfr( param, reinterpret_cast<const float*>(&modelViewProjection) );
+    }
+
+    void            CShader::SetModel               ( const float4x4& model ) const
+    {
+        CGparameter param = cgGetEffectParameterBySemantic( m_cgEffect, "MODEL" );
+        cgSetMatrixParameterfr( param, reinterpret_cast<const float*>(&model) );
+    }
+
+    void            CShader::SetParameterBySemantic    ( const float3& v, const char* semantic ) const
+    {
+        CGparameter param = cgGetEffectParameterBySemantic( m_cgEffect, semantic );
+        cgSetParameter3fv( param, reinterpret_cast<const float*>(&v) );
+    }
+
+    void            CShader::SetParameterBySemantic    ( const float v, const char* semantic ) const
+    {
+        CGparameter param = cgGetEffectParameterBySemantic( m_cgEffect, semantic );
+        cgSetParameter1f( param, v );
     }
 };
