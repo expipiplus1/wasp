@@ -127,4 +127,9 @@ namespace NWasp
     {
         glfwSetWindowTitle( m_window, title );
     }
+    
+    const GLFWwindow  CWindow::GetWindow() const
+    {
+        return m_window;
+    }
 };
