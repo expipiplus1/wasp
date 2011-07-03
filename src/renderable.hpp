@@ -32,13 +32,6 @@ namespace NWasp
 {
     class CRenderable
     {
-    protected:
-        CRenderable                 ( );
-        virtual ~CRenderable        ( );
-    private:
-        CRenderable&  operator =    ( const CRenderable& ) = delete;
-        CRenderable                 ( const CRenderable& ) = delete;
-        
     public: 
         virtual void    Render      ( ) const = 0;
     };
