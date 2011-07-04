@@ -59,7 +59,7 @@ namespace NTime
     #ifdef WIN32
         QueryPerformanceCounter(&m_startTime);
     #else
-        gettimeofday(&m_startTime, NULL);
+        gettimeofday(&m_startTime, nullptr);
     #endif
         m_running = true;
     }
@@ -69,7 +69,7 @@ namespace NTime
     #ifdef WIN32
         QueryPerformanceCounter(&m_endTime);
     #else
-        gettimeofday(&m_endTime, NULL);
+        gettimeofday(&m_endTime, nullptr);
     #endif
         m_running = false;
     }
@@ -83,7 +83,7 @@ namespace NTime
         return double(m_endTime.QuadPart - m_startTime.QuadPart) * m_recipFrequency;
     #else
         if(m_running)
-            gettimeofday(&m_endTime, NULL);
+            gettimeofday(&m_endTime, nullptr);
         
         return (m_endTime.tv_sec - m_startTime.tv_sec) + double(m_endTime.tv_usec - m_startTime.tv_usec) * 0.0000001;
     #endif

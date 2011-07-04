@@ -35,7 +35,7 @@
 
 namespace NWasp
 {
-    CCgContext* CCgContext::s_instance = NULL;
+    CCgContext* CCgContext::s_instance = nullptr;
     
     CCgContext::CCgContext                  ( )
     {
@@ -47,7 +47,7 @@ namespace NWasp
 
     bool            CCgContext::Create          ( )
     {
-        assert( s_instance == NULL );
+        assert( s_instance == nullptr );
         s_instance = new CCgContext();
 
         //
@@ -76,15 +76,15 @@ namespace NWasp
     
     CCgContext*     CCgContext::Instance        ( )
     {
-        assert( s_instance != NULL );
+        assert( s_instance != nullptr );
         return s_instance;
     }
 
     void            CCgContext::Destroy         ( )
     {
-        assert( s_instance != NULL );
+        assert( s_instance != nullptr );
         delete s_instance;
-        s_instance = NULL;
+        s_instance = nullptr;
     }
     
     CGcontext       CCgContext::GetCgContext    ( ) const
@@ -99,7 +99,7 @@ namespace NWasp
         std::cerr << "Cg Error:\n" 
                   << error_string << std::endl;
         const char* error_listing = cgGetLastListing( CCgContext::Instance( )->GetCgContext( ) );
-        if ( error_listing != NULL )
+        if ( error_listing != nullptr )
             std::cerr << error_listing << std::endl;
     }
 

@@ -35,7 +35,7 @@
 
 namespace NWasp
 {
-    CWindow* CWindow::s_instance = NULL;
+    CWindow* CWindow::s_instance = nullptr;
 
     const u32   INIT_WIDTH  = 640;
     const u32   INIT_HEIGHT = 640;
@@ -51,7 +51,7 @@ namespace NWasp
 
     bool        CWindow::Create     ( )
     {
-        assert( s_instance == NULL );
+        assert( s_instance == nullptr );
         s_instance = new CWindow();
 
         s32 error;
@@ -69,7 +69,7 @@ namespace NWasp
             return false;
         }
         
-        s_instance->m_window = glfwOpenWindow( INIT_WIDTH, INIT_HEIGHT, GLFW_WINDOWED, INIT_WINDOW_TITLE, NULL );
+        s_instance->m_window = glfwOpenWindow( INIT_WIDTH, INIT_HEIGHT, GLFW_WINDOWED, INIT_WINDOW_TITLE, nullptr );
         if ( !s_instance->m_window )
         {
             std::cerr << "GLFW window creation failed: " << glfwErrorString( error ) << std::endl;
@@ -88,17 +88,17 @@ namespace NWasp
 
     CWindow*    CWindow::Instance   ( )
     {
-        assert( s_instance != NULL );
+        assert( s_instance != nullptr );
         return s_instance;
     }
 
     void        CWindow::Destroy    ( )
     {
-        assert( s_instance != NULL );
+        assert( s_instance != nullptr );
         glfwTerminate( );
 
         delete s_instance;
-        s_instance = NULL;
+        s_instance = nullptr;
     }
 
     bool CWindow::IsWindowClosed() const

@@ -34,7 +34,7 @@
 
 namespace NWasp
 {
-    CInput* CInput::s_instance = NULL;
+    CInput* CInput::s_instance = nullptr;
     
     CInput::CInput                  ( )
     {
@@ -46,7 +46,7 @@ namespace NWasp
 
     bool            CInput::Create          ( )
     {
-        assert( s_instance == NULL );
+        assert( s_instance == nullptr );
         s_instance = new CInput();
         
         //
@@ -67,15 +67,15 @@ namespace NWasp
     
     CInput*     CInput::Instance        ( )
     {
-        assert( s_instance != NULL );
+        assert( s_instance != nullptr );
         return s_instance;
     }
 
     void            CInput::Destroy         ( )
     {
-        assert( s_instance != NULL );
+        assert( s_instance != nullptr );
         delete s_instance;
-        s_instance = NULL;
+        s_instance = nullptr;
     }
     
     void    CInput::Poll                ( )
