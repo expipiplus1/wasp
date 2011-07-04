@@ -4,3 +4,6 @@
 [submodule "glfw"]
 	path = glfw
 	url = git://glfw.git.sourceforge.net/gitroot/glfw/glfw
+[submodule "glee"]
+	path = glee
+	url = git://glee.git.sourceforge.net/gitroot/glee/glee

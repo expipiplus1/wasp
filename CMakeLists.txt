@@ -25,11 +25,16 @@ add_subdirectory( joemath EXCLUDE_FROM_ALL )
 
 add_subdirectory( glfw EXCLUDE_FROM_ALL )
 
+add_subdirectory( glee EXCLUDE_FROM_ALL )
+
 set( joemath_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/joemath/include" )
 set( joemath_LIBRARY      libjoemathStatic )
 
 set( glfw_INCLUDE_DIR    "${CMAKE_SOURCE_DIR}/glfw/include")
 set( glfw_LIBRARY         libglfwStatic )
+
+set( glee_INCLUDE_DIR    "${CMAKE_SOURCE_DIR}/glee/include")
+set( glee_LIBRARY         libgleeStatic )
 
 #
 # Create the main engine
@@ -72,7 +77,7 @@ add_dependencies( wasp wasp_shaders )
 
 include_directories( ${joemath_INCLUDE_DIR} ${glfw_INCLUDE_DIR} ${CG_INCLUDE_DIR} )
 
-set( GL_LIBS ${OPENGL_LIBRARY} ${glfw_LIBRARY} ${CG_LIBRARY} ${CG_GL_LIBRARY} )
+set( GL_LIBS ${OPENGL_LIBRARY} ${glfw_LIBRARY} ${glee_LIBRARY} ${CG_LIBRARY} ${CG_GL_LIBRARY} )
 
 if( UNIX )
     list( APPEND GL_LIBS Xrandr Xxf86vm )
