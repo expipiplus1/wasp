@@ -34,7 +34,8 @@
 
 namespace NWasp
 {
-    class CScene
+    class CScene : public CRenderable
+                 , public CUpdatable
     {
     private:
         CScene                  ( );
@@ -53,8 +54,8 @@ namespace NWasp
         static CScene*  Instance        ( );
         static void     Destroy         ( );
 
-        void            Update          ( );
-        void            Render          ( ) const;
+        virtual void    Update          ( );
+        virtual void    Render          ( ) const;
         
     private:
         std::list<CUpdatable*>  m_updatables;
