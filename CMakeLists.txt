@@ -75,7 +75,7 @@ set( GL_LIBS ${OPENGL_LIBRARY} ${glfw_LIBRARY} ${CG_LIBRARY} ${CG_GL_LIBRARY} )
 if( UNIX )
     list( APPEND GL_LIBS Xrandr Xxf86vm )
 else()
-    list( APPEND GL_LIBS opengl32 )
+    list( APPEND GL_LIBS opengl32 wgl )
 endif()
 
 target_link_libraries( wasp ${joemath_LIBRARY} ${GL_LIBS} )
