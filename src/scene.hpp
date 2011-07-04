@@ -28,8 +28,9 @@
 
 #pragma once
 
-#include <vector>
+#include <list>
 #include "renderable.hpp"
+#include "updatable.hpp"
 
 namespace NWasp
 {
@@ -52,9 +53,11 @@ namespace NWasp
         static CScene*  Instance        ( );
         static void     Destroy         ( );
 
+        void            Update          ( );
         void            Render          ( ) const;
         
     private:
-        std::vector<CRenderable*> m_renderables;
+        std::list<CUpdatable*>  m_updatables;
+        std::list<CRenderable*> m_renderables;
     };
 };

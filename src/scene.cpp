@@ -35,7 +35,7 @@
 
 namespace NWasp
 {
-    CScene* CScene::s_instance = NULL;
+    CScene* CScene::s_instance = nullptr;
 
     CScene::CScene          ( )
     {
@@ -51,28 +51,34 @@ namespace NWasp
 
     bool     CScene::Create          ( )
     {
-        assert( s_instance == NULL );
+        assert( s_instance == nullptr );
         s_instance = new CScene;
-
+        
         return true;
     }
 
     CScene*  CScene::Instance        ( )
     {
-        assert( s_instance != NULL );
+        assert( s_instance != nullptr );
         return s_instance;
     }
 
     void     CScene::Destroy         ( )
     {
-        assert( s_instance != NULL );
+        assert( s_instance != nullptr );
         delete s_instance;
-        s_instance = NULL;
+        s_instance = nullptr;
+    }
+    
+    void     CScene::Update()
+    {
+        for( auto i : m_updatables )
+            i->Update();
     }
 
     void     CScene::Render          ( ) const
     {
-        for( u32 i = 0; i < m_renderables.size(); ++i )
-            m_renderables[i]->Render(); 
+        for( auto i : m_renderables )
+            i->Render();
     }
 };
