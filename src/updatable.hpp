@@ -26,16 +26,14 @@
     or implied, of Joe Hermaszewski.
 */
 
-#include "renderable.hpp"
+#pragma once
 
 namespace NWasp
 {
-    CRenderable::CRenderable    ( )
+    class CUpdatable
     {
-    }
-
-    CRenderable::~CRenderable   ( )
-    {
-    }
+    public: 
+        virtual void    Update      ( ) = 0;
+    };
 };
 

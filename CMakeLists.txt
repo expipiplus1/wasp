@@ -42,10 +42,11 @@ set( wasp_sources       src/main.cpp
                         src/camera.cpp
                         src/cg_context.hpp
                         src/cg_context.cpp
+                        src/input.hpp
+                        src/input.cpp
                         src/mesh.hpp
                         src/mesh.cpp
                         src/renderable.hpp
-                        src/renderable.cpp
                         src/scene.hpp
                         src/scene.cpp
                         src/shader.hpp
@@ -54,6 +55,7 @@ set( wasp_sources       src/main.cpp
                         src/time.cpp
                         src/timer.hpp
                         src/timer.cpp
+                        src/updatable.hpp
                         src/window.hpp
                         src/window.cpp )
 

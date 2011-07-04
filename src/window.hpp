@@ -48,10 +48,12 @@ namespace NWasp
         static CWindow* Instance    ( );
         static void     Destroy     ( );
 
-        bool Init               ( );
-        bool IsWindowClosed     ( ) const;
-        void Swap               ( );
-        void SetTitle           ( const char* title ) const;
+        bool Init                   ( );
+        bool IsWindowClosed         ( ) const;
+        void Swap                   ( );
+        void SetTitle               ( const char* title ) const;
+        
+        const GLFWwindow GetWindow ( ) const;
         
     private:
         s32 m_width;

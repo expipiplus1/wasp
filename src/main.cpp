@@ -36,6 +36,7 @@
 #include "shader.hpp"
 #include "timer.hpp"
 #include "window.hpp"
+#include "input.hpp"
 
 using namespace NJoeMath;
 using namespace NWasp;
@@ -47,9 +48,12 @@ int main (int argc, char** argv)
 
     if ( !CCgContext::Create() )
         return 2;
+    
+    if ( !CInput::Create() )
+        return 3;
 
     if ( !CScene::Create() )
-        return 3;
+        return 4;
     
     CMesh mesh;
     
@@ -58,6 +62,9 @@ int main (int argc, char** argv)
     while ( !CWindow::Instance()->IsWindowClosed( ) )
     {      
         timer.Start( );
+        
+        CScene::Instance()->Update();
+        CScene::Instance()->Render();
         
         mesh.Render( );
         
@@ -71,6 +78,7 @@ int main (int argc, char** argv)
     }
     
     CScene::Destroy();
+    CInput::Destroy();
     CCgContext::Destroy();
     CWindow::Destroy();
     

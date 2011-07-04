@@ -28,37 +28,63 @@
 
 #pragma once
 
-#include <list>
-#include "renderable.hpp"
-#include "updatable.hpp"
+#include <GL/glfw3.h>
+#include <joemath/joemath.hpp>
+
+using namespace NJoeMath;
 
 namespace NWasp
 {
-    class CScene : public CRenderable
-                 , public CUpdatable
+    class CInput
     {
     private:
-        CScene                  ( );
-        ~CScene                 ( );
-        CScene                  ( const CScene& ) = delete;
-        CScene&  operator =     ( const CScene& ) = delete;
+        CInput                  ( );
+        ~CInput                 ( );
+        CInput                  ( const CInput& ) = delete;
+        CInput&  operator =     ( const CInput& ) = delete;
         
-        static CScene* s_instance;
+        static CInput* s_instance;
     public: 
+        //
+        // Singleton functions
+        //
+        static bool         Create          ( );
+        static CInput*      Instance        ( );
+        static void         Destroy         ( );
+    
+        //
+        // Polling fuctions
+        //
+        void                Poll            ( );
+        
+        //
+        // Getters
+        //
 
         //
-        // Singleton methods
+        // Mouse
         //
+        // Position in window, -1 to 1
+        float2              GetMousePosition    ( ) const;
+        // Current velocity
+        float2              GetMouseVelocity    ( ) const;
+        // Change in position since last frame
+        float2              GetMouseDelta       ( ) const;
 
-        static bool     Create          ( );
-        static CScene*  Instance        ( );
-        static void     Destroy         ( );
-
-        virtual void    Update          ( );
-        virtual void    Render          ( ) const;
+        //
+        // Keyboard
+        //
+        bool                IsKeyDown           ( const int key ) const;
+        bool                IsKeyChanged        ( const int key ) const;
         
     private:
-        std::list<CUpdatable*>  m_updatables;
-        std::list<CRenderable*> m_renderables;
+        float2  m_mousePosition;
+        float2  m_mousePreviousPosition;
+        float2  m_windowSize;
+        float   m_deltaTime;
+        float   m_previousTime;
+        
+        bool    m_keyStates[GLFW_KEY_LAST];
+        bool    m_keyChanged[GLFW_KEY_LAST];
     };
 };

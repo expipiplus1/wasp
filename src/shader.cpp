@@ -51,7 +51,7 @@ namespace NWasp
     bool            CShader::Load    ( std::string filename )
     {        
         m_filename = filename;
-        m_cgEffect = cgCreateEffectFromFile( CCgContext::Instance( )->GetCgContext( ), filename.c_str(), NULL );
+        m_cgEffect = cgCreateEffectFromFile( CCgContext::Instance( )->GetCgContext( ), filename.c_str(), nullptr );
 
         CGtechnique technique = cgGetFirstTechnique( m_cgEffect );
         CGbool valid;
