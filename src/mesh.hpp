@@ -28,7 +28,7 @@
 
 #pragma once
 
-#define GL_GLEXT_PROTOTYPES
+#include <GL/GLee.h>
 #include <GL/glfw3.h>
 #include <joemath/joemath.hpp>
 #include "shader.hpp"

@@ -53,7 +53,9 @@ namespace NWasp
         //
         // Initialize the cg context
         //
+        std::cout << "hahah" << std::endl;
         s_instance->m_cgContext = cgCreateContext( );
+        std::cout << "bbabb" << std::endl;
         
         CGerror error;
         const char* error_string = cgGetLastErrorString(&error);
