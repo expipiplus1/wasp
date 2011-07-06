@@ -28,7 +28,7 @@
 
 #pragma once
 
-#ifdef WIN32
+#ifdef _WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
 #else
@@ -49,7 +49,7 @@ namespace NTime
         
     private:
         bool    m_running;
-#ifdef WIN32
+#ifdef _WIN32
         double        m_recipFrequency;
         LARGE_INTEGER m_startTime;
         LARGE_INTEGER m_endTime;

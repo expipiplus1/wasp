@@ -36,7 +36,7 @@ namespace NTime
     {
         m_running = false;
         
-    #ifdef WIN32
+    #ifdef _WIN32
         LARGE_INTEGER frequency;
         QueryPerformanceFrequency(&frequency);
         m_recipFrequency = 1.0 / double(frequency.QuadPart);
@@ -56,7 +56,7 @@ namespace NTime
 
     void CTimer::Start()
     {
-    #ifdef WIN32
+    #ifdef _WIN32
         QueryPerformanceCounter(&m_startTime);
     #else
         gettimeofday(&m_startTime, nullptr);
@@ -66,7 +66,7 @@ namespace NTime
 
     void CTimer::Stop()
     {
-    #ifdef WIN32
+    #ifdef _WIN32
         QueryPerformanceCounter(&m_endTime);
     #else
         gettimeofday(&m_endTime, nullptr);
@@ -76,7 +76,7 @@ namespace NTime
 
     double CTimer::GetElapsedTime()
     {
-    #ifdef WIN32
+    #ifdef _WIN32
         if(m_running)
             QueryPerformanceCounter(&m_endTime);
         
