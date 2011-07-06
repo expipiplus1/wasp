@@ -75,14 +75,14 @@ add_custom_target( wasp_shaders
 
 add_dependencies( wasp wasp_shaders )
 
-include_directories( ${joemath_INCLUDE_DIR} ${glfw_INCLUDE_DIR} ${CG_INCLUDE_DIR} )
+include_directories( ${joemath_INCLUDE_DIR} ${glfw_INCLUDE_DIR} ${glee_INCLUDE_DIR} ${CG_INCLUDE_DIR} )
 
 set( GL_LIBS ${OPENGL_LIBRARY} ${glfw_LIBRARY} ${glee_LIBRARY} ${CG_LIBRARY} ${CG_GL_LIBRARY} )
 
 if( UNIX )
     list( APPEND GL_LIBS Xrandr Xxf86vm )
 else()
-    list( APPEND GL_LIBS opengl32 wgl )
+    list( APPEND GL_LIBS opengl32 )
 endif()
 
 target_link_libraries( wasp ${joemath_LIBRARY} ${GL_LIBS} )
