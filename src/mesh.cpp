@@ -91,7 +91,7 @@ namespace NWasp
 
     }
     
-    void    CMesh::Render   ( )
+    void    CMesh::Render   ( ) const
     {   
         float3 camera_position = float3(1.0f, 0.0f, -2.0f);
         float3 camera_target   = float3(0.0f, 0.35f, 0.0f); 
@@ -107,10 +107,11 @@ namespace NWasp
 
         m_shader.SetModelViewProjection( modelViewProjection );
         m_shader.SetModel              ( model );
-        m_shader.SetParameterBySemantic( float3(0.1f, 0.1f, 0.1f), "AMBIENTCOLOR" );
-        m_shader.SetParameterBySemantic( float3(0.5f, 0.5f, 1.0f), "DIFFUSECOLOR" );
-        m_shader.SetParameterBySemantic( float3(100.1f, 400.1f, 400.1f), "LIGHTPOSITION" );
-        m_shader.SetParameterBySemantic( 52.0f,                    "SPECULAREXPONENT" );
+        m_shader.SetParameterBySemantic( float3(0.1f, 0.1f, 0.1f),  "AMBIENTCOLOR" );
+        m_shader.SetParameterBySemantic( float3(0.5f, 0.5f, 1.0f),  "DIFFUSECOLOR" );
+        m_shader.SetParameterBySemantic( float3(1.0f, 0.0f, -2.0f), "LIGHTPOSITION" );
+        m_shader.SetParameterBySemantic( 52.0f,                     "SPECULAREXPONENT" );
+        m_shader.SetParameterBySemantic( camera_position,           "CAMERAPOSITION" );
 
         m_shader.Bind();
 

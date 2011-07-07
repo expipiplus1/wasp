@@ -31,17 +31,18 @@
 #include <GL/GLee.h>
 #include <GL/glfw3.h>
 #include <joemath/joemath.hpp>
+#include "renderable.hpp"
 #include "shader.hpp"
 
 namespace NWasp
 {
-    class CMesh
+    class CMesh : public CRenderable
     {
     public:
         CMesh                   ( );
         virtual ~CMesh          ( );
 
-        void    Render          ( );
+        virtual void    Render  ( ) const;
         
     private:
         CShader m_shader; 
