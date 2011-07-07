@@ -58,6 +58,17 @@ namespace NWasp
         // Getters
         //
         CGcontext           GetCgContext    ( ) const;
+
+    private:
+        //
+        // States
+        //
+        
+        static  CGbool  StateRenderSceneSet         ( CGstateassignment state_assignment );
+
+        static  CGbool  StateRenderSceneReset       ( CGstateassignment state_assignment );
+        
+        static  CGbool  StateRenderSceneValidate    ( CGstateassignment state_assignment );
         
     private:
         CGcontext   m_cgContext;

@@ -53,19 +53,20 @@ namespace NWasp
         //
         // Initialize the cg context
         //
-        std::cout << "hahah" << std::endl;
         s_instance->m_cgContext = cgCreateContext( );
-        std::cout << "bbabb" << std::endl;
         
         CGerror error;
         const char* error_string = cgGetLastErrorString(&error);
         if (error != CG_NO_ERROR)
         {
             std::cerr << "Cg Error creating context\n"
-                        << error_string << std::endl;
+                      << error_string << std::endl;
             return false;
         }
         
+        CGstate render_scene_state = cgCreateState( s_instance->m_cgContext, "RenderScene", CG_BOOL );
+        cgSetStateCallbacks( render_scene_state, StateRenderSceneSet, StateRenderSceneReset, StateRenderSceneValidate );
+
         cgGLRegisterStates( s_instance->m_cgContext );
         cgGLSetManageTextureParameters( s_instance->m_cgContext, CG_TRUE );
         cgGLSetDebugMode( CG_TRUE );
@@ -94,6 +95,33 @@ namespace NWasp
         return m_cgContext;
     }
     
+    //
+    // States
+    //
+    
+    CGbool          CCgContext::StateRenderSceneSet         ( CGstateassignment state_assignment )
+    {
+        int num_values = 0;
+        const CGbool* render_scene = cgGetBoolStateAssignmentValues( state_assignment, &num_values );
+        std::cout << "RenderScene called with " << *render_scene << "\n";
+        return CG_TRUE;
+    }
+
+    CGbool          CCgContext::StateRenderSceneReset       ( CGstateassignment state_assignment )
+    {
+        std::cout << "Resetting RenderScene\n";
+        return CG_TRUE;
+    }
+    
+    CGbool          CCgContext::StateRenderSceneValidate    ( CGstateassignment state_assignment )
+    {
+        std::cout << "Validating RenderScene\n";
+        return CG_TRUE;
+    }
+    
+    //
+    // Error handling
+    //
     void CCgContext::CgErrorCallback()
     {
         CGerror error;
@@ -104,5 +132,4 @@ namespace NWasp
         if ( error_listing != nullptr )
             std::cerr << error_listing << std::endl;
     }
-
 };
