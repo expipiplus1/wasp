@@ -69,6 +69,11 @@ namespace NWasp
         delete s_instance;
         s_instance = nullptr;
     }
+
+    void     CScene::AddRenderable( CRenderable* renderable )
+    {
+        m_renderables.push_back( renderable );
+    }
     
     void     CScene::Update()
     {

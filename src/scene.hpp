@@ -39,7 +39,7 @@ namespace NWasp
     {
     private:
         CScene                  ( );
-        ~CScene                 ( );
+        virtual ~CScene         ( );
         CScene                  ( const CScene& ) = delete;
         CScene&  operator =     ( const CScene& ) = delete;
         
@@ -56,6 +56,8 @@ namespace NWasp
 
         virtual void    Update          ( );
         virtual void    Render          ( ) const;
+
+        void            AddRenderable   ( CRenderable* renderable );
         
     private:
         std::list<CUpdatable*>  m_updatables;
