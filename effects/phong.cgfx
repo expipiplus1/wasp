@@ -70,11 +70,9 @@ float4          phong_ps    ( VertexOutput input ) : COLOR
     float4 output;
 
     float3 n = normalize( input.normal );
+    float3 l = -normalize( input.lightDirection );
     float3 v = normalize( input.viewDirection );  
     float3 r = reflect( v, n );
-    float3 l = normalize( input.lightDirection );
-
-    //return float4( n, 1.0f );
 
     float3 ambient  = g_ambient * g_diffuse;
     float3 diffuse  = saturate( dot( l, n ) ) * g_diffuse;
