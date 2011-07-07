@@ -30,6 +30,7 @@
 #include <iostream>
 #include <Cg/cg.h>
 #include <joemath/joemath.hpp>
+#include "camera.hpp"
 #include "cg_context.hpp"
 #include "mesh.hpp"
 #include "scene.hpp"
@@ -54,8 +55,13 @@ int main (int argc, char** argv)
 
     if ( !CScene::Create() )
         return 4;
+
+    CCamera camera;
+    s_currentCamera = &camera;
     
     CMesh mesh;
+
+    CScene::Instance()->AddRenderable( &mesh );
     
     NTime::CTimer timer;
 
@@ -65,8 +71,6 @@ int main (int argc, char** argv)
         
         CScene::Instance()->Update();
         CScene::Instance()->Render();
-        
-        mesh.Render( );
         
         CWindow::Instance()->Swap( );
 
