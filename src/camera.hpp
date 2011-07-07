@@ -34,7 +34,11 @@ using namespace NJoeMath;
 
 namespace NWasp
 {
-    class CCamera
+    class   CCamera;
+
+    static  CCamera* s_currentCamera;
+
+    class   CCamera
     {
     public:
         CCamera                 ( );

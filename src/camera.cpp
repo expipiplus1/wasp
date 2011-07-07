@@ -32,6 +32,8 @@
 
 namespace NWasp
 {
+    CCamera* s_currentCamera = nullptr;
+
     CCamera::CCamera    ( )
     {
     }
