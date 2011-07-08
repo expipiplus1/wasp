@@ -28,10 +28,13 @@
 
 #include "mesh.hpp"
 
+#include <iostream>
 #include <Cg/cg.h>
 #include <GL/GLee.h>
 #include <GL/glfw3.h>
 #include <joemath/joemath.hpp>
+#include "camera.hpp"
+#include "camera_manager.hpp"
 #include "time.hpp"
 
 #include "bunny.h"
@@ -93,25 +96,19 @@ namespace NWasp
     
     void    CMesh::Render   ( ) const
     {   
-        float3 camera_position = float3(1.0f, 0.0f, -2.0f);
-        float3 camera_target   = float3(0.0f, 0.35f, 0.0f); 
-
         float4x4 model = RotateZXY<float,4>( 0.0f, NTime::GetApplicationTime() / 2.0, 0.0f )
                        * (Scale( float4(-10.0f, -10.0f, 10.0f, 1.0f) ) 
                        * Translate( float3(0.0f, 1.25f, 0.3f) ) );
                        
-        float4x4 view  = View( camera_position, camera_target - camera_position, float3(0.0f, 1.0f, 0.0f));
-        float4x4 projection = Projection( DegToRad( 90.0f ), 1.0f, 0.01f, 100.0f );
-
-        float4x4 modelViewProjection = model * view * projection;
+        float4x4 modelViewProjection = model * CCameraManager::Instance()->GetCurrentCamera()->GetViewProjection();
 
         m_shader.SetModelViewProjection( modelViewProjection );
         m_shader.SetModel              ( model );
-        m_shader.SetParameterBySemantic( float3(0.1f, 0.1f, 0.1f),  "AMBIENTCOLOR" );
-        m_shader.SetParameterBySemantic( float3(0.5f, 0.5f, 1.0f),  "DIFFUSECOLOR" );
-        m_shader.SetParameterBySemantic( float3(1.0f, 0.0f, -2.0f), "LIGHTPOSITION" );
-        m_shader.SetParameterBySemantic( 52.0f,                     "SPECULAREXPONENT" );
-        m_shader.SetParameterBySemantic( camera_position,           "CAMERAPOSITION" );
+        m_shader.SetParameterBySemantic( float3(0.1f, 0.1f, 0.1f),          "AMBIENTCOLOR" );
+        m_shader.SetParameterBySemantic( float3(0.5f, 0.5f, 1.0f),          "DIFFUSECOLOR" );
+        m_shader.SetParameterBySemantic( float3(1.0f, 0.0f, -2.0f),         "LIGHTPOSITION" );
+        m_shader.SetParameterBySemantic( 52.0f,                             "SPECULAREXPONENT" );
+        m_shader.SetParameterBySemantic( CCameraManager::Instance()->GetCurrentCamera()->GetPosition(),    "CAMERAPOSITION" );
 
         m_shader.Bind();
 

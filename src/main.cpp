@@ -31,6 +31,7 @@
 #include <Cg/cg.h>
 #include <joemath/joemath.hpp>
 #include "camera.hpp"
+#include "camera_manager.hpp"
 #include "cg_context.hpp"
 #include "mesh.hpp"
 #include "scene.hpp"
@@ -56,8 +57,20 @@ int main (int argc, char** argv)
     if ( !CScene::Create() )
         return 4;
 
+    if ( !CCameraManager::Create() )
+        return 5;
+
     CCamera camera;
-    s_currentCamera = &camera;
+
+    camera.SetPosition( float3(1.0f, 0.0f, -2.0f) );
+    camera.SetTarget( float3(0.0f, 0.35f, 0.0f) );
+    camera.SetAspectRatio( 1.0f );
+    camera.SetVerticalFov( DegToRad(70.0f) );
+    camera.SetNearPlane( 0.01f );
+    camera.SetFarPlane( 100.0f );
+    camera.Update();
+
+    CCameraManager::Instance()->SetCurrentCamera( &camera );
     
     CMesh mesh;
 
@@ -67,11 +80,11 @@ int main (int argc, char** argv)
 
     while ( !CWindow::Instance()->IsWindowClosed( ) )
     {      
-        timer.Start( );
-        
+        timer.Start( );        
+
         CScene::Instance()->Update();
-        CScene::Instance()->Render();
-        
+        CScene::Instance()->Render();     
+
         CWindow::Instance()->Swap( );
 
         timer.Stop( );
