@@ -34,19 +34,19 @@ using namespace NJoeMath;
 
 namespace NWasp
 {
-    class   CCamera;
-
-    static  CCamera* s_currentCamera;
-
     class   CCamera
     {
     public:
         CCamera                 ( );
         virtual ~CCamera        ( );
 
-        void            SetPosition         ( const float3&   position );
-        void            SetView             ( const float4x4& view );
-        void            SetProjection       ( const float4x4& projection );
+        void            SetPosition         ( const float3& position );
+        void            SetTarget           ( const float3& target );
+        void            SetVerticalFov      ( const float   fov );
+        void            SetAspectRatio      ( const float   aspect );
+        void            SetNearPlane        ( const float   near_plane );
+        void            SetFarPlane         ( const float   far_plane );
+
         void            Update              ( );
         
         const float3&   GetPosition         ( ) const;
@@ -55,6 +55,11 @@ namespace NWasp
         const float4x4& GetViewProjection   ( ) const;
     private:
         float3      m_position;
+        float3      m_target;
+        float       m_verticalFov;
+        float       m_aspectRatio;
+        float       m_nearPlane;
+        float       m_farPlane;
 
         //
         // Matrices

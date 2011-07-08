@@ -32,7 +32,7 @@
 
 namespace NWasp
 {
-    CCamera* s_currentCamera = nullptr;
+    //CCamera* s_currentCamera = nullptr;
 
     CCamera::CCamera    ( )
     {
@@ -47,18 +47,35 @@ namespace NWasp
         m_position = position;
     }
 
-    void    CCamera::SetView            ( const float4x4& view )
+    void    CCamera::SetTarget          ( const float3&   target )
     {
-        m_view = view;
+        m_target = target;
     }
 
-    void    CCamera::SetProjection      ( const float4x4& projection )
+    void    CCamera::SetVerticalFov     ( const float fov )
     {
-        m_projection = projection;
+        m_verticalFov = fov;
+    }
+
+    void    CCamera::SetAspectRatio     ( const float aspect )
+    {
+        m_aspectRatio = aspect;
+    }
+
+    void    CCamera::SetNearPlane       ( const float near_plane )
+    {
+        m_nearPlane = near_plane;
+    }
+
+    void    CCamera::SetFarPlane        ( const float far_plane )
+    {
+        m_farPlane = far_plane;
     }
 
     void    CCamera::Update             ( )
     {
+        m_view  = View( m_position, m_target - m_position, float3(0.0f, 1.0f, 0.0f));
+        m_projection = Projection( m_verticalFov, m_aspectRatio, m_nearPlane, m_farPlane );
         m_viewProjection = m_view * m_projection;
     }
 
