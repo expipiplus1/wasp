@@ -45,6 +45,8 @@ set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wall -g" )
 set( wasp_sources       src/main.cpp
                         src/camera.hpp
                         src/camera.cpp
+                        src/camera_manager.hpp
+                        src/camera_manager.cpp
                         src/cg_context.hpp
                         src/cg_context.cpp
                         src/input.hpp
@@ -65,6 +67,7 @@ set( wasp_sources       src/main.cpp
                         src/window.cpp )
 
 set( wasp_effect_sources    effects/global.cgh
+                            effects/scene.cgfx
                             effects/phong.cgfx 
                             effects/blue.cgfx )
 
