@@ -38,10 +38,10 @@ namespace NWasp
                  , public Updatable
     {
     private:
-        Scene                  ( );
-        virtual ~Scene         ( );
-        Scene                  ( const Scene& ) = delete;
-        Scene&  operator =     ( const Scene& ) = delete;
+                            Scene           ( );
+                    virtual ~Scene          ( );
+                            Scene           ( const Scene& )                    = delete;
+                    Scene&  operator =      ( const Scene& )                    = delete;
         
         static Scene* s_instance;
     public: 
@@ -50,14 +50,14 @@ namespace NWasp
         // Singleton methods
         //
 
-        static bool     Create          ( );
-        static Scene*  Instance        ( );
-        static void     Destroy         ( );
+        static      bool    Create          ( );
+        static      Scene*  Instance        ( );
+        static      void    Destroy         ( );
 
-        virtual void    Update          ( );
-        virtual void    Render          ( ) const;
+        virtual     void    Update          ( );
+        virtual     void    Render          ( )                         const;
 
-        void            AddRenderable   ( Renderable* renderable );
+                    void    AddRenderable   ( Renderable* renderable );
         
     private:
         std::list<Updatable*>  m_updatables;

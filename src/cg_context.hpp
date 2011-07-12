@@ -35,40 +35,40 @@ namespace NWasp
     class CgContext
     {
     private:
-        CgContext                  ( );
-        ~CgContext                 ( );
-        CgContext                  ( const CgContext& ) = delete;
-        CgContext&  operator =     ( const CgContext& ) = delete;
+                            CgContext                   ( );
+                            ~CgContext                  ( );
+                            CgContext                   ( const CgContext& )                            = delete;
+                CgContext&  operator =                  ( const CgContext& )                            = delete;
         
         static CgContext* s_instance;
     public: 
         //
         // Singleton functions
         //
-        static bool         Create          ( );
-        static CgContext*  Instance        ( );
-        static void         Destroy         ( );
+        static  bool        Create                      ( );
+        static  CgContext*  Instance                    ( );
+        static  void        Destroy                     ( );
         
         //
         // Callbacks
         //
-        static void         CgErrorCallback ( );
+        static  void        CgErrorCallback             ( );
 
         //
         // Getters
         //
-        CGcontext           GetCgContext    ( ) const;
+                CGcontext   GetCgContext                ( )                                     const;
 
     private:
         //
         // States
         //
         
-        static  CGbool  StateRenderSceneSet         ( CGstateassignment state_assignment );
+        static  CGbool      StateRenderSceneSet         ( CGstateassignment state_assignment );
 
-        static  CGbool  StateRenderSceneReset       ( CGstateassignment state_assignment );
+        static  CGbool      StateRenderSceneReset       ( CGstateassignment state_assignment );
         
-        static  CGbool  StateRenderSceneValidate    ( CGstateassignment state_assignment );
+        static  CGbool      StateRenderSceneValidate    ( CGstateassignment state_assignment );
         
     private:
         CGcontext   m_cgContext;

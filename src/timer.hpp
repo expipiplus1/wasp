@@ -40,12 +40,12 @@ namespace NTime
     class Timer
     {
     public:
-        Timer                  ( );
-        ~Timer                 ( );
+                    Timer           ( );
+                    ~Timer          ( );
         
-        void   Start            ( );
-        void   Stop             ( );
-        double GetElapsedTime   ( ); 
+            void    Start           ( );
+            void    Stop            ( );
+            double  GetElapsedTime  ( );
         
     private:
         bool    m_running;

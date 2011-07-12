@@ -30,6 +30,6 @@
 
 namespace NTime
 {
-    double  GetApplicationTime  ();
+            double  GetApplicationTime  ();
 };
 

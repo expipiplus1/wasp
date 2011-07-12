@@ -33,7 +33,7 @@ namespace NWasp
     class Renderable
     {
     public: 
-        virtual void    Render      ( ) const = 0;
+        virtual     void    Render  ( ) const        = 0;
     };
 };
 

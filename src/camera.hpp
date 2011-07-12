@@ -37,22 +37,22 @@ namespace NWasp
     class   Camera
     {
     public:
-        Camera                 ( );
-        virtual ~Camera        ( );
+                                Camera              ( );
+        virtual                 ~Camera             ( );
 
-        void            SetPosition         ( const float3& position );
-        void            SetTarget           ( const float3& target );
-        void            SetVerticalFov      ( const float   fov );
-        void            SetAspectRatio      ( const float   aspect );
-        void            SetNearPlane        ( const float   near_plane );
-        void            SetFarPlane         ( const float   far_plane );
+                    void        SetPosition         ( const float3& position );
+                    void        SetTarget           ( const float3& target );
+                    void        SetVerticalFov      ( const float   fov );
+                    void        SetAspectRatio      ( const float   aspect );
+                    void        SetNearPlane        ( const float   near_plane );
+                    void        SetFarPlane         ( const float   far_plane );
 
-        void            Update              ( );
+                    void        Update              ( );
         
-        const float3&   GetPosition         ( ) const;
-        const float4x4& GetView             ( ) const;
-        const float4x4& GetProjection       ( ) const;
-        const float4x4& GetViewProjection   ( ) const;
+        const       float3&     GetPosition         ( )                             const;
+        const       float4x4&   GetView             ( )                             const;
+        const       float4x4&   GetProjection       ( )                             const;
+        const       float4x4&   GetViewProjection   ( )                             const;
     private:
         float3      m_position;
         float3      m_target;
