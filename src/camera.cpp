@@ -34,67 +34,67 @@ namespace NWasp
 {
     //CCamera* s_currentCamera = nullptr;
 
-    CCamera::CCamera    ( )
+    Camera::Camera    ( )
     {
     }
 
-    CCamera::~CCamera   ( )
+    Camera::~Camera   ( )
     {
     }
 
-    void    CCamera::SetPosition        ( const float3&   position )
+    void    Camera::SetPosition        ( const float3&   position )
     {
         m_position = position;
     }
 
-    void    CCamera::SetTarget          ( const float3&   target )
+    void    Camera::SetTarget          ( const float3&   target )
     {
         m_target = target;
     }
 
-    void    CCamera::SetVerticalFov     ( const float fov )
+    void    Camera::SetVerticalFov     ( const float fov )
     {
         m_verticalFov = fov;
     }
 
-    void    CCamera::SetAspectRatio     ( const float aspect )
+    void    Camera::SetAspectRatio     ( const float aspect )
     {
         m_aspectRatio = aspect;
     }
 
-    void    CCamera::SetNearPlane       ( const float near_plane )
+    void    Camera::SetNearPlane       ( const float near_plane )
     {
         m_nearPlane = near_plane;
     }
 
-    void    CCamera::SetFarPlane        ( const float far_plane )
+    void    Camera::SetFarPlane        ( const float far_plane )
     {
         m_farPlane = far_plane;
     }
 
-    void    CCamera::Update             ( )
+    void    Camera::Update             ( )
     {
         m_view  = View( m_position, m_target - m_position, float3(0.0f, 1.0f, 0.0f));
         m_projection = Projection( m_verticalFov, m_aspectRatio, m_nearPlane, m_farPlane );
         m_viewProjection = m_view * m_projection;
     }
 
-    const float3&       CCamera::GetPosition         ( ) const
+    const float3&       Camera::GetPosition         ( ) const
     {
         return m_position;
     }
 
-    const float4x4&     CCamera::GetView             ( ) const
+    const float4x4&     Camera::GetView             ( ) const
     {
         return m_view;
     }
     
-    const float4x4&     CCamera::GetProjection       ( ) const
+    const float4x4&     Camera::GetProjection       ( ) const
     {
         return m_projection;
     }
 
-    const float4x4&     CCamera::GetViewProjection   ( ) const
+    const float4x4&     Camera::GetViewProjection   ( ) const
     {
         return m_viewProjection;
     }

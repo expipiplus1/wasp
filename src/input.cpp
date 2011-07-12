@@ -34,30 +34,30 @@
 
 namespace NWasp
 {
-    CInput* CInput::s_instance = nullptr;
+    Input* Input::s_instance = nullptr;
     
-    CInput::CInput                  ( )
+    Input::Input                  ( )
     {
     }
 
-    CInput::~CInput                 ( )
+    Input::~Input                 ( )
     {
     }
 
-    bool            CInput::Create          ( )
+    bool            Input::Create          ( )
     {
         assert( s_instance == nullptr );
-        s_instance = new CInput();
+        s_instance = new Input();
         
         //
         // Get windows size
         //
         int2 integer_window_size;
-        glfwGetWindowSize( const_cast<GLFWwindow>(CWindow::Instance()->GetWindow()), &integer_window_size[0], &integer_window_size[1] );
+        glfwGetWindowSize( const_cast<GLFWwindow>(Window::Instance()->GetWindow()), &integer_window_size[0], &integer_window_size[1] );
         s_instance->m_windowSize = integer_window_size;
         
         int2 integer_mouse_position;
-        glfwGetMousePos( CWindow::Instance()->GetWindow(), &integer_mouse_position[0], &integer_mouse_position[1] );
+        glfwGetMousePos( Window::Instance()->GetWindow(), &integer_mouse_position[0], &integer_mouse_position[1] );
         s_instance->m_mousePosition = integer_mouse_position / s_instance->m_windowSize;
         s_instance->m_mousePreviousPosition = s_instance->m_mousePosition;
         s_instance->m_deltaTime = 1.0f;
@@ -65,24 +65,24 @@ namespace NWasp
         return true;
     }
     
-    CInput*     CInput::Instance        ( )
+    Input*     Input::Instance        ( )
     {
         assert( s_instance != nullptr );
         return s_instance;
     }
 
-    void            CInput::Destroy         ( )
+    void            Input::Destroy         ( )
     {
         assert( s_instance != nullptr );
         delete s_instance;
         s_instance = nullptr;
     }
     
-    void    CInput::Poll                ( )
+    void    Input::Poll                ( )
     {
         glfwPollEvents();
         
-        GLFWwindow window = const_cast<GLFWwindow>(CWindow::Instance()->GetWindow());
+        GLFWwindow window = const_cast<GLFWwindow>(Window::Instance()->GetWindow());
         
         for( u32 i = 0; i < GLFW_KEY_LAST; ++i )
         {
@@ -101,27 +101,27 @@ namespace NWasp
         m_previousTime = current_time;
     }
 
-    float2  CInput::GetMousePosition    ( ) const
+    float2  Input::GetMousePosition    ( ) const
     {
         return m_mousePosition;
     }
 
-    float2  CInput::GetMouseVelocity    ( ) const
+    float2  Input::GetMouseVelocity    ( ) const
     {
         return (m_mousePosition - m_mousePreviousPosition) / m_deltaTime;
     }
     
-    float2  CInput::GetMouseDelta       ( ) const
+    float2  Input::GetMouseDelta       ( ) const
     {
         return m_mousePosition - m_mousePreviousPosition;
     }
 
-    bool    CInput::IsKeyDown           ( const int key ) const
+    bool    Input::IsKeyDown           ( const int key ) const
     {
         return m_keyStates[key];
     }
     
-    bool    CInput::IsKeyChanged        ( const int key ) const
+    bool    Input::IsKeyChanged        ( const int key ) const
     {
         return m_keyChanged[key];
     }

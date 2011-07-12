@@ -35,21 +35,21 @@ using namespace NJoeMath;
 
 namespace NWasp
 {
-    class CInput
+    class Input
     {
     private:
-        CInput                  ( );
-        ~CInput                 ( );
-        CInput                  ( const CInput& ) = delete;
-        CInput&  operator =     ( const CInput& ) = delete;
+        Input                  ( );
+        ~Input                 ( );
+        Input                  ( const Input& ) = delete;
+        Input&  operator =     ( const Input& ) = delete;
         
-        static CInput* s_instance;
+        static Input* s_instance;
     public: 
         //
         // Singleton functions
         //
         static bool         Create          ( );
-        static CInput*      Instance        ( );
+        static Input*      Instance        ( );
         static void         Destroy         ( );
     
         //

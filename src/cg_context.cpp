@@ -35,20 +35,20 @@
 
 namespace NWasp
 {
-    CCgContext* CCgContext::s_instance = nullptr;
+    CgContext* CgContext::s_instance = nullptr;
     
-    CCgContext::CCgContext                  ( )
+    CgContext::CgContext                  ( )
     {
     }
 
-    CCgContext::~CCgContext                 ( )
+    CgContext::~CgContext                 ( )
     {
     }
 
-    bool            CCgContext::Create          ( )
+    bool            CgContext::Create          ( )
     {
         assert( s_instance == nullptr );
-        s_instance = new CCgContext();
+        s_instance = new CgContext();
 
         //
         // Initialize the cg context
@@ -77,20 +77,20 @@ namespace NWasp
         return true;
     }
     
-    CCgContext*     CCgContext::Instance        ( )
+    CgContext*     CgContext::Instance        ( )
     {
         assert( s_instance != nullptr );
         return s_instance;
     }
 
-    void            CCgContext::Destroy         ( )
+    void            CgContext::Destroy         ( )
     {
         assert( s_instance != nullptr );
         delete s_instance;
         s_instance = nullptr;
     }
     
-    CGcontext       CCgContext::GetCgContext    ( ) const
+    CGcontext       CgContext::GetCgContext    ( ) const
     {
         return m_cgContext;
     }
@@ -99,7 +99,7 @@ namespace NWasp
     // States
     //
     
-    CGbool          CCgContext::StateRenderSceneSet         ( CGstateassignment state_assignment )
+    CGbool          CgContext::StateRenderSceneSet         ( CGstateassignment state_assignment )
     {
         int num_values = 0;
         const CGbool* render_scene = cgGetBoolStateAssignmentValues( state_assignment, &num_values );
@@ -107,13 +107,13 @@ namespace NWasp
         return CG_TRUE;
     }
 
-    CGbool          CCgContext::StateRenderSceneReset       ( CGstateassignment state_assignment )
+    CGbool          CgContext::StateRenderSceneReset       ( CGstateassignment state_assignment )
     {
         std::cout << "Resetting RenderScene\n";
         return CG_TRUE;
     }
     
-    CGbool          CCgContext::StateRenderSceneValidate    ( CGstateassignment state_assignment )
+    CGbool          CgContext::StateRenderSceneValidate    ( CGstateassignment state_assignment )
     {
         std::cout << "Validating RenderScene\n";
         return CG_TRUE;
@@ -122,13 +122,13 @@ namespace NWasp
     //
     // Error handling
     //
-    void CCgContext::CgErrorCallback()
+    void CgContext::CgErrorCallback()
     {
         CGerror error;
         const char* error_string = cgGetLastErrorString( &error );
         std::cerr << "Cg Error:\n" 
                   << error_string << std::endl;
-        const char* error_listing = cgGetLastListing( CCgContext::Instance( )->GetCgContext( ) );
+        const char* error_listing = cgGetLastListing( CgContext::Instance( )->GetCgContext( ) );
         if ( error_listing != nullptr )
             std::cerr << error_listing << std::endl;
     }

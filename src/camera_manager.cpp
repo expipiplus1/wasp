@@ -33,43 +33,43 @@
 
 namespace NWasp
 {
-    CCameraManager* CCameraManager::s_instance = nullptr;
+    CameraManager* CameraManager::s_instance = nullptr;
 
-    CCameraManager::CCameraManager( )
+    CameraManager::CameraManager( )
     {
     }
 
-    CCameraManager::~CCameraManager( )
+    CameraManager::~CameraManager( )
     {
     }
 
-    bool        CCameraManager::Create     ( )
+    bool        CameraManager::Create     ( )
     {
         assert( s_instance == nullptr );
-        s_instance = new CCameraManager();
+        s_instance = new CameraManager();
 
         return true;
     }
 
-    CCameraManager*    CCameraManager::Instance   ( )
+    CameraManager*    CameraManager::Instance   ( )
     {
         assert( s_instance != nullptr );
         return s_instance;
     }
 
-    void        CCameraManager::Destroy    ( )
+    void        CameraManager::Destroy    ( )
     {
         assert( s_instance != nullptr );
         delete s_instance;
         s_instance = nullptr;
     }
 
-    void        CCameraManager::SetCurrentCamera    ( CCamera* current_camera )
+    void        CameraManager::SetCurrentCamera    ( Camera* current_camera )
     {
         m_currentCamera = current_camera;
     }
 
-    CCamera*    CCameraManager::GetCurrentCamera    ( ) const
+    Camera*    CameraManager::GetCurrentCamera    ( ) const
     {
         return m_currentCamera;
     }

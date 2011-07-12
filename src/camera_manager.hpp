@@ -32,24 +32,24 @@
 
 namespace NWasp
 {
-    class CCameraManager
+    class CameraManager
     {
     private:
-        CCameraManager                 ( );
-        ~CCameraManager                ( );
-        CCameraManager                 ( const CCameraManager& ) = delete;
-        CCameraManager& operator =     ( const CCameraManager& ) = delete;
+        CameraManager                 ( );
+        ~CameraManager                ( );
+        CameraManager                 ( const CameraManager& ) = delete;
+        CameraManager& operator =     ( const CameraManager& ) = delete;
 
-        static CCameraManager* s_instance;
+        static CameraManager* s_instance;
     public:
         static bool             Create      ( );
-        static CCameraManager*  Instance    ( );
+        static CameraManager*  Instance    ( );
         static void             Destroy     ( );
 
-        void        SetCurrentCamera    ( CCamera* current_camera );
-        CCamera*    GetCurrentCamera    ( ) const;
+        void        SetCurrentCamera    ( Camera* current_camera );
+        Camera*    GetCurrentCamera    ( ) const;
 
     private:
-        CCamera* m_currentCamera;
+        Camera* m_currentCamera;
     };
 };

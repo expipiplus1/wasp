@@ -35,13 +35,13 @@
 
 namespace NWasp
 {
-    CScene* CScene::s_instance = nullptr;
+    Scene* Scene::s_instance = nullptr;
 
-    CScene::CScene          ( )
+    Scene::Scene          ( )
     {
     }
 
-    CScene::~CScene         ( )
+    Scene::~Scene         ( )
     {
     }
 
@@ -49,39 +49,39 @@ namespace NWasp
     // Singleton methods
     //
 
-    bool     CScene::Create          ( )
+    bool     Scene::Create          ( )
     {
         assert( s_instance == nullptr );
-        s_instance = new CScene;
+        s_instance = new Scene;
         
         return true;
     }
 
-    CScene*  CScene::Instance        ( )
+    Scene*  Scene::Instance        ( )
     {
         assert( s_instance != nullptr );
         return s_instance;
     }
 
-    void     CScene::Destroy         ( )
+    void     Scene::Destroy         ( )
     {
         assert( s_instance != nullptr );
         delete s_instance;
         s_instance = nullptr;
     }
 
-    void     CScene::AddRenderable( CRenderable* renderable )
+    void     Scene::AddRenderable( Renderable* renderable )
     {
         m_renderables.push_back( renderable );
     }
     
-    void     CScene::Update()
+    void     Scene::Update()
     {
         for( auto i : m_updatables )
             i->Update();
     }
 
-    void     CScene::Render          ( ) const
+    void     Scene::Render          ( ) const
     {
         for( auto i : m_renderables )
             i->Render();

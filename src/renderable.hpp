@@ -30,7 +30,7 @@
 
 namespace NWasp
 {
-    class CRenderable
+    class Renderable
     {
     public: 
         virtual void    Render      ( ) const = 0;

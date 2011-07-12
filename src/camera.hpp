@@ -34,11 +34,11 @@ using namespace NJoeMath;
 
 namespace NWasp
 {
-    class   CCamera
+    class   Camera
     {
     public:
-        CCamera                 ( );
-        virtual ~CCamera        ( );
+        Camera                 ( );
+        virtual ~Camera        ( );
 
         void            SetPosition         ( const float3& position );
         void            SetTarget           ( const float3& target );

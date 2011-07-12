@@ -32,7 +32,7 @@
 
 namespace NTime
 {
-    CTimer::CTimer()
+    Timer::Timer()
     {
         m_running = false;
         
@@ -50,11 +50,11 @@ namespace NTime
     #endif
     }
 
-    CTimer::~CTimer()
+    Timer::~Timer()
     {
     }
 
-    void CTimer::Start()
+    void Timer::Start()
     {
     #ifdef _WIN32
         QueryPerformanceCounter(&m_startTime);
@@ -64,7 +64,7 @@ namespace NTime
         m_running = true;
     }
 
-    void CTimer::Stop()
+    void Timer::Stop()
     {
     #ifdef _WIN32
         QueryPerformanceCounter(&m_endTime);
@@ -74,7 +74,7 @@ namespace NTime
         m_running = false;
     }
 
-    double CTimer::GetElapsedTime()
+    double Timer::GetElapsedTime()
     {
     #ifdef _WIN32
         if(m_running)

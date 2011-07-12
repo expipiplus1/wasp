@@ -36,16 +36,16 @@
 
 namespace NWasp
 {
-    class CMesh : public CRenderable
+    class Mesh : public Renderable
     {
     public:
-        CMesh                   ( );
-        virtual ~CMesh          ( );
+        Mesh                   ( );
+        virtual ~Mesh          ( );
 
         virtual void    Render  ( ) const;
         
     private:
-        CShader m_shader; 
+        Shader m_shader; 
 
         GLuint  m_vbo;
         GLuint  m_ibo;

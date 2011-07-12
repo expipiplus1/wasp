@@ -32,21 +32,21 @@
 
 namespace NWasp
 {
-    class CCgContext
+    class CgContext
     {
     private:
-        CCgContext                  ( );
-        ~CCgContext                 ( );
-        CCgContext                  ( const CCgContext& ) = delete;
-        CCgContext&  operator =     ( const CCgContext& ) = delete;
+        CgContext                  ( );
+        ~CgContext                 ( );
+        CgContext                  ( const CgContext& ) = delete;
+        CgContext&  operator =     ( const CgContext& ) = delete;
         
-        static CCgContext* s_instance;
+        static CgContext* s_instance;
     public: 
         //
         // Singleton functions
         //
         static bool         Create          ( );
-        static CCgContext*  Instance        ( );
+        static CgContext*  Instance        ( );
         static void         Destroy         ( );
         
         //

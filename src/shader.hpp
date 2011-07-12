@@ -36,11 +36,11 @@ using namespace NJoeMath;
 
 namespace NWasp
 {
-    class CShader
+    class Shader
     {
     public:
-        CShader                 ( );
-        virtual ~CShader        ( );
+        Shader                 ( );
+        virtual ~Shader        ( );
         
         bool                Load    ( std::string filename );
 

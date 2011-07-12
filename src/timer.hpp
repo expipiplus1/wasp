@@ -37,11 +37,11 @@
 
 namespace NTime
 {
-    class CTimer
+    class Timer
     {
     public:
-        CTimer                  ( );
-        ~CTimer                 ( );
+        Timer                  ( );
+        ~Timer                 ( );
         
         void   Start            ( );
         void   Stop             ( );

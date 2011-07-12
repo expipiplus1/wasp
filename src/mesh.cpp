@@ -41,7 +41,7 @@
 
 namespace NWasp
 {
-    CMesh::CMesh            ( )
+    Mesh::Mesh            ( )
     :m_shader()
     {
         m_shader.Load( "effects/phong.cgfx" );
@@ -89,18 +89,18 @@ namespace NWasp
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
     }
     
-    CMesh::~CMesh           ( )
+    Mesh::~Mesh           ( )
     {
 
     }
     
-    void    CMesh::Render   ( ) const
+    void    Mesh::Render   ( ) const
     {   
         float4x4 model = RotateZXY<float,4>( 0.0f, NTime::GetApplicationTime() / 2.0, 0.0f )
                        * (Scale( float4(-10.0f, -10.0f, 10.0f, 1.0f) ) 
                        * Translate( float3(0.0f, 1.25f, 0.3f) ) );
                        
-        float4x4 modelViewProjection = model * CCameraManager::Instance()->GetCurrentCamera()->GetViewProjection();
+        float4x4 modelViewProjection = model * CameraManager::Instance()->GetCurrentCamera()->GetViewProjection();
 
         m_shader.SetModelViewProjection( modelViewProjection );
         m_shader.SetModel              ( model );
@@ -108,7 +108,7 @@ namespace NWasp
         m_shader.SetParameterBySemantic( float3(0.5f, 0.5f, 1.0f),          "DIFFUSECOLOR" );
         m_shader.SetParameterBySemantic( float3(1.0f, 0.0f, -2.0f),         "LIGHTPOSITION" );
         m_shader.SetParameterBySemantic( 52.0f,                             "SPECULAREXPONENT" );
-        m_shader.SetParameterBySemantic( CCameraManager::Instance()->GetCurrentCamera()->GetPosition(),    "CAMERAPOSITION" );
+        m_shader.SetParameterBySemantic( CameraManager::Instance()->GetCurrentCamera()->GetPosition(),    "CAMERAPOSITION" );
 
         m_shader.Bind();
 

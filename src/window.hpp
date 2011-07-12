@@ -34,18 +34,18 @@
 
 namespace NWasp
 {
-    class CWindow
+    class Window
     {
     private:
-        CWindow                 ( );
-        ~CWindow                ( );
-        CWindow                 ( const CWindow& ) = delete;
-        CWindow& operator =     ( const CWindow& ) = delete;
+        Window                 ( );
+        ~Window                ( );
+        Window                 ( const Window& ) = delete;
+        Window& operator =     ( const Window& ) = delete;
 
-        static CWindow* s_instance;
+        static Window* s_instance;
     public:
         static bool     Create      ( );
-        static CWindow* Instance    ( );
+        static Window* Instance    ( );
         static void     Destroy     ( );
 
         bool Init                   ( );

@@ -34,16 +34,16 @@
 
 namespace NWasp
 {
-    class CScene : public CRenderable
-                 , public CUpdatable
+    class Scene : public Renderable
+                 , public Updatable
     {
     private:
-        CScene                  ( );
-        virtual ~CScene         ( );
-        CScene                  ( const CScene& ) = delete;
-        CScene&  operator =     ( const CScene& ) = delete;
+        Scene                  ( );
+        virtual ~Scene         ( );
+        Scene                  ( const Scene& ) = delete;
+        Scene&  operator =     ( const Scene& ) = delete;
         
-        static CScene* s_instance;
+        static Scene* s_instance;
     public: 
 
         //
@@ -51,16 +51,16 @@ namespace NWasp
         //
 
         static bool     Create          ( );
-        static CScene*  Instance        ( );
+        static Scene*  Instance        ( );
         static void     Destroy         ( );
 
         virtual void    Update          ( );
         virtual void    Render          ( ) const;
 
-        void            AddRenderable   ( CRenderable* renderable );
+        void            AddRenderable   ( Renderable* renderable );
         
     private:
-        std::list<CUpdatable*>  m_updatables;
-        std::list<CRenderable*> m_renderables;
+        std::list<Updatable*>  m_updatables;
+        std::list<Renderable*> m_renderables;
     };
 };

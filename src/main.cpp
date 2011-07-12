@@ -45,22 +45,22 @@ using namespace NWasp;
 
 int main (int argc, char** argv)
 {
-    if ( !CWindow::Create() )
+    if ( !Window::Create() )
         return 1;
 
-    if ( !CCgContext::Create() )
+    if ( !CgContext::Create() )
         return 2;
     
-    if ( !CInput::Create() )
+    if ( !Input::Create() )
         return 3;
 
-    if ( !CScene::Create() )
+    if ( !Scene::Create() )
         return 4;
 
-    if ( !CCameraManager::Create() )
+    if ( !CameraManager::Create() )
         return 5;
 
-    CCamera camera;
+    Camera camera;
 
     camera.SetPosition( float3(1.0f, 0.0f, -2.0f) );
     camera.SetTarget( float3(0.0f, 0.35f, 0.0f) );
@@ -70,34 +70,34 @@ int main (int argc, char** argv)
     camera.SetFarPlane( 100.0f );
     camera.Update();
 
-    CCameraManager::Instance()->SetCurrentCamera( &camera );
+    CameraManager::Instance()->SetCurrentCamera( &camera );
     
-    CMesh mesh;
+    Mesh mesh;
 
-    CScene::Instance()->AddRenderable( &mesh );
+    Scene::Instance()->AddRenderable( &mesh );
     
-    NTime::CTimer timer;
+    NTime::Timer timer;
 
-    while ( !CWindow::Instance()->IsWindowClosed( ) )
+    while ( !Window::Instance()->IsWindowClosed( ) )
     {      
         timer.Start( );        
 
-        CScene::Instance()->Update();
-        CScene::Instance()->Render();     
+        Scene::Instance()->Update();
+        Scene::Instance()->Render();     
 
-        CWindow::Instance()->Swap( );
+        Window::Instance()->Swap( );
 
         timer.Stop( );
 
         char title[64];
         std::snprintf( title, 64, "Wasp -- %.2f fps", 1.0 / timer.GetElapsedTime() );
-        CWindow::Instance()->SetTitle( title );
+        Window::Instance()->SetTitle( title );
     }
     
-    CScene::Destroy();
-    CInput::Destroy();
-    CCgContext::Destroy();
-    CWindow::Destroy();
+    Scene::Destroy();
+    Input::Destroy();
+    CgContext::Destroy();
+    Window::Destroy();
     
     return 0;
 }

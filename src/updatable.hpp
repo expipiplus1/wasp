@@ -30,7 +30,7 @@
 
 namespace NWasp
 {
-    class CUpdatable
+    class Updatable
     {
     public: 
         virtual void    Update      ( ) = 0;

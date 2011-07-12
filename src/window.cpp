@@ -35,24 +35,24 @@
 
 namespace NWasp
 {
-    CWindow* CWindow::s_instance = nullptr;
+    Window* Window::s_instance = nullptr;
 
     const u32   INIT_WIDTH  = 640;
     const u32   INIT_HEIGHT = 640;
     const char* INIT_WINDOW_TITLE = "wasp";
 
-    CWindow::CWindow( )
+    Window::Window( )
     {
     }
 
-    CWindow::~CWindow( )
+    Window::~Window( )
     {
     }
 
-    bool        CWindow::Create     ( )
+    bool        Window::Create     ( )
     {
         assert( s_instance == nullptr );
-        s_instance = new CWindow();
+        s_instance = new Window();
 
         s32 error;
         
@@ -86,13 +86,13 @@ namespace NWasp
         return true;
     }
 
-    CWindow*    CWindow::Instance   ( )
+    Window*    Window::Instance   ( )
     {
         assert( s_instance != nullptr );
         return s_instance;
     }
 
-    void        CWindow::Destroy    ( )
+    void        Window::Destroy    ( )
     {
         assert( s_instance != nullptr );
         glfwTerminate( );
@@ -101,14 +101,14 @@ namespace NWasp
         s_instance = nullptr;
     }
 
-    bool CWindow::IsWindowClosed() const
+    bool Window::IsWindowClosed() const
     {
         return ( !glfwIsWindow( m_window ) ||
                 glfwGetKey( m_window, GLFW_KEY_ESCAPE ) == GLFW_PRESS ||
                 glfwGetKey( m_window, 'Q' )             == GLFW_PRESS );
     }
 
-    void CWindow::Swap()
+    void Window::Swap()
     {
         //
         // Swap buffers
@@ -123,12 +123,12 @@ namespace NWasp
         glfwPollEvents( );
     }
 
-    void CWindow::SetTitle( const char* title ) const
+    void Window::SetTitle( const char* title ) const
     {
         glfwSetWindowTitle( m_window, title );
     }
     
-    const GLFWwindow  CWindow::GetWindow() const
+    const GLFWwindow  Window::GetWindow() const
     {
         return m_window;
     }
