@@ -33,7 +33,7 @@ namespace NWasp
     class Updatable
     {
     public: 
-        virtual     void    Update  ( )     = 0;
+        virtual void    Update  ( )         = 0;
     };
 };
 

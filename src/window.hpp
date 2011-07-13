@@ -39,26 +39,26 @@ namespace NWasp
     private:
                             Window          ( );
                             ~Window         ( );
-                            Window          ( const Window& )               = delete;
-                Window&     operator =      ( const Window& )               = delete;
+                            Window          ( const Window&  )              = delete;
+        Window&             operator =      ( const Window&  )              = delete;
 
-        static Window* s_instance;
+        static Window*      s_instance;
     public:
-        static  bool        Create          ( );
-        static  Window*     Instance        ( );
-        static  void        Destroy         ( );
+        static bool         Create          ( );
+        static Window*      Instance        ( );
+        static void         Destroy         ( );
 
-                bool        Init            ( );
-                bool        IsWindowClosed  ( )                     const;
-                void        Swap            ( );
-                void        SetTitle        ( const char* title )   const;
+        bool                Init            ( );
+        bool                IsWindowClosed  ( ) const;
+        void                Swap            ( );
+        void                SetTitle        ( const char*   title ) const;
         
-        const   GLFWwindow  GetWindow       ( )                     const;
+        const GLFWwindow    GetWindow       ( ) const;
         
     private:
-        s32 m_width;
-        s32 m_height;
+        s32                 m_width;
+        s32                 m_height;
         
-        GLFWwindow m_window;
+        GLFWwindow          m_window;
     };
 };

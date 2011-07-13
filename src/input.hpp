@@ -38,24 +38,24 @@ namespace NWasp
     class Input
     {
     private:
-                            Input               ( );
-                            ~Input              ( );
-                            Input               ( const Input& )            = delete;
-                Input&      operator =          ( const Input& )            = delete;
+                        Input                   ( );
+                        ~Input                  ( );
+                        Input                   ( const Input&  )               = delete;
+        Input&          operator =              ( const Input&  )               = delete;
         
-        static Input* s_instance;
+        static Input*   s_instance;
     public: 
         //
         // Singleton functions
         //
-        static  bool        Create              ( );
-        static  Input*      Instance            ( );
-        static  void        Destroy             ( );
+        static bool     Create                  ( );
+        static Input*   Instance                ( );
+        static void     Destroy                 ( );
     
         //
         // Polling fuctions
         //
-                void        Poll                ( );
+        void            Poll                    ( );
         
         //
         // Getters
@@ -65,24 +65,24 @@ namespace NWasp
         // Mouse
         //
         // Position in window, -1 to 1
-                float2      GetMousePosition    ( )                 const;
+        float2          GetMousePosition        ( ) const;
         // Current velocity
-                float2      GetMouseVelocity    ( )                 const;
+        float2          GetMouseVelocity        ( ) const;
         // Change in position since last frame
-                float2      GetMouseDelta       ( )                 const;
+        float2          GetMouseDelta           ( ) const;
 
         //
         // Keyboard
         //
-                bool        IsKeyDown           ( const int key )   const;
-                bool        IsKeyChanged        ( const int key )   const;
+        bool            IsKeyDown               ( const int    key ) const;
+        bool            IsKeyChanged            ( const int    key ) const;
         
     private:
-        float2  m_mousePosition;
-        float2  m_mousePreviousPosition;
-        float2  m_windowSize;
-        float   m_deltaTime;
-        float   m_previousTime;
+        float2          m_mousePosition;
+        float2          m_mousePreviousPosition;
+        float2          m_windowSize;
+        float           m_deltaTime;
+        float           m_previousTime;
         
         bool    m_keyStates[GLFW_KEY_LAST];
         bool    m_keyChanged[GLFW_KEY_LAST];

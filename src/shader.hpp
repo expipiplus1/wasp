@@ -39,24 +39,26 @@ namespace NWasp
     class Shader
     {
     public:
-                    Shader                  ( );
-            virtual ~Shader                 ( );
+                        Shader                  ( );
+        virtual         ~Shader                 ( );
         
-            bool    Load                    ( std::string filename );
+        bool            Load                    ( std::string     filename );
 
-        std::string         GetName ( ) const;
+        std::string     GetName                 ( ) const;
         
-            void    Bind                    ( )                                         const;
-            bool    Reload                  ( );
+        void            Bind                    ( ) const;
+        bool            Reload                  ( );
 
-            void    SetModelViewProjection  ( const float4x4& modelViewProjection )     const;
-            void    SetModel                ( const float4x4& model )                   const;
-            void    SetParameterBySemantic  ( const float3& v, const char* semantic )   const;
-            void    SetParameterBySemantic  ( const float v, const char* semantic )     const;
+        void            SetModelViewProjection  ( const float4x4& modelViewProjection ) const;
+        void            SetModel                ( const float4x4& model ) const;
+        void            SetParameterBySemantic  ( const float3&   v,
+                                                  const char*     semantic ) const;
+        void            SetParameterBySemantic  ( const float     v,
+                                                  const char*     semantic ) const;
         
     private:
-        std::string         m_name;
-        std::string         m_filename;   
-        CGeffect            m_cgEffect;
+        std::string     m_name;
+        std::string     m_filename;
+        CGeffect        m_cgEffect;
     };
 };

@@ -40,22 +40,22 @@ namespace NTime
     class Timer
     {
     public:
-                    Timer           ( );
-                    ~Timer          ( );
+                        Timer               ( );
+                        ~Timer              ( );
         
-            void    Start           ( );
-            void    Stop            ( );
-            double  GetElapsedTime  ( );
+        void            Start               ( );
+        void            Stop                ( );
+        double          GetElapsedTime      ( );
         
     private:
-        bool    m_running;
+        bool            m_running;
 #ifdef _WIN32
-        double        m_recipFrequency;
-        LARGE_INTEGER m_startTime;
-        LARGE_INTEGER m_endTime;
+        double          m_recipFrequency;
+        LARGE_INTEGER   m_startTime;
+        LARGE_INTEGER   m_endTime;
 #else
-        timeval m_startTime;
-        timeval m_endTime;
+        timeval         m_startTime;
+        timeval         m_endTime;
 #endif
     };
 };
