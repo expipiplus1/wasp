@@ -41,26 +41,25 @@
 #include "input.hpp"
 
 using namespace NJoeMath;
-using namespace NWasp;
 
 int main (int argc, char** argv)
 {
-    if ( !Window::Create() )
+    if ( !NWasp::Window::Create() )
         return 1;
 
-    if ( !CgContext::Create() )
+    if ( !NWasp::CgContext::Create() )
         return 2;
     
-    if ( !Input::Create() )
+    if ( !NWasp::Input::Create() )
         return 3;
 
-    if ( !Scene::Create() )
+    if ( !NWasp::Scene::Create() )
         return 4;
 
-    if ( !CameraManager::Create() )
+    if ( !NWasp::CameraManager::Create() )
         return 5;
 
-    Camera camera;
+    NWasp::Camera camera;
 
     camera.SetPosition( float3(1.0f, 0.0f, -2.0f) );
     camera.SetTarget( float3(0.0f, 0.35f, 0.0f) );
@@ -70,34 +69,34 @@ int main (int argc, char** argv)
     camera.SetFarPlane( 100.0f );
     camera.Update();
 
-    CameraManager::Instance()->SetCurrentCamera( &camera );
+    NWasp::CameraManager::Instance()->SetCurrentCamera( &camera );
     
-    Mesh mesh;
+    NWasp::Mesh mesh;
 
-    Scene::Instance()->AddRenderable( &mesh );
+    NWasp::Scene::Instance()->AddRenderable( &mesh );
     
     NTime::Timer timer;
 
-    while ( !Window::Instance()->IsWindowClosed( ) )
+    while ( !NWasp::Window::Instance()->IsWindowClosed( ) )
     {      
         timer.Start( );        
 
-        Scene::Instance()->Update();
-        Scene::Instance()->Render();     
+        NWasp::Scene::Instance()->Update();
+        NWasp::Scene::Instance()->Render();     
 
-        Window::Instance()->Swap( );
+        NWasp::Window::Instance()->Swap( );
 
         timer.Stop( );
 
         char title[64];
         std::snprintf( title, 64, "Wasp -- %.2f fps", 1.0 / timer.GetElapsedTime() );
-        Window::Instance()->SetTitle( title );
+        NWasp::Window::Instance()->SetTitle( title );
     }
     
-    Scene::Destroy();
-    Input::Destroy();
-    CgContext::Destroy();
-    Window::Destroy();
+    NWasp::Scene::Destroy();
+    NWasp::Input::Destroy();
+    NWasp::CgContext::Destroy();
+    NWasp::Window::Destroy();
     
     return 0;
 }
