@@ -29,8 +29,10 @@
 #include "scene.hpp"
 
 #include <cassert>
+#include <iostream>
 #include <vector>
 #include <joemath/joemath.hpp>
+#include "camera_manager.hpp"
 #include "renderable.hpp"
 
 namespace NWasp
@@ -53,6 +55,18 @@ namespace NWasp
     {
         assert( s_instance == nullptr );
         s_instance = new Scene;
+        
+        s_instance->m_shader = Effect();
+        s_instance->m_shader.Load( "effects/scene.cgfx" );
+        
+        CGeffect effect = s_instance->m_shader.GetCgEffect();
+        
+        CGparameter param = cgGetFirstEffectParameter( effect );
+        
+        std::cout << cgGetParameterSemantic( param ) << "\n";
+        
+        while( ( param = cgGetNextParameter( param ) ) )
+            std::cout << cgGetParameterSemantic( param ) << "\n" << param << "\n\n";
         
         return true;
     }
@@ -83,6 +97,11 @@ namespace NWasp
 
     void     Scene::Render          ( ) const
     {
+        m_shader.Bind();
+        
+        m_shader.SetParameterBySemantic( CameraManager::Instance()->GetCurrentCamera()->GetPosition(),    "CAMERAPOSITION" );
+        
+        
         for( auto i : m_renderables )
             i->Render();
     }

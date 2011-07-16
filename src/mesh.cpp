@@ -45,6 +45,15 @@ namespace NWasp
     :m_shader()
     {
         m_shader.Load( "effects/phong.cgfx" );
+        
+        std::cout << "awha\n";
+        
+        CGparameter param = cgGetFirstEffectParameter( m_shader.GetCgEffect() );
+        
+        std::cout << cgGetParameterSemantic( param ) << "\n";
+        
+        while( ( param = cgGetNextParameter( param ) ) )
+            std::cout << cgGetParameterSemantic( param ) << "\n" << param << "\n\n";
 
         glGenBuffers( 1, &m_vbo );
         glGenBuffers( 1, &m_ibo );
@@ -108,7 +117,6 @@ namespace NWasp
         m_shader.SetParameterBySemantic( float3(0.5f, 0.5f, 1.0f),          "DIFFUSECOLOR" );
         m_shader.SetParameterBySemantic( float3(1.0f, 0.0f, -2.0f),         "LIGHTPOSITION" );
         m_shader.SetParameterBySemantic( 52.0f,                             "SPECULAREXPONENT" );
-        m_shader.SetParameterBySemantic( CameraManager::Instance()->GetCurrentCamera()->GetPosition(),    "CAMERAPOSITION" );
 
         m_shader.Bind();
 

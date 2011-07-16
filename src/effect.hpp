@@ -36,14 +36,15 @@ using namespace NJoeMath;
 
 namespace NWasp
 {
-    class Shader
+    class Effect
     {
     public:
-                        Shader                  ( );
-        virtual         ~Shader                 ( );
+                        Effect                  ( );
+        virtual         ~Effect                 ( );
         
         bool            Load                    ( std::string     filename );
 
+        CGeffect        GetCgEffect             ( );
         std::string     GetName                 ( ) const;
         
         void            Bind                    ( ) const;

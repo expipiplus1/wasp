@@ -26,7 +26,7 @@
     or implied, of Joe Hermaszewski.
 */
 
-#include "shader.hpp"
+#include "effect.hpp"
 
 #include <iostream>
 #include <string>
@@ -40,15 +40,15 @@ using namespace NJoeMath;
 
 namespace NWasp
 {
-    Shader::Shader    ( )
+    Effect::Effect    ( )
     {
     }
 
-    Shader::~Shader   ( )
+    Effect::~Effect   ( )
     {
     }
 
-    bool            Shader::Load    ( std::string filename )
+    bool            Effect::Load    ( std::string filename )
     {        
         m_filename = filename;
         m_cgEffect = cgCreateEffectFromFile( CgContext::Instance( )->GetCgContext( ), filename.c_str(), nullptr );
@@ -66,19 +66,19 @@ namespace NWasp
         return true;
     }
 
-    std::string     Shader::GetName ( ) const
+    std::string     Effect::GetName ( ) const
     {
         return std::string( cgGetEffectName( m_cgEffect ) );
     }        
 
-    void            Shader::Bind    ( ) const
+    void            Effect::Bind    ( ) const
     {
         CGtechnique technique = cgGetFirstTechnique( m_cgEffect );
         CGpass      pass = cgGetFirstPass( technique );
         cgSetPassState( pass );
     }
     
-    bool            Shader::Reload  ( )
+    bool            Effect::Reload  ( )
     {
         CGeffect old_effect = m_cgEffect;
         if( !Load( m_filename ) )
@@ -88,26 +88,31 @@ namespace NWasp
         }
         return true;
     }
+    
+    CGeffect        Effect::GetCgEffect()
+    {
+        return m_cgEffect;
+    }
 
-    void            Shader::SetModelViewProjection ( const float4x4& modelViewProjection ) const
+    void            Effect::SetModelViewProjection ( const float4x4& modelViewProjection ) const
     {
         CGparameter param = cgGetEffectParameterBySemantic( m_cgEffect, "MODELVIEWPROJECTION" );
         cgSetMatrixParameterfr( param, reinterpret_cast<const float*>(&modelViewProjection) );
     }
 
-    void            Shader::SetModel               ( const float4x4& model ) const
+    void            Effect::SetModel               ( const float4x4& model ) const
     {
         CGparameter param = cgGetEffectParameterBySemantic( m_cgEffect, "MODEL" );
         cgSetMatrixParameterfr( param, reinterpret_cast<const float*>(&model) );
     }
 
-    void            Shader::SetParameterBySemantic    ( const float3& v, const char* semantic ) const
+    void            Effect::SetParameterBySemantic    ( const float3& v, const char* semantic ) const
     {
         CGparameter param = cgGetEffectParameterBySemantic( m_cgEffect, semantic );
         cgSetParameter3fv( param, reinterpret_cast<const float*>(&v) );
     }
 
-    void            Shader::SetParameterBySemantic    ( const float v, const char* semantic ) const
+    void            Effect::SetParameterBySemantic    ( const float v, const char* semantic ) const
     {
         CGparameter param = cgGetEffectParameterBySemantic( m_cgEffect, semantic );
         cgSetParameter1f( param, v );

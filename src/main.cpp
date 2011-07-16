@@ -35,7 +35,7 @@
 #include "cg_context.hpp"
 #include "mesh.hpp"
 #include "scene.hpp"
-#include "shader.hpp"
+#include "effect.hpp"
 #include "timer.hpp"
 #include "window.hpp"
 #include "input.hpp"

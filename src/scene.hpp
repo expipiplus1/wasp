@@ -30,6 +30,7 @@
 
 #include <list>
 #include "renderable.hpp"
+#include "effect.hpp"
 #include "updatable.hpp"
 
 namespace NWasp
@@ -62,5 +63,7 @@ namespace NWasp
     private:
         std::list<Updatable*>  m_updatables;
         std::list<Renderable*> m_renderables;
+        
+        Effect m_shader;
     };
 };

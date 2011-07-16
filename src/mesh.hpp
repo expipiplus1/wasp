@@ -32,7 +32,7 @@
 #include <GL/glfw3.h>
 #include <joemath/joemath.hpp>
 #include "renderable.hpp"
-#include "shader.hpp"
+#include "effect.hpp"
 
 namespace NWasp
 {
@@ -45,7 +45,7 @@ namespace NWasp
         virtual void    Render      ( ) const;
         
     private:
-        Shader          m_shader;
+        Effect          m_shader;
 
         GLuint          m_vbo;
         GLuint          m_ibo;
