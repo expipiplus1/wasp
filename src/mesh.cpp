@@ -35,6 +35,7 @@
 #include <joemath/joemath.hpp>
 #include "camera.hpp"
 #include "camera_manager.hpp"
+#include "effect_manager.hpp"
 #include "time.hpp"
 
 #include "bunny.h"
@@ -42,19 +43,9 @@
 namespace NWasp
 {
     Mesh::Mesh            ( )
-    :m_shader()
     {
-        m_shader.Load( "effects/phong.cgfx" );
+        m_shader = EffectManager::Instance()->LoadEffect( "effects/phong.cgfx" );
         
-        std::cout << "awha\n";
-        
-        CGparameter param = cgGetFirstEffectParameter( m_shader.GetCgEffect() );
-        
-        std::cout << cgGetParameterSemantic( param ) << "\n";
-        
-        while( ( param = cgGetNextParameter( param ) ) )
-            std::cout << cgGetParameterSemantic( param ) << "\n" << param << "\n\n";
-
         glGenBuffers( 1, &m_vbo );
         glGenBuffers( 1, &m_ibo );
         glGenVertexArrays( 1, &m_vao ); 
@@ -111,14 +102,14 @@ namespace NWasp
                        
         float4x4 modelViewProjection = model * CameraManager::Instance()->GetCurrentCamera()->GetViewProjection();
 
-        m_shader.SetModelViewProjection( modelViewProjection );
-        m_shader.SetModel              ( model );
-        m_shader.SetParameterBySemantic( float3(0.1f, 0.1f, 0.1f),          "AMBIENTCOLOR" );
-        m_shader.SetParameterBySemantic( float3(0.5f, 0.5f, 1.0f),          "DIFFUSECOLOR" );
-        m_shader.SetParameterBySemantic( float3(1.0f, 0.0f, -2.0f),         "LIGHTPOSITION" );
-        m_shader.SetParameterBySemantic( 52.0f,                             "SPECULAREXPONENT" );
+        m_shader->SetModelViewProjection( modelViewProjection );
+        m_shader->SetModel              ( model );
+        m_shader->SetParameterBySemantic( float3(0.1f, 0.1f, 0.1f),          "AMBIENTCOLOR" );
+        m_shader->SetParameterBySemantic( float3(0.5f, 0.5f, 1.0f),          "DIFFUSECOLOR" );
+        m_shader->SetParameterBySemantic( float3(1.0f, 0.0f, -2.0f),         "LIGHTPOSITION" );
+        m_shader->SetParameterBySemantic( 52.0f,                             "SPECULAREXPONENT" );
 
-        m_shader.Bind();
+        m_shader->Bind();
 
         glBindVertexArray( m_vao );
         glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
