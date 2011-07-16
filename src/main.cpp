@@ -39,6 +39,7 @@
 #include "timer.hpp"
 #include "window.hpp"
 #include "input.hpp"
+#include "effect_manager.hpp"
 
 using namespace NJoeMath;
 
@@ -50,14 +51,17 @@ int main (int argc, char** argv)
     if ( !NWasp::CgContext::Create() )
         return 2;
     
-    if ( !NWasp::Input::Create() )
+    if ( !NWasp::EffectManager::Create() )
         return 3;
-
-    if ( !NWasp::Scene::Create() )
+    
+    if ( !NWasp::Input::Create() )
         return 4;
 
-    if ( !NWasp::CameraManager::Create() )
+    if ( !NWasp::Scene::Create() )
         return 5;
+
+    if ( !NWasp::CameraManager::Create() )
+        return 6;
 
     NWasp::Camera camera;
 
@@ -93,8 +97,10 @@ int main (int argc, char** argv)
         NWasp::Window::Instance()->SetTitle( title );
     }
     
+    NWasp::CameraManager::Destroy();
     NWasp::Scene::Destroy();
     NWasp::Input::Destroy();
+    NWasp::EffectManager::Destroy();
     NWasp::CgContext::Destroy();
     NWasp::Window::Destroy();
     
