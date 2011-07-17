@@ -40,6 +40,7 @@
 #include "window.hpp"
 #include "input.hpp"
 #include "effect_manager.hpp"
+#include "model.hpp"
 
 using namespace NJoeMath;
 
@@ -75,9 +76,9 @@ int main (int argc, char** argv)
 
     NWasp::CameraManager::Instance()->SetCurrentCamera( &camera );
     
-    NWasp::Mesh mesh;
+    NWasp::Model model;
 
-    NWasp::Scene::Instance()->AddRenderable( &mesh );
+    NWasp::Scene::Instance()->AddRenderable( &model );
     
     NTime::Timer timer;
 
