@@ -49,15 +49,17 @@ set( wasp_sources       src/main.cpp
                         src/camera_manager.cpp
                         src/cg_context.hpp
                         src/cg_context.cpp
+                        src/effect.hpp
+                        src/effect.cpp
+                        src/effect_manager.hpp
+                        src/effect_manager.cpp
                         src/input.hpp
                         src/input.cpp
                         src/mesh.hpp
                         src/mesh.cpp
                         src/renderable.hpp
                         src/scene.hpp
-                        src/scene.cpp
-                        src/shader.hpp
-                        src/shader.cpp
+                        src/scene.cpp 
                         src/time.hpp
                         src/time.cpp
                         src/timer.hpp
