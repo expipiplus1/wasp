@@ -74,7 +74,6 @@ int main (int argc, char** argv)
     NWasp::CameraManager::Instance()->SetCurrentCamera( &camera );
     
     NWasp::Model model;
-
     NWasp::Scene::Instance()->AddRenderable( &model );
     
     NTime::Timer timer;
