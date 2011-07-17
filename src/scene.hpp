@@ -60,6 +60,7 @@ namespace NWasp
         virtual void    Render              ( ) const;
 
         void            AddRenderable       ( Renderable*  renderable );
+        void            AddUpdatable        ( Updatable*   updatable  );
         
     private:
         //

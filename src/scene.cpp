@@ -82,6 +82,11 @@ namespace NWasp
         m_renderables.push_back( renderable );
     }
     
+    void     Scene::AddUpdatable ( Updatable* updatable )
+    {
+        m_updatables.push_back( updatable );
+    }
+    
     void     Scene::Update          ( )
     {
         for( auto i : m_updatables )
