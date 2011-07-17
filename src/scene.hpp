@@ -36,7 +36,7 @@
 namespace NWasp
 {
     class Scene : public Renderable
-                 , public Updatable
+                , public Updatable
     {
     private:
                         Scene           ( );
@@ -61,9 +61,9 @@ namespace NWasp
         void            AddRenderable   ( Renderable*  renderable );
         
     private:
-        std::list<Updatable*>  m_updatables;
-        std::list<Renderable*> m_renderables;
+        std::list<Updatable*>   m_updatables;
+        std::list<Renderable*>  m_renderables;
         
-        Effect m_shader;
+        Effect*                 m_effect;
     };
 };

@@ -33,6 +33,7 @@
 #include <vector>
 #include <joemath/joemath.hpp>
 #include "camera_manager.hpp"
+#include "effect_manager.hpp"
 #include "renderable.hpp"
 
 namespace NWasp
@@ -56,10 +57,9 @@ namespace NWasp
         assert( s_instance == nullptr );
         s_instance = new Scene;
         
-        s_instance->m_shader = Effect();
-        s_instance->m_shader.Load( "effects/scene.cgfx" );
+        s_instance->m_effect = EffectManager::Instance()->LoadEffect( "effects/scene.cgfx", true);
         
-        CGeffect effect = s_instance->m_shader.GetCgEffect();
+        CGeffect effect = s_instance->m_effect->GetCgEffect();
         
         CGparameter param = cgGetFirstEffectParameter( effect );
         
@@ -97,9 +97,9 @@ namespace NWasp
 
     void     Scene::Render          ( ) const
     {
-        m_shader.Bind();
+        m_effect->Bind();
         
-        m_shader.SetParameterBySemantic( CameraManager::Instance()->GetCurrentCamera()->GetPosition(),    "CAMERAPOSITION" );
+        m_effect->SetParameterBySemantic( CameraManager::Instance()->GetCurrentCamera()->GetPosition(),    "CAMERAPOSITION" );
         
         
         for( auto i : m_renderables )
