@@ -31,6 +31,8 @@
 
 using namespace NJoeMath;
 
+const int WASP_FILE_MAGIC = 0x57415350;
+
 int main (int argc, char** argv)
 {
     std::cout << "Hello, World\n";
