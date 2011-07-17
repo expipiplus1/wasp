@@ -28,10 +28,10 @@
 
 #pragma once
 
-#include "camera.hpp"
-
 namespace NWasp
 {
+    class Camera;
+    
     class CameraManager
     {
     private:

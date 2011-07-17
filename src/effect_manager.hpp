@@ -30,6 +30,7 @@
 
 #include <string>
 #include <unordered_map>
+#include "Cg/cg.h"
 #include "effect.hpp"
 
 namespace NWasp

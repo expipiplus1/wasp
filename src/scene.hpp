@@ -30,11 +30,12 @@
 
 #include <list>
 #include "renderable.hpp"
-#include "effect.hpp"
 #include "updatable.hpp"
 
 namespace NWasp
 {
+    class Effect;
+    
     class Scene : public Renderable
                 , public Updatable
     {

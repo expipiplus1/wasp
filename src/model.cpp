@@ -32,6 +32,7 @@
 #include "camera.hpp"
 #include "camera_manager.hpp"
 #include "effect_manager.hpp"
+#include "mesh.hpp"
 #include "time.hpp"
 
 namespace NWasp

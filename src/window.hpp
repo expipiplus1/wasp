@@ -29,7 +29,6 @@
 #pragma once
 
 #include <GL/glfw3.h>
-
 #include <joemath/joemath.hpp>
 
 namespace NWasp

@@ -31,11 +31,15 @@
 #include <vector>
 #include <utility>
 #include <joemath/joemath.hpp>
-#include "mesh.hpp"
 #include "renderable.hpp"
+
+using namespace NJoeMath;
 
 namespace NWasp
 {
+    class Effect;
+    class Mesh;
+    
     class Model : public Renderable
     {
     public:
