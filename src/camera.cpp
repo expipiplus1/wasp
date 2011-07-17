@@ -74,7 +74,7 @@ namespace NWasp
         m_farPlane = far_plane;
     }
 
-    void    Camera::Update             ( )
+    void    Camera::RecalculateMatrixStack          ( )
     {
         m_view  = View( m_position, m_target - m_position, float3(0.0f, 1.0f, 0.0f));
         m_projection = Projection( m_verticalFov, m_aspectRatio, m_nearPlane, m_farPlane );

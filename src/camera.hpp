@@ -47,13 +47,13 @@ namespace NWasp
         void            SetNearPlane        ( const float   near_plane );
         void            SetFarPlane         ( const float   far_plane );
 
-        void            Update              ( );
+        void            RecalculateMatrixStack              ( );
         
         const float3&   GetPosition         ( ) const;
         const float4x4& GetView             ( ) const;
         const float4x4& GetProjection       ( ) const;
         const float4x4& GetViewProjection   ( ) const;
-    private:
+    protected:
         float3          m_position;
         float3          m_target;
         float           m_verticalFov;
