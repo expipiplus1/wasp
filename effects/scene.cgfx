@@ -30,7 +30,7 @@
 
 technique technique0
 {
-    pass pass0
+    pass render_scene
     {
         RenderScene = true;
     }
