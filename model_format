@@ -1,0 +1,48 @@
+u32 magic   = "WASP"
+u32 version
+// Header
+u32 num_meshes == num_effects
+
+// Meshes
+num_meshes *
+{
+    u32 mesh_type
+    u32 effect_index
+
+    u32 num_positions
+    u32 num_normals
+    u32 num_tangents
+    u32 num_bitangents
+    u32 num_texcoords
+    u32 num_colors
+
+    u32 num_vertices
+    u32 num_indices
+
+    num_vertices*
+    {
+        num_positions *
+            float3
+        num_normals *
+            float3
+        num_tangents *
+            float3
+        num_bitangents *
+            float3
+        num_texcoords *
+            float4
+        num_colors *
+            float4
+    }
+
+    num_indices *
+        u32
+}
+
+// Effects
+num_meshes *
+{
+    u32     filename_length
+    filename_length *
+        char filename
+}
