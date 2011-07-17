@@ -39,29 +39,41 @@ namespace NWasp
     class Scene : public Renderable
                 , public Updatable
     {
+        friend class CgContext;
     private:
-                        Scene           ( );
-        virtual         ~Scene          ( );
-                        Scene           ( const Scene&  )                   = delete;
-        Scene&          operator =      ( const Scene&  )                   = delete;
+                        Scene               ( );
+        virtual         ~Scene              ( );
+                        Scene               ( const Scene&  )                   = delete;
+        Scene&          operator =          ( const Scene&  )                   = delete;
         
         static Scene*   s_instance;
-    public: 
-
+    public:
         //
         // Singleton methods
         //
+        
+        static bool     Create              ( );
+        static Scene*   Instance            ( );
+        static void     Destroy             ( );
+        
+        virtual void    Update              ( );
+        virtual void    Render              ( ) const;
 
-        static bool     Create          ( );
-        static Scene*   Instance        ( );
-        static void     Destroy         ( );
-
-        virtual void    Update          ( );
-        virtual void    Render          ( ) const;
-
-        void            AddRenderable   ( Renderable*  renderable );
+        void            AddRenderable       ( Renderable*  renderable );
         
     private:
+        //
+        // Cg State
+        //
+        void            SetRenderScene      ( bool render_scene );
+        void            ResetRenderScene    ( );
+        bool            ValidateRenderScene ( );
+        
+        //
+        // States
+        //
+        bool                    m_renderScene;
+        
         std::list<Updatable*>   m_updatables;
         std::list<Renderable*>  m_renderables;
         

@@ -31,6 +31,7 @@
 #include <cassert>
 #include <iostream>
 #include <list>
+#include <Cg/cg.h>
 #include <joemath/joemath.hpp>
 #include "camera.hpp"
 #include "camera_manager.hpp"
@@ -60,19 +61,10 @@ namespace NWasp
         
         s_instance->m_effect = EffectManager::Instance()->LoadEffect( "effects/scene.cgfx", true);
         
-        CGeffect effect = s_instance->m_effect->GetCgEffect();
-        
-        CGparameter param = cgGetFirstEffectParameter( effect );
-        
-        std::cout << cgGetParameterSemantic( param ) << "\n";
-        
-        while( ( param = cgGetNextParameter( param ) ) )
-            std::cout << cgGetParameterSemantic( param ) << "\n" << param << "\n\n";
-        
         return true;
     }
 
-    Scene*  Scene::Instance        ( )
+    Scene*  Scene::Instance         ( )
     {
         assert( s_instance != nullptr );
         return s_instance;
@@ -90,7 +82,7 @@ namespace NWasp
         m_renderables.push_back( renderable );
     }
     
-    void     Scene::Update()
+    void     Scene::Update          ( )
     {
         for( auto i : m_updatables )
             i->Update();
@@ -98,11 +90,44 @@ namespace NWasp
 
     void     Scene::Render          ( ) const
     {
-        m_effect->Bind();
-        
         m_effect->SetParameterBySemantic( CameraManager::Instance()->GetCurrentCamera()->GetPosition(),    "CAMERAPOSITION" );
         
-        for( auto i : m_renderables )
-            i->Render();
+        CGeffect    effect      = m_effect->GetCgEffect();
+        CGtechnique technique   = cgGetFirstTechnique( effect );
+        CGpass      pass        = cgGetFirstPass( technique );
+        
+        while( pass != NULL )
+        {
+            cgSetPassState( pass );
+            
+            if( m_renderScene )
+            {
+                for( auto r : m_renderables )
+                    r->Render();
+            }
+            cgResetPassState( pass );
+            
+            pass = cgGetNextPass( pass );
+        }
+    }
+    
+    //
+    // Cg State
+    //
+    
+    void            Scene::SetRenderScene      ( bool render_scene )
+    {
+        m_renderScene = render_scene;
+    }
+    
+    void            Scene::ResetRenderScene    ( )
+    {
+        //TODO should this be popping the top off the stack?
+        m_renderScene = false;
+    }
+    
+    bool            Scene::ValidateRenderScene ( )
+    {
+        return true;
     }
 };
