@@ -37,6 +37,11 @@ set( glee_INCLUDE_DIR    "${CMAKE_SOURCE_DIR}/glee/include")
 set( glee_LIBRARY         libgleeStatic )
 
 #
+# Create the model_compiler
+#
+add_subdirectory( model_compiler )
+
+#
 # Create the main engine
 #
 
