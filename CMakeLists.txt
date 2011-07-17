@@ -58,6 +58,8 @@ set( wasp_sources       src/main.cpp
                         src/effect.cpp
                         src/effect_manager.hpp
                         src/effect_manager.cpp
+                        src/fly_camera.hpp
+                        src/fly_camera.cpp
                         src/input.hpp
                         src/input.cpp
                         src/mesh.hpp
