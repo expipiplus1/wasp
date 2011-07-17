@@ -42,6 +42,7 @@ namespace NWasp
     Model::Model            ( )
     {
         m_renderSets.resize( m_renderSets.size() + 1 );
+        
         m_renderSets[ m_renderSets.size() - 1 ].first = EffectManager::Instance()->LoadEffect( "effects/phong.cgfx" );
         m_renderSets[ m_renderSets.size() - 1 ].second = new Mesh;
     }
