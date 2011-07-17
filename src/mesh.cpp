@@ -44,8 +44,6 @@ namespace NWasp
 {
     Mesh::Mesh            ( )
     {
-        m_shader = EffectManager::Instance()->LoadEffect( "effects/phong.cgfx" );
-        
         glGenBuffers( 1, &m_vbo );
         glGenBuffers( 1, &m_ibo );
         glGenVertexArrays( 1, &m_vao ); 
@@ -55,7 +53,6 @@ namespace NWasp
         //
         // Load the vbo data
         //
-        
         float* vertices = new float[NUM_POINTS * 3 * 2];
         for( u32 i = 0; i < NUM_POINTS; ++i)
         {
@@ -96,21 +93,6 @@ namespace NWasp
     
     void    Mesh::Render   ( ) const
     {   
-        float4x4 model = RotateZXY<float,4>( 0.0f, NTime::GetApplicationTime() / 2.0, 0.0f )
-                       * (Scale( float4(-10.0f, -10.0f, 10.0f, 1.0f) ) 
-                       * Translate( float3(0.0f, 1.25f, 0.3f) ) );
-                       
-        float4x4 modelViewProjection = model * CameraManager::Instance()->GetCurrentCamera()->GetViewProjection();
-
-        m_shader->SetModelViewProjection( modelViewProjection );
-        m_shader->SetModel              ( model );
-        m_shader->SetParameterBySemantic( float3(0.1f, 0.1f, 0.1f),          "AMBIENTCOLOR" );
-        m_shader->SetParameterBySemantic( float3(0.5f, 0.5f, 1.0f),          "DIFFUSECOLOR" );
-        m_shader->SetParameterBySemantic( float3(1.0f, 0.0f, -2.0f),         "LIGHTPOSITION" );
-        m_shader->SetParameterBySemantic( 52.0f,                             "SPECULAREXPONENT" );
-
-        m_shader->Bind();
-
         glBindVertexArray( m_vao );
         glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_ibo );

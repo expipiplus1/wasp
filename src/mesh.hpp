@@ -45,8 +45,6 @@ namespace NWasp
         virtual void    Render      ( ) const;
         
     private:
-        Effect*         m_shader;
-
         GLuint          m_vbo;
         GLuint          m_ibo;
         GLuint          m_vao;
