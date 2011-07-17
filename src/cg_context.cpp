@@ -32,6 +32,7 @@
 #include <iostream>
 #include <Cg/cg.h>
 #include <Cg/cgGL.h>
+#include "scene.hpp"
 
 namespace NWasp
 {
@@ -103,20 +104,22 @@ namespace NWasp
     {
         int num_values = 0;
         const CGbool* render_scene = cgGetBoolStateAssignmentValues( state_assignment, &num_values );
-        std::cout << "RenderScene called with " << *render_scene << "\n";
+        
+        Scene::Instance()->SetRenderScene( *render_scene == CG_TRUE );
+        
         return CG_TRUE;
     }
 
     CGbool          CgContext::StateRenderSceneReset       ( CGstateassignment state_assignment )
     {
-        std::cout << "Resetting RenderScene\n";
+        Scene::Instance()->ResetRenderScene();
+        
         return CG_TRUE;
     }
     
     CGbool          CgContext::StateRenderSceneValidate    ( CGstateassignment state_assignment )
     {
-        std::cout << "Validating RenderScene\n";
-        return CG_TRUE;
+        return Scene::Instance()->ValidateRenderScene();
     }
     
     //
