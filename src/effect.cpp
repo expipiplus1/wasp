@@ -35,6 +35,7 @@
 #include <GL/glfw3.h>
 #include <joemath/joemath.hpp>
 #include "cg_context.hpp"
+#include "renderable.hpp"
 
 using namespace NJoeMath;
 
@@ -65,6 +66,17 @@ namespace NWasp
                
         return true;
     }
+    
+    bool            Effect::Reload  ( )
+    {
+        CGeffect old_effect = m_cgEffect;
+        if( !Load( m_filename ) )
+        {
+            m_cgEffect = old_effect;
+            return false;
+        }
+        return true;
+    }
 
     std::string     Effect::GetName ( ) const
     {
@@ -78,20 +90,25 @@ namespace NWasp
         cgSetPassState( pass );
     }
     
-    bool            Effect::Reload  ( )
-    {
-        CGeffect old_effect = m_cgEffect;
-        if( !Load( m_filename ) )
-        {
-            m_cgEffect = old_effect;
-            return false;
-        }
-        return true;
-    }
-    
     CGeffect        Effect::GetCgEffect()
     {
         return m_cgEffect;
+    }
+    
+    void            Effect::RenderPrimitive( Renderable* primitive ) const
+    {
+        CGtechnique technique = cgGetFirstTechnique( m_cgEffect );
+        CGpass      pass      = cgGetFirstPass( technique );
+        
+        while( pass != NULL )
+        {
+            cgSetPassState( pass );
+            
+            primitive->Render();
+            
+            cgResetPassState( pass );
+            pass = cgGetNextPass( pass );
+        }
     }
 
     void            Effect::SetModelViewProjection ( const float4x4& modelViewProjection ) const

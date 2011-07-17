@@ -36,6 +36,8 @@ using namespace NJoeMath;
 
 namespace NWasp
 {
+    class Renderable;
+    
     class Effect
     {
     public:
@@ -43,12 +45,14 @@ namespace NWasp
         virtual         ~Effect                 ( );
         
         bool            Load                    ( std::string     filename );
+        bool            Reload                  ( );
 
         CGeffect        GetCgEffect             ( );
         std::string     GetName                 ( ) const;
         
+        void            RenderPrimitive         ( Renderable* primitive ) const;
+        
         void            Bind                    ( ) const;
-        bool            Reload                  ( );
 
         void            SetModelViewProjection  ( const float4x4& modelViewProjection ) const;
         void            SetModel                ( const float4x4& model ) const;
