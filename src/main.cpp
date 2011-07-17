@@ -29,10 +29,10 @@
 #include <cstdio>
 #include <iostream>
 #include <joemath/joemath.hpp>
-#include "camera.hpp"
 #include "camera_manager.hpp"
 #include "cg_context.hpp"
 #include "effect_manager.hpp"
+#include "fly_camera.hpp"
 #include "input.hpp"
 #include "model.hpp"
 #include "scene.hpp"
@@ -61,7 +61,7 @@ int main (int argc, char** argv)
     if ( !NWasp::CameraManager::Create() )
         return 6;
 
-    NWasp::Camera camera;
+    NWasp::FlyCamera camera;
 
     camera.SetPosition( float3(1.0f, 0.0f, -2.0f) );
     camera.SetTarget( float3(0.0f, 0.35f, 0.0f) );
@@ -69,9 +69,10 @@ int main (int argc, char** argv)
     camera.SetVerticalFov( DegToRad(70.0f) );
     camera.SetNearPlane( 0.01f );
     camera.SetFarPlane( 100.0f );
-    camera.Update();
+    camera.RecalculateMatrixStack();
 
     NWasp::CameraManager::Instance()->SetCurrentCamera( &camera );
+    NWasp::Scene::Instance()->AddUpdatable( &camera );
     
     NWasp::Model model;
     NWasp::Scene::Instance()->AddRenderable( &model );
