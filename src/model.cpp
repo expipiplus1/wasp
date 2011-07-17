@@ -35,6 +35,8 @@
 #include "mesh.hpp"
 #include "time.hpp"
 
+using namespace NJoeMath;
+
 namespace NWasp
 {
     Model::Model            ( )

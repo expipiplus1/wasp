@@ -29,10 +29,11 @@
 #include "camera_manager.hpp"
 
 #include <cassert>
-#include "camera.hpp"
 
 namespace NWasp
 {
+    class Camera;
+    
     CameraManager* CameraManager::s_instance = nullptr;
 
     CameraManager::CameraManager( )

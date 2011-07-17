@@ -30,6 +30,8 @@
 
 #include <joemath/joemath.hpp>
 
+using namespace NJoeMath;
+
 namespace NWasp
 {
     //CCamera* s_currentCamera = nullptr;

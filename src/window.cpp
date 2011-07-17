@@ -33,6 +33,8 @@
 #include <GL/glfw3.h>
 #include <joemath/joemath.hpp>
 
+using namespace NJoeMath;
+
 namespace NWasp
 {
     Window* Window::s_instance = nullptr;

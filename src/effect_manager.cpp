@@ -29,6 +29,7 @@
 #include "effect_manager.hpp"
 
 #include <cassert>
+#include <string>
 #include "effect.hpp"
 
 namespace NWasp

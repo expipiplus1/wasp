@@ -31,8 +31,6 @@
 #include <iostream>
 #include <string>
 #include <Cg/cg.h>
-#include <Cg/cgGL.h>
-#include <GL/glfw3.h>
 #include <joemath/joemath.hpp>
 #include "cg_context.hpp"
 #include "renderable.hpp"

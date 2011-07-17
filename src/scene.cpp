@@ -30,7 +30,7 @@
 
 #include <cassert>
 #include <iostream>
-#include <vector>
+#include <list>
 #include <joemath/joemath.hpp>
 #include "camera.hpp"
 #include "camera_manager.hpp"
@@ -101,7 +101,6 @@ namespace NWasp
         m_effect->Bind();
         
         m_effect->SetParameterBySemantic( CameraManager::Instance()->GetCurrentCamera()->GetPosition(),    "CAMERAPOSITION" );
-        
         
         for( auto i : m_renderables )
             i->Render();

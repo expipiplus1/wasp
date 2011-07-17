@@ -28,15 +28,9 @@
 
 #include "mesh.hpp"
 
-#include <iostream>
-#include <Cg/cg.h>
 #include <GL/GLee.h>
 #include <GL/glfw3.h>
 #include <joemath/joemath.hpp>
-#include "camera.hpp"
-#include "camera_manager.hpp"
-#include "effect_manager.hpp"
-#include "time.hpp"
 
 #include "bunny.h"
 

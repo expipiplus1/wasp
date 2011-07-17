@@ -28,19 +28,16 @@
 
 #include <cstdio>
 #include <iostream>
-#include <Cg/cg.h>
 #include <joemath/joemath.hpp>
 #include "camera.hpp"
 #include "camera_manager.hpp"
 #include "cg_context.hpp"
-#include "mesh.hpp"
+#include "effect_manager.hpp"
+#include "input.hpp"
+#include "model.hpp"
 #include "scene.hpp"
-#include "effect.hpp"
 #include "timer.hpp"
 #include "window.hpp"
-#include "input.hpp"
-#include "effect_manager.hpp"
-#include "model.hpp"
 
 using namespace NJoeMath;
 
