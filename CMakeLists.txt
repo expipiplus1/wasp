@@ -57,6 +57,8 @@ set( wasp_sources       src/main.cpp
                         src/input.cpp
                         src/mesh.hpp
                         src/mesh.cpp
+                        src/model.hpp
+                        src/model.cpp
                         src/renderable.hpp
                         src/scene.hpp
                         src/scene.cpp 
