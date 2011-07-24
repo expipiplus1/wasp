@@ -7,3 +7,6 @@
 [submodule "glee"]
 	path = glee
 	url = git://glee.git.sourceforge.net/gitroot/glee/glee
+[submodule "model_compiler/assimp"]
+	path = model_compiler/assimp
+	url = git://github.com/assimp/assimp.git
