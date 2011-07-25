@@ -94,7 +94,7 @@ include_directories( ${joemath_INCLUDE_DIR} ${glfw_INCLUDE_DIR} ${glee_INCLUDE_D
 set( GL_LIBS ${OPENGL_LIBRARY} ${glfw_LIBRARY} ${glee_LIBRARY} ${CG_LIBRARY} ${CG_GL_LIBRARY} )
 
 if( UNIX )
-    list( APPEND GL_LIBS Xrandr Xxf86vm )
+    list( APPEND GL_LIBS X11 Xrandr Xxf86vm )
 else()
     list( APPEND GL_LIBS opengl32 )
 endif()
