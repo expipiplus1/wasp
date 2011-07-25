@@ -36,7 +36,7 @@
 #include "input.hpp"
 #include "model.hpp"
 #include "scene.hpp"
-#include "timer.hpp"
+#include "time.hpp"
 #include "window.hpp"
 
 using namespace NJoeMath;
@@ -77,21 +77,20 @@ int main (int argc, char** argv)
     NWasp::Model model;
     NWasp::Scene::Instance()->AddRenderable( &model );
     
-    NTime::Timer timer;
+    double old_time = NTime::GetApplicationTime();
 
     while ( !NWasp::Window::Instance()->IsWindowClosed( ) )
     {      
-        timer.Start( );        
-
         NWasp::Scene::Instance()->Update();
         NWasp::Scene::Instance()->Render();     
 
         NWasp::Window::Instance()->Swap( );
 
-        timer.Stop( );
-
+        double new_time = NTime::GetApplicationTime();
+        double delta_time = new_time - old_time;
+        old_time = new_time;
         char title[64];
-        std::snprintf( title, 64, "Wasp -- %.2f fps", 1.0 / timer.GetElapsedTime() );
+        std::snprintf( title, 64, "Wasp -- %.5fms", delta_time * 1000 );
         NWasp::Window::Instance()->SetTitle( title );
     }
     
