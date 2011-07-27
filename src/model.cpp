@@ -28,10 +28,16 @@
 
 #include "model.hpp"
 
+#include <cassert>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <utility>
 #include <joemath/joemath.hpp>
 #include "camera.hpp"
 #include "camera_manager.hpp"
 #include "effect_manager.hpp"
+#include "input_stream.hpp"
 #include "mesh.hpp"
 #include "time.hpp"
 
@@ -39,23 +45,55 @@ using namespace NJoeMath;
 
 namespace NWasp
 {
+    const u32 WASP_FILE_MAGIC = 0x57415350;
+
     Model::Model            ( )
     {
-        m_renderSets.resize( m_renderSets.size() + 1 );
-        
-        m_renderSets[ m_renderSets.size() - 1 ].first = EffectManager::Instance()->LoadEffect( "effects/phong.cgfx" );
-        m_renderSets[ m_renderSets.size() - 1 ].second = new Mesh;
     }
     
     Model::~Model           ( )
     {
-        for( auto r : m_renderSets )
+        for( auto& r : m_renderSets )
             delete r.second;
+    }
+    
+    bool    Model::Load     ( const std::string filename )
+    {
+        InputStream input_stream;
+        input_stream.Read( filename );
+        
+        u32 file_magic;
+        input_stream >> file_magic;
+        assert( file_magic == WASP_FILE_MAGIC );
+        
+        u32 file_version;
+        input_stream >> file_version;
+        
+        u32 num_meshes;
+        input_stream >> num_meshes;
+        
+        m_renderSets.resize( num_meshes );
+        
+        for( auto& r : m_renderSets )
+        {
+            r.second = new Mesh;
+            if( !r.second->Load( input_stream ) )
+                return false;
+        }
+        
+        for( auto& r : m_renderSets )
+        {
+            std::string name;
+            input_stream >> name;
+            r.first = EffectManager::Instance()->LoadEffect( name );
+        }
+        
+        return true;
     }
     
     void    Model::Render   ( ) const
     {   
-        for( auto r : m_renderSets )
+        for( auto& r : m_renderSets )
         {
             float4x4 modelMatrix = RotateZXY<float,4>( 0.0f, NTime::GetApplicationTime() / 2.0, 0.0f )
                        * (Scale( float4(-10.0f, -10.0f, 10.0f, 1.0f) ) 

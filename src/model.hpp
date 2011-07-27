@@ -28,6 +28,7 @@
 
 #pragma once
 
+#include <string>
 #include <vector>
 #include <utility>
 #include <joemath/joemath.hpp>
@@ -45,6 +46,8 @@ namespace NWasp
     public:
                         Model       ( );
         virtual         ~Model      ( );
+        
+        virtual bool    Load        ( const std::string filename );
 
         virtual void    Render      ( ) const;
 
