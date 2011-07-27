@@ -73,7 +73,7 @@ int main (int argc, char** argv)
     for( u32 i = 0; i < NUM_TRIANGLES * 3; i += 1 )
         output_stream << (u32)g_bunnyIndices[i];
         
-    output_stream << std::string( "effects/phong.cgfx" );
+    output_stream << std::string( "data/effects/phong.cgfx" );
     
-    output_stream.Write( "bunny.joe" );
+    output_stream.Write( "data/models/bunny.joe" );
 }

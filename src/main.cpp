@@ -75,7 +75,7 @@ int main (int argc, char** argv)
     NWasp::Scene::Instance()->AddUpdatable( &camera );
     
     NWasp::Model model;
-    model.Load( "bunny.joe" );
+    model.Load( "data/models/bunny.joe" );
     NWasp::Scene::Instance()->AddRenderable( &model );
     
     double old_time = NTime::GetApplicationTime();

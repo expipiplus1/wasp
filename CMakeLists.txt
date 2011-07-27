@@ -80,17 +80,25 @@ set( wasp_sources       src/main.cpp
                         src/window.hpp
                         src/window.cpp )
 
-set( wasp_effect_sources    effects/global.cgh
-                            effects/scene.cgfx
-                            effects/phong.cgfx 
-                            effects/blue.cgfx )
+set( wasp_data_dir data/ )
+
+set( wasp_effect_sources    ${wasp_data_dir}/effects/global.cgh
+                            ${wasp_data_dir}/effects/scene.cgfx
+                            ${wasp_data_dir}/effects/phong.cgfx 
+                            ${wasp_data_dir}/effects/blue.cgfx )
+
+set( wasp_model_sources     ${wasp_data_dir}/models/bunny.ply )
 
 add_executable( wasp    ${wasp_sources} ) 
 
 add_custom_target( wasp_shaders
                    SOURCES  ${wasp_effect_sources} )
 
+add_custom_target( wasp_models
+                   SOURCES ${wasp_model_sources} )
+
 add_dependencies( wasp wasp_shaders )
+add_dependencies( wasp wasp_models )
 
 include_directories( ${joemath_INCLUDE_DIR} ${glfw_INCLUDE_DIR} ${glee_INCLUDE_DIR} ${CG_INCLUDE_DIR} )
 
@@ -109,12 +117,17 @@ target_link_libraries( wasp ${joemath_LIBRARY} ${GL_LIBS} )
 #
 
 foreach( FILENAME ${wasp_effect_sources} )
-    set( SRC "${CMAKE_CURRENT_SOURCE_DIR}/${FILENAME}" )
+    set( SRC "${CMAKE_SOURCE_DIR}/${FILENAME}" )
     set( DST "${CMAKE_BINARY_DIR}/${FILENAME}" )
 
     add_custom_command( TARGET wasp_shaders
                         COMMAND ${CG_COMPILER} -noentry -strict -glslWerror ${SRC}
                         COMMAND ${CMAKE_COMMAND} -E copy ${SRC} ${DST}
                         COMMENT "Checking ${SRC}" )
+endforeach( )
+
+foreach( FILENAME ${wasp_model_sources} )
+    set( SRC "${CMAKE_SOURCE_DIR}/${FILENAME}" )
+    set( DST "${CMAKE_BINARY_DIR}/${FILENAME}" )
 endforeach( )
 

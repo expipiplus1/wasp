@@ -59,7 +59,7 @@ namespace NWasp
         assert( s_instance == nullptr );
         s_instance = new Scene;
         
-        s_instance->m_effect = EffectManager::Instance()->LoadEffect( "effects/scene.cgfx", true);
+        s_instance->m_effect = EffectManager::Instance()->LoadEffect( "data/effects/scene.cgfx", true);
         
         return true;
     }
