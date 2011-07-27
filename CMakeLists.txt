@@ -121,7 +121,10 @@ endforeach( )
 
 foreach( FILENAME ${wasp_model_sources} )
     set( SRC "${CMAKE_SOURCE_DIR}/${FILENAME}" )
-    set( DST "${CMAKE_BINARY_DIR}/${FILENAME}" )
+    get_filename_component( filename_without_extension ${FILENAME} NAME_WE )
+    get_filename_component( file_path ${FILENAME} PATH )
+    file( MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/${file_path}/" )
+    set( DST "${CMAKE_BINARY_DIR}/${file_path}/${filename_without_extension}.joe" )
     add_custom_command( TARGET wasp_models
                         COMMAND model_compiler ${SRC} ${DST}
                         COMMENT "Compiling ${SRC}" )
