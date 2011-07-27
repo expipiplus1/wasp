@@ -48,9 +48,6 @@ namespace NWaspModelCompiler
         template <typename T>
         OutputStream& operator <<   ( const T& t );
 
-        //template <>
-        //OutputStream& operator <<   ( const std::string& t );
-
     private:
         u8*     m_data;
         u32     m_maxSize;
