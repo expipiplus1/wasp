@@ -28,6 +28,7 @@
 
 #include "output_stream.hpp"
 
+#include <cstdio>
 #include <cstring>
 #include <string>
 #include <joemath/joemath.hpp>
@@ -55,7 +56,10 @@ namespace NWaspModelCompiler
         if( file == nullptr )
             return false;
         if ( fwrite( m_data, m_offset, 1, file ) != 1 )
+        {
+            fclose( file );
             return false;
+        }
         if ( fclose( file ) != 0 )
             return false;
         return true;
