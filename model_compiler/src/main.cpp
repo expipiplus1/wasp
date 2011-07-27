@@ -28,12 +28,52 @@
 
 #include <iostream>
 #include <joemath/joemath.hpp>
+#include "output_stream.hpp"
+
+#include "bunny.h"
 
 using namespace NJoeMath;
 
-const int WASP_FILE_MAGIC = 0x57415350;
+const u32 WASP_FILE_MAGIC = 0x57415350;
+const u32 WASP_FILE_VERSION = 1;
 
 int main (int argc, char** argv)
 {
-    std::cout << "Hello, World\n";
+    NWaspModelCompiler::OutputStream output_stream;
+    output_stream << WASP_FILE_MAGIC;
+    output_stream << WASP_FILE_VERSION;
+    
+    u32 num_meshes = 1;
+    output_stream << num_meshes;
+    
+    output_stream << (u32)0;
+    output_stream << (u32)0;
+    
+    output_stream << (u32)1;
+    output_stream << (u32)1;
+    output_stream << (u32)0;
+    output_stream << (u32)0;
+    output_stream << (u32)0;
+    output_stream << (u32)0;
+    
+    output_stream << (u32)NUM_POINTS;
+    output_stream << (u32)(NUM_TRIANGLES * 3);
+
+    for( u32 i = 0; i < NUM_POINTS * 3; i += 3 )
+    {
+        output_stream << g_bunnyPositions[i+0];
+        output_stream << g_bunnyPositions[i+1];
+        output_stream << g_bunnyPositions[i+2];
+        
+        output_stream << g_bunnyNormals[i+0];
+        output_stream << g_bunnyNormals[i+1];
+        output_stream << g_bunnyNormals[i+2];
+    }
+    
+    for( u32 i = 0; i < NUM_TRIANGLES * 3; i += 1 )
+        output_stream << (u32)g_bunnyIndices[i];
+        
+    output_stream << std::string( "effects/phong.cgfx" );
+    
+    output_stream.Write( "bunny.joe" );
 }
