@@ -15,17 +15,10 @@ include(${CMAKE_MODULE_PATH}/DetermineProcessor.cmake)
 
 #
 # load libraries
-# TODO: Write Find*.cmake files for glfw and joemath
 #
 find_package(                       OpenGL      REQUIRED )
 
 find_package(                       Cg          REQUIRED )
-
-add_subdirectory( joemath EXCLUDE_FROM_ALL )
-
-add_subdirectory( glfw EXCLUDE_FROM_ALL )
-
-add_subdirectory( glee EXCLUDE_FROM_ALL )
 
 set( joemath_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/joemath/include" )
 set( joemath_LIBRARY      libjoemathStatic )
@@ -80,7 +73,7 @@ set( wasp_sources       src/main.cpp
                         src/window.hpp
                         src/window.cpp )
 
-set( wasp_data_dir data/ )
+set( wasp_data_dir data )
 
 set( wasp_effect_sources    ${wasp_data_dir}/effects/global.cgh
                             ${wasp_data_dir}/effects/scene.cgfx
@@ -129,5 +122,29 @@ endforeach( )
 foreach( FILENAME ${wasp_model_sources} )
     set( SRC "${CMAKE_SOURCE_DIR}/${FILENAME}" )
     set( DST "${CMAKE_BINARY_DIR}/${FILENAME}" )
+    add_custom_command( TARGET wasp_models
+                        COMMAND model_compiler ${SRC} ${DST}
+                        COMMENT "Compiling ${SRC}" )
 endforeach( )
 
+#
+# Uninstall operation
+#
+if( NOT TARGET uninstall )
+    configure_file( ${wasp_SOURCE_DIR}/cmake_uninstall.cmake.in
+                    ${wasp_BINARY_DIR}/cmake_uninstall.cmake IMMEDIATE @ONLY )
+
+    add_custom_target( uninstall
+                       ${CMAKE_COMMAND} -P
+                       ${wasp_BINARY_DIR}/cmake_uninstall.cmake )
+endif( )
+  
+#
+# submodules
+#
+
+add_subdirectory( joemath EXCLUDE_FROM_ALL )
+
+add_subdirectory( glfw EXCLUDE_FROM_ALL )
+
+add_subdirectory( glee EXCLUDE_FROM_ALL )
