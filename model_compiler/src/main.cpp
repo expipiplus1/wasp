@@ -28,52 +28,22 @@
 
 #include <iostream>
 #include <joemath/joemath.hpp>
+#include "compiler.hpp"
 #include "output_stream.hpp"
-
-#include "bunny.h"
 
 using namespace NJoeMath;
 
-const u32 WASP_FILE_MAGIC = 0x57415350;
-const u32 WASP_FILE_VERSION = 1;
-
 int main (int argc, char** argv)
 {
-    NWaspModelCompiler::OutputStream output_stream;
-    output_stream << WASP_FILE_MAGIC;
-    output_stream << WASP_FILE_VERSION;
-    
-    u32 num_meshes = 1;
-    output_stream << num_meshes;
-    
-    output_stream << (u32)0;
-    output_stream << (u32)0;
-    
-    output_stream << (u32)1;
-    output_stream << (u32)1;
-    output_stream << (u32)0;
-    output_stream << (u32)0;
-    output_stream << (u32)0;
-    output_stream << (u32)0;
-    
-    output_stream << (u32)NUM_POINTS;
-    output_stream << (u32)(NUM_TRIANGLES * 3);
-
-    for( u32 i = 0; i < NUM_POINTS * 3; i += 3 )
+    if( argc < 3 )
     {
-        output_stream << g_bunnyPositions[i+0];
-        output_stream << g_bunnyPositions[i+1];
-        output_stream << g_bunnyPositions[i+2];
-        
-        output_stream << g_bunnyNormals[i+0];
-        output_stream << g_bunnyNormals[i+1];
-        output_stream << g_bunnyNormals[i+2];
+        std::cerr << "Need at least 2 arguments\n";
+        return 1;
     }
     
-    for( u32 i = 0; i < NUM_TRIANGLES * 3; i += 1 )
-        output_stream << (u32)g_bunnyIndices[i];
-        
-    output_stream << std::string( "data/effects/phong.cgfx" );
-    
-    output_stream.Write( "data/models/bunny.joe" );
+    NWaspModelCompiler::Compiler compiler;
+    if( compiler.Compile( argv[1], argv[2] ) )
+        return 0;
+    else
+        return 1;
 }
