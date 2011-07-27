@@ -31,13 +31,61 @@
 #include <GL/GLee.h>
 #include <GL/glfw3.h>
 #include <joemath/joemath.hpp>
-
-#include "bunny.h"
+#include "input_stream.hpp"
 
 namespace NWasp
 {
     Mesh::Mesh            ( )
     {
+    }
+    
+    Mesh::~Mesh           ( )
+    {
+
+    }
+    
+    bool    Mesh::Load     ( InputStream& input_stream )
+    {
+        u32 mesh_type;
+        input_stream >> mesh_type;
+        
+        u32 effect_index;
+        input_stream >> effect_index;
+        
+        u32 num_positions;
+        u32 num_normals;
+        u32 num_tangents;
+        u32 num_bitangents;
+        u32 num_texcoords;
+        u32 num_colors;
+        
+        input_stream >> num_positions
+                     >> num_normals
+                     >> num_tangents
+                     >> num_bitangents
+                     >> num_texcoords
+                     >> num_colors;
+                     
+        u32 num_vertices;
+        input_stream >> num_vertices;
+        
+        u32 num_indices;
+        input_stream >> num_indices;
+        
+        m_numIndices = num_indices;
+        
+        u32 vertex_size = 0;
+        
+        vertex_size += num_positions    * sizeof( float ) * 3;
+        vertex_size += num_normals      * sizeof( float ) * 3;
+        vertex_size += num_tangents     * sizeof( float ) * 3;
+        vertex_size += num_bitangents   * sizeof( float ) * 3;
+        vertex_size += num_texcoords    * sizeof( float ) * 4;
+        vertex_size += num_colors       * sizeof( float ) * 4;
+        
+        float* vertices = reinterpret_cast<float*>( input_stream.GetData( num_vertices * vertex_size ) );            
+        u32*   indices  = reinterpret_cast<u32*  >( input_stream.GetData( num_indices * sizeof( u32 ) ) );
+        
         glGenBuffers( 1, &m_vbo );
         glGenBuffers( 1, &m_ibo );
         glGenVertexArrays( 1, &m_vao ); 
@@ -47,51 +95,37 @@ namespace NWasp
         //
         // Load the vbo data
         //
-        float* vertices = new float[NUM_POINTS * 3 * 2];
-        for( u32 i = 0; i < NUM_POINTS; ++i)
-        {
-            vertices[i*3*2 + 0 + 0*3] = g_bunnyPositions[i*3 + 0];
-            vertices[i*3*2 + 1 + 0*3] = g_bunnyPositions[i*3 + 1];
-            vertices[i*3*2 + 2 + 0*3] = g_bunnyPositions[i*3 + 2];
-
-            vertices[i*3*2 + 0 + 1*3] = g_bunnyNormals[i*3 + 0];
-            vertices[i*3*2 + 1 + 1*3] = g_bunnyNormals[i*3 + 1];
-            vertices[i*3*2 + 2 + 1*3] = g_bunnyNormals[i*3 + 2];
-        }
-
         glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
-        glBufferData( GL_ARRAY_BUFFER, sizeof(float) * NUM_POINTS * 2 * 3, vertices, GL_STATIC_DRAW );
-        delete[] vertices;
+        glBufferData( GL_ARRAY_BUFFER, num_vertices * vertex_size, vertices, GL_STATIC_DRAW );
 
         //
         // Load the index data
         //
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_ibo );
-        glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * NUM_TRIANGLES * 3, &g_bunnyIndices[0], GL_STATIC_DRAW );
+        glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof( u32 ) * num_indices, indices, GL_STATIC_DRAW );
 
         
-        glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 24, (void*)0   );
-        glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, 24, (void*)12 );
+        //TODO: how to get the attrib index?
+        glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)0  );
+        glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)( num_positions * 3 * sizeof( float ) ) );
+        
         glEnableVertexAttribArray( 0 );
         glEnableVertexAttribArray( 1 );
 
         glBindVertexArray( 0 );
         glBindBuffer( GL_ARRAY_BUFFER, 0 );
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
-    }
-    
-    Mesh::~Mesh           ( )
-    {
-
+        
+        return true;
     }
     
     void    Mesh::Render   ( ) const
-    {   
+    {
         glBindVertexArray( m_vao );
         glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_ibo );
 
-        glDrawElements( GL_TRIANGLES, NUM_TRIANGLES * 3, GL_UNSIGNED_INT, 0 );
+        glDrawElements( GL_TRIANGLES, m_numIndices, GL_UNSIGNED_INT, 0 );
 
         glBindVertexArray( 0 );
         glBindBuffer( GL_ARRAY_BUFFER, 0 );

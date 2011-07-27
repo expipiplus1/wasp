@@ -30,6 +30,7 @@
 
 #include <GL/GLee.h>
 #include <GL/glfw3.h>
+#include "input_stream.hpp"
 #include "renderable.hpp"
 
 namespace NWasp
@@ -42,9 +43,12 @@ namespace NWasp
 
         virtual void    Render      ( ) const;
         
+        bool            Load        ( InputStream& input_stream );
+        
     private:
         GLuint          m_vbo;
         GLuint          m_ibo;
         GLuint          m_vao;
+        u32             m_numIndices;
     };
 };
