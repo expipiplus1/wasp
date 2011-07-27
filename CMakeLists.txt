@@ -62,6 +62,9 @@ set( wasp_sources       src/main.cpp
                         src/fly_camera.cpp
                         src/input.hpp
                         src/input.cpp
+                        src/input_stream.hpp
+                        src/input_stream.cpp
+                        src/input_stream-inl.hpp
                         src/mesh.hpp
                         src/mesh.cpp
                         src/model.hpp
