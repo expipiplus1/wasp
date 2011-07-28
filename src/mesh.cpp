@@ -31,6 +31,7 @@
 #include <GL/GLee.h>
 #include <GL/glfw3.h>
 #include <joemath/joemath.hpp>
+#include "attribute_indices.hpp"
 #include "input_stream.hpp"
 
 namespace NWasp
@@ -91,7 +92,7 @@ namespace NWasp
         glGenVertexArrays( 1, &m_vao ); 
 
         glBindVertexArray( m_vao );
-        
+            
         //
         // Load the vbo data
         //
@@ -104,14 +105,52 @@ namespace NWasp
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_ibo );
         glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof( u32 ) * num_indices, indices, GL_STATIC_DRAW );
 
+        float* p = 0;
         
-        //TODO: how to get the attrib index?
-        glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)0  );
-        glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)( num_positions * 3 * sizeof( float ) ) );
+        if( num_positions != 0 )
+        {
+            glVertexAttribPointer( POSITION_INDEX, 3, GL_FLOAT, GL_FALSE, vertex_size, p  );
+            glEnableVertexAttribArray( POSITION_INDEX );
+            p += 3;
+        }
         
-        glEnableVertexAttribArray( 0 );
-        glEnableVertexAttribArray( 1 );
+        if( num_normals != 0 )
+        {
+            glVertexAttribPointer( NORMAL_INDEX, 3, GL_FLOAT, GL_FALSE, vertex_size, p );
+            glEnableVertexAttribArray( NORMAL_INDEX );
+            p += 3;
+        }
+        
+        if( num_tangents != 0 )
+        {
+            glVertexAttribPointer( TANGENT_INDEX, 3, GL_FLOAT, GL_FALSE, vertex_size, p );
+            glEnableVertexAttribArray( TANGENT_INDEX );
+            p += 3;
+        }
 
+        if( num_bitangents != 0 )
+        {
+            glVertexAttribPointer( BITANGENT_INDEX, 3, GL_FLOAT, GL_FALSE, vertex_size, p );
+            glEnableVertexAttribArray( BITANGENT_INDEX );
+            p += 3;
+        }
+        
+        for( u32 i = 0; i < num_texcoords; ++i )
+        {
+            glVertexAttribPointer( TEXCOORD_INDEX + i, 4, GL_FLOAT, GL_FALSE, vertex_size, p );
+            glEnableVertexAttribArray( TEXCOORD_INDEX + i );
+            p += 4;
+        }
+        
+        for( u32 i = 0; i < num_colors; ++i )
+        {
+            glVertexAttribPointer( COLOR_INDEX + i, 4, GL_FLOAT, GL_FALSE, vertex_size, p );
+            glEnableVertexAttribArray( COLOR_INDEX + i );
+            p += 4;
+        }
+       
+        //assert( p == (float*)vertex_size );
+        
         glBindVertexArray( 0 );
         glBindBuffer( GL_ARRAY_BUFFER, 0 );
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
