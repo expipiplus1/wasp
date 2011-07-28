@@ -29,6 +29,8 @@
 #ifndef GLOBAL_CGH
 #define GLOBAL_CGH
 
+#include "attribute_indices.hpp"
+
 uniform float4x4    g_view              :   ENV0    :   VIEW;
 uniform float3      g_cameraPosition    :   ENV4    :   CAMERAPOSITION;
 

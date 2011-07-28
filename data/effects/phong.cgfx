@@ -39,8 +39,8 @@ uniform float4x4    g_model                     : MODEL;
 
 struct VertexInput 
 {
-    float4 position : POSITION : ATTR0;
-    float3 normal   : NORMAL   : ATTR1;
+    float4 position : ATTR[POSITION_INDEX];
+    float3 normal   : ATTR[NORMAL_INDEX];
 };  
 
 struct VertexOutput
