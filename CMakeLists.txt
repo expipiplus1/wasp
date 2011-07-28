@@ -41,6 +41,7 @@ add_subdirectory( model_compiler )
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wall -g" )
 
 set( wasp_sources       src/main.cpp
+                        src/attribute_indices.hpp
                         src/camera.hpp
                         src/camera.cpp
                         src/camera_manager.hpp
@@ -84,15 +85,6 @@ set( wasp_model_sources     ${wasp_data_dir}/models/bunny.ply )
 
 add_executable( wasp    ${wasp_sources} ) 
 
-add_custom_target( wasp_shaders
-                   SOURCES  ${wasp_effect_sources} )
-
-add_custom_target( wasp_models
-                   SOURCES ${wasp_model_sources} )
-
-add_dependencies( wasp wasp_shaders )
-add_dependencies( wasp wasp_models )
-
 include_directories( ${joemath_INCLUDE_DIR} ${glfw_INCLUDE_DIR} ${glee_INCLUDE_DIR} ${CG_INCLUDE_DIR} )
 
 set( GL_LIBS ${OPENGL_LIBRARY} ${glfw_LIBRARY} ${glee_LIBRARY} ${CG_LIBRARY} ${CG_GL_LIBRARY} )
@@ -112,24 +104,44 @@ target_link_libraries( wasp ${joemath_LIBRARY} ${GL_LIBS} )
 foreach( FILENAME ${wasp_effect_sources} )
     set( SRC "${CMAKE_SOURCE_DIR}/${FILENAME}" )
     set( DST "${CMAKE_BINARY_DIR}/${FILENAME}" )
-
-    add_custom_command( TARGET wasp_shaders
-                        COMMAND ${CG_COMPILER} -noentry -strict -glslWerror ${SRC}
+    
+    add_custom_command( OUTPUT ${FILENAME}
+                        COMMAND ${CG_COMPILER} -noentry -strict -glslWerror -I ${CMAKE_SOURCE_DIR}/src ${SRC}
                         COMMAND ${CMAKE_COMMAND} -E copy ${SRC} ${DST}
-                        COMMENT "Checking ${SRC}" )
+                        DEPENDS ${SRC}
+                        IMPLICIT_DEPENDS CXX ${SRC}
+                        COMMENT "Checking ${FILENAME}" )
 endforeach( )
+
+add_custom_target( wasp_effects
+                   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/src/attribute_indices.hpp ${CMAKE_BINARY_DIR}/${wasp_data_dir}/effects/attribute_indices.hpp
+                   DEPENDS  ${wasp_effect_sources} )
+add_dependencies( wasp wasp_effects )
+
+#
+# Compile models
+#
 
 foreach( FILENAME ${wasp_model_sources} )
     set( SRC "${CMAKE_SOURCE_DIR}/${FILENAME}" )
     get_filename_component( filename_without_extension ${FILENAME} NAME_WE )
     get_filename_component( file_path ${FILENAME} PATH )
+    set( FILENAME "${file_path}/${filename_without_extension}.joe" )
     file( MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/${file_path}/" )
-    set( DST "${CMAKE_BINARY_DIR}/${file_path}/${filename_without_extension}.joe" )
-    add_custom_command( TARGET wasp_models
+    set( DST "${CMAKE_BINARY_DIR}/${FILENAME}" )
+    
+    list( APPEND wasp_models_compiled ${FILENAME} )
+
+    add_custom_command( OUTPUT ${FILENAME}
                         COMMAND model_compiler ${SRC} ${DST}
-                        COMMENT "Compiling ${SRC}" )
+                        COMMENT "Compiling ${FILENAME}" )
 endforeach( )
 
+MESSAGE( STATUS ${wasp_models_compiled} )
+
+add_custom_target( wasp_models
+                   DEPENDS ${wasp_models_compiled} )
+add_dependencies( wasp wasp_models )
 #
 # Uninstall operation
 #
