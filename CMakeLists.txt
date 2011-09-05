@@ -89,13 +89,20 @@ include_directories( ${joemath_INCLUDE_DIR} ${glfw_INCLUDE_DIR} ${glee_INCLUDE_D
 
 set( GL_LIBS ${OPENGL_LIBRARY} ${glfw_LIBRARY} ${glee_LIBRARY} ${CG_LIBRARY} ${CG_GL_LIBRARY} )
 
-if( UNIX )
+if( UNIX AND NOT APPLE AND NOT CYGWIN )
     list( APPEND GL_LIBS X11 Xrandr Xxf86vm )
-else()
+endif()
+
+if( UNIX AND APPLE )
+    find_library( COCOA_FRAMEWORK Cocoa )
+    list( APPEND GL_LIBS ${COCOA_FRAMEWORK} )
+endif()
+
+if( WINDOWS )
     list( APPEND GL_LIBS opengl32 )
 endif()
 
-target_link_libraries( wasp ${joemath_LIBRARY} ${GL_LIBS} )
+target_link_libraries( wasp ${joemath_LIBRARY} ${GL_LIBS} c++ )
 
 #
 # Copy shaders
