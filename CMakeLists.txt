@@ -38,8 +38,6 @@ add_subdirectory( model_compiler )
 # Create the main engine
 #
 
-set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wall -g" )
-
 set( wasp_sources       src/main.cpp
                         src/attribute_indices.hpp
                         src/camera.hpp
@@ -84,6 +82,8 @@ set( wasp_effect_sources    ${wasp_data_dir}/effects/global.cgh
 set( wasp_model_sources     ${wasp_data_dir}/models/bunny.ply )
 
 add_executable( wasp    ${wasp_sources} ) 
+
+set_target_properties( wasp PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -stdlib=libc++ -Wall -g" )
 
 include_directories( ${joemath_INCLUDE_DIR} ${glfw_INCLUDE_DIR} ${glee_INCLUDE_DIR} ${CG_INCLUDE_DIR} )
 

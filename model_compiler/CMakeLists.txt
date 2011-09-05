@@ -7,7 +7,7 @@ project( model_compiler )
 
 add_subdirectory( assimp EXCLUDE_FROM_ALL )
 
-set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wall -g" )
+set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -stdlib=libc++ -Wall -g" )
 
 set( model_compiler_sources src/main.cpp 
                             src/compiler.hpp
