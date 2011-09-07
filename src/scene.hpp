@@ -29,6 +29,7 @@
 #pragma once
 
 #include <list>
+#include "wasp_gl.hpp"
 #include "quad.hpp"
 #include "renderable.hpp"
 #include "updatable.hpp"
@@ -85,6 +86,10 @@ namespace NWasp
         std::list<Renderable*>  m_renderables;
 
         Quad*                   m_quad;
+
+        GLuint                  m_fbo;
+        GLuint                  m_colorTex;
+        GLuint                  m_depthRB;
         
         Effect*                 m_effect;
     };

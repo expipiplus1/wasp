@@ -27,36 +27,41 @@
 */
 
 #include "global.cgh"
+#include "passthrough.cgfx"
 
-struct VertexInput
+/*
+unsigned int depth_rb : RENDERBUFFER
+<
+    int2 size = g_screenSize;
+    int  format = DEPTH32;
+>;
+
+unsigned int color_rt : RENDERTEXTURE
+<
+    int2 size = g_screenSize;
+    int format = RGBA8;
+>;
+
+sampler2d colorTexSampler
+*/
+
+
+uniform sampler2D color_buffer = sampler_state
 {
-    float4 position : ATTR[POSITION_INDEX];
-    float4 texcoord : ATTR[TEXCOORD_INDEX];
-};  
-
-struct VertexOutput
-{
-    float4 position : POSITION;
-    float4 texcoord : TEXCOORD0;
-}; 
-
-VertexOutput    Passthrough_VS  ( VertexInput input )
-{
-    VertexOutput output;
-
-    output.position = float4( input.position.xy, 0.0f, 1.0f );
-    output.texcoord = float4( input.texcoord.xy, 0.0f, 1.0f );
-    
-    return output;
-}
-
-float4          Blue_PS        ( VertexOutput input ) : COLOR
-{
-    return float4( input.texcoord.xy, 0.0f, 1.0f );
-}
+    MagFilter = Nearest;
+    MinFilter = Nearest;
+};
 
 technique technique0
 {
+    pass render_scene
+    {
+    //    Target = main_fbo;
+
+        DepthTestEnable = true;
+
+        RenderScene = true;
+    }
     pass render_quad
     {
         DepthTestEnable = false;
@@ -64,12 +69,6 @@ technique technique0
         RenderFullScreenQuad = true;
 
         VertexProgram   = compile latest Passthrough_VS();
-        FragmentProgram = compile latest Blue_PS();
-    }
-    pass render_scene
-    {
-        DepthTestEnable = true;
-
-        RenderScene = true;
+        FragmentProgram = compile latest Passthrough_PS( color_buffer );
     }
 }

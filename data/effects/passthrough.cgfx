@@ -26,23 +26,31 @@
     or implied, of Joe Hermaszewski.
 */
 
-#pragma once
+#include "global.cgh"
 
-#ifndef ATTRIBUTE_INDICES_HPP
-#define ATTRIBUTE_INDICES_HPP
+struct VertexInput
+{
+    float4 position : ATTR[POSITION_INDEX];
+    float4 texcoord : ATTR[TEXCOORD_INDEX];
+};  
 
-#define POSITION_INDEX    0
-#define NORMAL_INDEX      1
-#define TANGENT_INDEX     2
-#define BITANGENT_INDEX   3
-#define TEXCOORD_INDEX    4
-#define COLOR_INDEX       12
+struct VertexOutput
+{
+    float4 position : POSITION;
+    float4 texcoord : TEXCOORD0;
+}; 
 
-//
-// Formats
-//
+VertexOutput    Passthrough_VS  ( VertexInput input )
+{
+    VertexOutput output;
 
-#define DEPTH32 0
-#define RGBA8 1
+    output.position = float4( input.position.xy, 0.0f, 1.0f );
+    output.texcoord = float4( input.texcoord.xy, 0.0f, 1.0f );
+    
+    return output;
+}
 
-#endif // ATTRIBUTE_INDICES_HPP
+float4          Passthrough_PS        ( VertexOutput input, uniform sampler2D tex ) : COLOR
+{
+    return tex2D( tex, input.texcoord.xy );
+}
