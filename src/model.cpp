@@ -56,7 +56,7 @@ namespace NWasp
         for( auto& r : m_renderSets )
             delete r.second;
     }
-    
+
     bool    Model::Load     ( const std::string filename )
     {
         InputStream input_stream;

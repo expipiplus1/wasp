@@ -28,10 +28,48 @@
 
 #include "global.cgh"
 
+struct VertexInput
+{
+    float4 position : ATTR[POSITION_INDEX];
+    float4 texcoord : ATTR[TEXCOORD_INDEX];
+};  
+
+struct VertexOutput
+{
+    float4 position : POSITION;
+    float4 texcoord : TEXCOORD0;
+}; 
+
+VertexOutput    Passthrough_VS  ( VertexInput input )
+{
+    VertexOutput output;
+
+    output.position = float4( input.position.xy, 0.0f, 1.0f );
+    output.texcoord = float4( input.texcoord.xy, 0.0f, 1.0f );
+    
+    return output;
+}
+
+float4          Blue_PS        ( VertexOutput input ) : COLOR
+{
+    return float4( input.texcoord.xy, 0.0f, 1.0f );
+}
+
 technique technique0
 {
+    pass render_quad
+    {
+        DepthTestEnable = false;
+
+        RenderFullScreenQuad = true;
+
+        VertexProgram   = compile latest Passthrough_VS();
+        FragmentProgram = compile latest Blue_PS();
+    }
     pass render_scene
     {
+        DepthTestEnable = true;
+
         RenderScene = true;
     }
 }

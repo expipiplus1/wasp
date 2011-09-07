@@ -30,7 +30,7 @@
 
 #include <cassert>
 #include <iostream>
-#include <GL/glfw3.h>
+#include "wasp_gl.hpp"
 #include <joemath/joemath.hpp>
 
 using namespace NJoeMath;
@@ -70,6 +70,8 @@ namespace NWasp
             Destroy(); 
             return false;
         }
+
+        glfwOpenWindowHint( GLFW_DEPTH_BITS, 32 );
         
         s_instance->m_window = glfwOpenWindow( INIT_WIDTH, INIT_HEIGHT, GLFW_WINDOWED, INIT_WINDOW_TITLE, nullptr );
         if ( !s_instance->m_window )
@@ -82,6 +84,7 @@ namespace NWasp
         glfwGetWindowSize( s_instance->m_window, &s_instance->m_width, &s_instance->m_height );
 
         glfwEnable( s_instance->m_window, GLFW_STICKY_KEYS );
+        glDisable( GL_DEPTH_TEST );
         
         glfwSwapInterval( 1 );
 

@@ -28,7 +28,7 @@
 
 #include "time.hpp"
 
-#include <GL/glfw3.h>
+#include "wasp_gl.hpp"
 
 namespace NTime
 {

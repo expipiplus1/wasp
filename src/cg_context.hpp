@@ -65,10 +65,12 @@ namespace NWasp
         //
         
         static CGbool       StateRenderSceneSet         ( CGstateassignment state_assignment );
-
         static CGbool       StateRenderSceneReset       ( CGstateassignment state_assignment );
-        
         static CGbool       StateRenderSceneValidate    ( CGstateassignment state_assignment );
+        
+        static CGbool       StateRenderFullscreenQuadSet         ( CGstateassignment state_assignment );
+        static CGbool       StateRenderFullscreenQuadReset       ( CGstateassignment state_assignment );
+        static CGbool       StateRenderFullscreenQuadValidate    ( CGstateassignment state_assignment );
         
     private:
         CGcontext           m_cgContext;

@@ -61,6 +61,8 @@ set( wasp_sources       src/main.cpp
                         src/mesh.cpp
                         src/model.hpp
                         src/model.cpp
+                        src/quad.hpp
+                        src/quad.cpp
                         src/renderable.hpp
                         src/scene.hpp
                         src/scene.cpp 
@@ -69,6 +71,7 @@ set( wasp_sources       src/main.cpp
                         src/timer.hpp
                         src/timer.cpp
                         src/updatable.hpp
+                        src/wasp_gl.hpp
                         src/window.hpp
                         src/window.cpp )
 

@@ -28,7 +28,7 @@
 
 #pragma once
 
-#include <GL/glfw3.h>
+#include "wasp_gl.hpp"
 #include <joemath/joemath.hpp>
 
 namespace NWasp

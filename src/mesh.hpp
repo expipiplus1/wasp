@@ -28,8 +28,7 @@
 
 #pragma once
 
-#include <GL/GLee.h>
-#include <GL/glfw3.h>
+#include "wasp_gl.hpp"
 #include "input_stream.hpp"
 #include "renderable.hpp"
 

@@ -85,10 +85,11 @@ technique technique0
 {
     pass pass0
     {
+        //CullFaceEnable = true;
+        //CullFace = back;
+        DepthTestEnable = true;
+
         VertexProgram   = compile latest phong_vs( );
         FragmentProgram = compile latest phong_ps( );
-        CullFaceEnable  = true;
-        CullFace        = back;
-        DepthTestEnable = true;
     }
 }

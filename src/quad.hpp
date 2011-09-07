@@ -30,61 +30,22 @@
 
 #include "wasp_gl.hpp"
 #include <joemath/joemath.hpp>
-
-using namespace NJoeMath;
+#include "renderable.hpp"
 
 namespace NWasp
 {
-    class Input
+    class Quad : public Renderable
     {
-    private:
-                        Input                   ( );
-                        ~Input                  ( );
-                        Input                   ( const Input&  )               = delete;
-        Input&          operator =              ( const Input&  )               = delete;
-        
-        static Input*   s_instance;
-    public: 
-        //
-        // Singleton functions
-        //
-        static bool     Create                  ( );
-        static Input*   Instance                ( );
-        static void     Destroy                 ( );
-    
-        //
-        // Polling fuctions
-        //
-        void            Poll                    ( );
-        
-        //
-        // Getters
-        //
+    public:
+                        Quad        ( );
+        virtual         ~Quad       ( );
 
-        //
-        // Mouse
-        //
-        // Position in window, -1 to 1
-        float2          GetMousePosition        ( ) const;
-        // Current velocity
-        float2          GetMouseVelocity        ( ) const;
-        // Change in position since last frame
-        float2          GetMouseDelta           ( ) const;
-
-        //
-        // Keyboard
-        //
-        bool            IsKeyDown               ( const int    key ) const;
-        bool            IsKeyChanged            ( const int    key ) const;
+        virtual void    Render      ( ) const;
         
     private:
-        float2          m_mousePosition;
-        float2          m_mousePreviousPosition;
-        float2          m_windowSize;
-        float           m_deltaTime;
-        float           m_previousTime;
-        
-        bool    m_keyStates[GLFW_KEY_LAST];
-        bool    m_keyChanged[GLFW_KEY_LAST];
+        GLuint          m_vbo;
+        GLuint          m_ibo;
+        GLuint          m_vao;
+        u32             m_numIndices;
     };
 };

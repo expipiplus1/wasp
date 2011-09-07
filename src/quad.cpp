@@ -26,65 +26,60 @@
     or implied, of Joe Hermaszewski.
 */
 
-#pragma once
+#include "quad.hpp"
 
+#include <iostream>
 #include "wasp_gl.hpp"
 #include <joemath/joemath.hpp>
-
-using namespace NJoeMath;
+#include "attribute_indices.hpp"
 
 namespace NWasp
 {
-    class Input
+    Quad::Quad            ( )
     {
-    private:
-                        Input                   ( );
-                        ~Input                  ( );
-                        Input                   ( const Input&  )               = delete;
-        Input&          operator =              ( const Input&  )               = delete;
+        u32 num_vertices = 4;
+        m_numIndices = 4;
+        u32 vertex_size = sizeof( float ) * 4;
         
-        static Input*   s_instance;
-    public: 
-        //
-        // Singleton functions
-        //
-        static bool     Create                  ( );
-        static Input*   Instance                ( );
-        static void     Destroy                 ( );
+        float vertices[] = { -1.0f, -1.0f, 0.0f, 0.0f,
+                             1.0f, -1.0f,  1.0f, 0.0f,
+                             1.0f, 1.0f,   1.0f, 1.0f,
+                             -1.0f, 1.0f,  0.0f, 1.0f };
+
+        u32   indices[]  = { 0, 1, 2, 3 };
+        
+        glGenBuffers( 1, &m_vbo );
+        glGenBuffers( 1, &m_ibo );
+        glGenVertexArraysWASP( 1, &m_vao ); 
+
+        glBindVertexArrayWASP( m_vao );
+            
+        glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
+        glBufferData( GL_ARRAY_BUFFER, num_vertices * vertex_size, vertices, GL_STATIC_DRAW );
+
+        glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_ibo );
+        glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof( u32 ) * m_numIndices, indices, GL_STATIC_DRAW );
+
+        glVertexAttribPointer( POSITION_INDEX, 2, GL_FLOAT, GL_FALSE, vertex_size, reinterpret_cast<void*>( 0 )  );
+        glEnableVertexAttribArray( POSITION_INDEX );
+        
+        glVertexAttribPointer( TEXCOORD_INDEX, 2, GL_FLOAT, GL_FALSE, vertex_size, reinterpret_cast<void*>( sizeof( float ) * 2 ) );
+        glEnableVertexAttribArray( TEXCOORD_INDEX );
+        
+        glBindVertexArrayWASP( 0 );
+        glBindBuffer( GL_ARRAY_BUFFER, 0 );
+        glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
+    }
     
-        //
-        // Polling fuctions
-        //
-        void            Poll                    ( );
-        
-        //
-        // Getters
-        //
+    Quad::~Quad           ( )
+    {
 
-        //
-        // Mouse
-        //
-        // Position in window, -1 to 1
-        float2          GetMousePosition        ( ) const;
-        // Current velocity
-        float2          GetMouseVelocity        ( ) const;
-        // Change in position since last frame
-        float2          GetMouseDelta           ( ) const;
+    }
+    
+    void    Quad::Render   ( ) const
+    {
+        glBindVertexArrayWASP( m_vao );
 
-        //
-        // Keyboard
-        //
-        bool            IsKeyDown               ( const int    key ) const;
-        bool            IsKeyChanged            ( const int    key ) const;
-        
-    private:
-        float2          m_mousePosition;
-        float2          m_mousePreviousPosition;
-        float2          m_windowSize;
-        float           m_deltaTime;
-        float           m_previousTime;
-        
-        bool    m_keyStates[GLFW_KEY_LAST];
-        bool    m_keyChanged[GLFW_KEY_LAST];
-    };
+        glDrawElements( GL_QUADS, m_numIndices, GL_UNSIGNED_INT, 0 );
+    }
 };

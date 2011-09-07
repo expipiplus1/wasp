@@ -36,6 +36,7 @@
 #include "camera.hpp"
 #include "camera_manager.hpp"
 #include "effect_manager.hpp"
+#include "quad.hpp"
 #include "renderable.hpp"
 
 namespace NWasp
@@ -60,6 +61,8 @@ namespace NWasp
         s_instance = new Scene;
         
         s_instance->m_effect = EffectManager::Instance()->LoadEffect( "data/effects/scene.cgfx", true);
+
+        s_instance->m_quad = new Quad;
         
         return true;
     }
@@ -73,6 +76,7 @@ namespace NWasp
     void     Scene::Destroy         ( )
     {
         assert( s_instance != nullptr );
+        delete s_instance->m_quad;
         delete s_instance;
         s_instance = nullptr;
     }
@@ -110,6 +114,11 @@ namespace NWasp
                 for( auto r : m_renderables )
                     r->Render();
             }
+
+            if( m_renderFullscreenQuad )
+            {
+                m_quad->Render();
+            }
             cgResetPassState( pass );
             
             pass = cgGetNextPass( pass );
@@ -132,6 +141,22 @@ namespace NWasp
     }
     
     bool            Scene::ValidateRenderScene ( )
+    {
+        return true;
+    }
+
+    void            Scene::SetRenderFullscreenQuad      ( bool render_fullscreen_quad )
+    {
+        m_renderFullscreenQuad = render_fullscreen_quad;
+    }
+    
+    void            Scene::ResetRenderFullscreenQuad    ( )
+    {
+        //TODO should this be popping the top off the stack?
+        m_renderFullscreenQuad = false;
+    }
+    
+    bool            Scene::ValidateRenderFullscreenQuad ( )
     {
         return true;
     }

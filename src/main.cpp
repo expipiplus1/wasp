@@ -1,4 +1,4 @@
-/*
+/*/Users/jophish/projects/wasp/build/wasp.xcodeproj
     Copyright 2011 Joe Hermaszewski. All rights reserved.
 
     Redistribution and use in source and binary forms, with or without modification, are
@@ -55,6 +55,9 @@ int main (int argc, char** argv)
     if ( !NWasp::Input::Create() )
         return 4;
 
+    NWasp::Model model;
+    model.Load( "data/models/bunny.joe" );
+
     if ( !NWasp::Scene::Create() )
         return 5;
 
@@ -74,8 +77,6 @@ int main (int argc, char** argv)
     NWasp::CameraManager::Instance()->SetCurrentCamera( &camera );
     NWasp::Scene::Instance()->AddUpdatable( &camera );
     
-    NWasp::Model model;
-    model.Load( "data/models/bunny.joe" );
     NWasp::Scene::Instance()->AddRenderable( &model );
     
     double old_time = NTime::GetApplicationTime();

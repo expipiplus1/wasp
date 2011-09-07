@@ -28,12 +28,14 @@
 
 #pragma once
 
-namespace NWasp
-{
-    class Renderable
-    {
-    public: 
-        virtual void    Render  ( ) const = 0;
-    };
-};
+#include <GL/GLee.h>
+#include <GL/glfw3.h>
 
+#ifdef __APPLE__
+    #define glGenVertexArraysWASP glGenVertexArraysAPPLE
+    #define glBindVertexArrayWASP glBindVertexArrayAPPLE
+#else
+    #define glGenVertexArraysWASP glGenVertexArrays
+    #define glBindVertexArrayWASP glBindVertexArray
+#endif
+    

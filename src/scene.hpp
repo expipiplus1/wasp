@@ -29,6 +29,7 @@
 #pragma once
 
 #include <list>
+#include "quad.hpp"
 #include "renderable.hpp"
 #include "updatable.hpp"
 
@@ -70,13 +71,20 @@ namespace NWasp
         void            ResetRenderScene    ( );
         bool            ValidateRenderScene ( );
         
+        void            SetRenderFullscreenQuad      ( bool render_fullscreen_quad );
+        void            ResetRenderFullscreenQuad    ( );
+        bool            ValidateRenderFullscreenQuad ( );
+        
         //
         // States
         //
-        bool                    m_renderScene;
+        bool                    m_renderScene = false;
+        bool                    m_renderFullscreenQuad = false;
         
         std::list<Updatable*>   m_updatables;
         std::list<Renderable*>  m_renderables;
+
+        Quad*                   m_quad;
         
         Effect*                 m_effect;
     };

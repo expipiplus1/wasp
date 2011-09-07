@@ -28,8 +28,8 @@
 
 #include "mesh.hpp"
 
-#include <GL/GLee.h>
-#include <GL/glfw3.h>
+#include <iostream>
+#include "wasp_gl.hpp"
 #include <joemath/joemath.hpp>
 #include "attribute_indices.hpp"
 #include "input_stream.hpp"
@@ -87,11 +87,12 @@ namespace NWasp
         float* vertices = reinterpret_cast<float*>( input_stream.GetData( num_vertices * vertex_size ) );            
         u32*   indices  = reinterpret_cast<u32*  >( input_stream.GetData( num_indices * sizeof( u32 ) ) );
         
+        glGenVertexArraysWASP( 1, &m_vao ); 
+        glBindVertexArrayWASP( m_vao );
+
+
         glGenBuffers( 1, &m_vbo );
         glGenBuffers( 1, &m_ibo );
-        glGenVertexArrays( 1, &m_vao ); 
-
-        glBindVertexArray( m_vao );
             
         //
         // Load the vbo data
@@ -149,25 +150,18 @@ namespace NWasp
             p += 4;
         }
        
-        //assert( p == (float*)vertex_size );
-        
-        glBindVertexArray( 0 );
+        glBindVertexArrayWASP( 0 );
+
         glBindBuffer( GL_ARRAY_BUFFER, 0 );
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
-        
+
         return true;
     }
     
     void    Mesh::Render   ( ) const
     {
-        glBindVertexArray( m_vao );
-        glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
-        glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_ibo );
+        glBindVertexArrayWASP( m_vao );
 
         glDrawElements( GL_TRIANGLES, m_numIndices, GL_UNSIGNED_INT, 0 );
-
-        glBindVertexArray( 0 );
-        glBindBuffer( GL_ARRAY_BUFFER, 0 );
-        glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
     }
 };

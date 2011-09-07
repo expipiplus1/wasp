@@ -29,7 +29,7 @@
 #include "input.hpp"
 
 #include <cassert>
-#include <GL/glfw3.h>
+#include "wasp_gl.hpp"
 #include "window.hpp"
 
 namespace NWasp

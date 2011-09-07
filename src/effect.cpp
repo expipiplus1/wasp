@@ -104,7 +104,7 @@ namespace NWasp
             
             primitive->Render();
             
-            cgResetPassState( pass );
+            //cgResetPassState( pass );
             pass = cgGetNextPass( pass );
         }
     }

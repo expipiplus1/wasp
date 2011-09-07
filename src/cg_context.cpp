@@ -30,6 +30,7 @@
 
 #include <cassert>
 #include <iostream>
+#include "wasp_gl.hpp"
 #include <Cg/cg.h>
 #include <Cg/cgGL.h>
 #include "scene.hpp"
@@ -68,6 +69,10 @@ namespace NWasp
         CGstate render_scene_state = cgCreateState( s_instance->m_cgContext, "RenderScene", CG_BOOL );
         cgSetStateCallbacks( render_scene_state, StateRenderSceneSet, StateRenderSceneReset, StateRenderSceneValidate );
 
+        CGstate render_fullscreen_quad_state = cgCreateState( s_instance->m_cgContext, "RenderFullscreenQuad", CG_BOOL );
+        cgSetStateCallbacks( render_fullscreen_quad_state, StateRenderFullscreenQuadSet, StateRenderFullscreenQuadReset, StateRenderFullscreenQuadValidate );
+
+
         cgGLRegisterStates( s_instance->m_cgContext );
         cgGLSetManageTextureParameters( s_instance->m_cgContext, CG_TRUE );
         cgGLSetDebugMode( CG_TRUE );
@@ -100,6 +105,10 @@ namespace NWasp
     // States
     //
     
+    //
+    // Render scene
+    //
+
     CGbool          CgContext::StateRenderSceneSet         ( CGstateassignment state_assignment )
     {
         int num_values = 0;
@@ -120,6 +129,32 @@ namespace NWasp
     CGbool          CgContext::StateRenderSceneValidate    ( CGstateassignment state_assignment )
     {
         return Scene::Instance()->ValidateRenderScene();
+    }
+
+    //
+    // Render fullscreen quad
+    //
+
+    CGbool          CgContext::StateRenderFullscreenQuadSet   ( CGstateassignment state_assignment )
+    {
+        int num_values = 0;
+        const CGbool* render_fullscreen_quad = cgGetBoolStateAssignmentValues( state_assignment, &num_values );
+        
+        Scene::Instance()->SetRenderFullscreenQuad( *render_fullscreen_quad == CG_TRUE );
+        
+        return CG_TRUE;
+    }
+
+    CGbool          CgContext::StateRenderFullscreenQuadReset       ( CGstateassignment state_assignment )
+    {
+        Scene::Instance()->ResetRenderFullscreenQuad();
+        
+        return CG_TRUE;
+    }
+    
+    CGbool          CgContext::StateRenderFullscreenQuadValidate    ( CGstateassignment state_assignment )
+    {
+        return Scene::Instance()->ValidateRenderFullscreenQuad();
     }
     
     //
