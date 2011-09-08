@@ -128,6 +128,11 @@ namespace NWasp
         glfwPollEvents( );
     }
 
+    int2 Window::GetSize ( ) const
+    {
+        return int2( m_width, m_height );
+    }
+
     void Window::SetTitle( const char* title ) const
     {
         glfwSetWindowTitle( m_window, title );

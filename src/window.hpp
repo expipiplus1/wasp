@@ -47,6 +47,8 @@ namespace NWasp
         static Window*      Instance        ( );
         static void         Destroy         ( );
 
+        int2                GetSize   ( ) const;
+    
         bool                Init            ( );
         bool                IsWindowClosed  ( ) const;
         void                Swap            ( );
