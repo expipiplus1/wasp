@@ -65,31 +65,33 @@ namespace NWasp
 
         s_instance->m_quad = new Quad;
 
+        glGenTextures(1, &s_instance->m_colorTex);
+
+        glBindTexture( GL_TEXTURE_2D, s_instance->m_colorTex );
+        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA32F, 100, 100, 0,
+                      GL_RGBA, GL_FLOAT, NULL );
+        glBindTexture( GL_TEXTURE_2D, 0 );
+                      
+
+        glGenRenderbuffers( 1, &s_instance->m_depthRB );
+        glBindRenderbuffer( GL_RENDERBUFFER, s_instance->m_depthRB );
+        glRenderbufferStorage( GL_RENDERBUFFER,
+                               GL_DEPTH_COMPONENT32, 100, 100 );
+        glBindRenderbuffer( GL_RENDERBUFFER, 0 );
+
         // generate namespace for the frame buffer, colorbuffer and depthbuffer
         glGenFramebuffers(1, &s_instance->m_fbo);
-        glGenTextures(1, &s_instance->m_colorTex);
-        glGenRenderbuffersEXT(1, &s_instance->m_depthRB);
-
         //switch to our fbo so we can bind stuff to it
         glBindFramebuffer(GL_FRAMEBUFFER, s_instance->m_fbo);
-
         //create the colorbuffer texture and attach it to the frame buffer
-        glBindTexture(GL_TEXTURE_2D, s_instance->m_colorTex);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, 100, 100, 0,
-                      GL_RGBA, GL_INT, NULL);
-        glFramebufferTexture2D( GL_FRAMEBUFFER_EXT,
-                                GL_COLOR_ATTACHMENT0_EXT,
+        glFramebufferTexture2D( GL_FRAMEBUFFER,
+                                GL_COLOR_ATTACHMENT0,
                                 GL_TEXTURE_2D, s_instance->m_colorTex, 0);
-
         // create a render buffer as our depthbuffer and attach it
-        glBindRenderbuffer( GL_RENDERBUFFER_EXT, s_instance->m_depthRB);
-        glRenderbufferStorage( GL_RENDERBUFFER_EXT,
-                               GL_DEPTH_COMPONENT32, 100, 100);
-        glFramebufferRenderbuffer( GL_FRAMEBUFFER_EXT,
-                                   GL_DEPTH_ATTACHMENT_EXT,
-                                   GL_RENDERBUFFER_EXT, s_instance->m_depthRB);
-
+        glFramebufferRenderbuffer( GL_FRAMEBUFFER,
+                                   GL_DEPTH_ATTACHMENT,
+                                   GL_RENDERBUFFER, s_instance->m_depthRB);
         // Go back to regular frame buffer rendering
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         
@@ -97,8 +99,9 @@ namespace NWasp
         
         CGparameter param; 
         param = cgGetNamedEffectParameter( effect, "color_buffer" ); 
-        cgGLSetTextureParameter( param, s_instance->m_colorTex ); 
-        cgSetSamplerState( param );
+        cgGLSetupSampler( param, s_instance->m_colorTex );
+        //cgGLSetTextureParameter( param, s_instance->m_colorTex ); 
+        //cgSetSamplerState( param );
 
         return true;
     }
@@ -147,7 +150,7 @@ namespace NWasp
             
             if( m_renderScene )
             {
-                glBindTexture(GL_TEXTURE_2D, 0);
+                //glBindTexture(GL_TEXTURE_2D, 0);
                 glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
                 glViewport( 0, 0, 100,100 );
 
@@ -162,8 +165,6 @@ namespace NWasp
 
             if( m_renderFullscreenQuad )
             {
-                glBindTexture(GL_TEXTURE_2D, m_colorTex);
-                
                 m_quad->Render();
             }
             cgResetPassState( pass );
