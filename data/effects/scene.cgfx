@@ -29,24 +29,29 @@
 #include "global.cgh"
 #include "passthrough.cgfx"
 
-/*
-unsigned int depth_rb : RENDERBUFFER
+int scene_depth : RENDERBUFFER
 <
-    int2 size = g_screenSize;
-    int  format = DEPTH32;
+    int2 Size = int2(100,100);
+    int Format = DEPTH32;
 >;
 
-unsigned int color_rt : RENDERTEXTURE
+int scene_color : RENDERTEXTURE
 <
-    int2 size = g_screenSize;
-    int format = RGBA8;
+    int2 Size = int2(100,100);
+    int Format = RGBA32F;
+>;
+sampler2D scene_color_sampler
+<
+    int RenderTexture = scene_color;
 >;
 
-sampler2d colorTexSampler
-*/
+int scene_fbo : FBO
+<
+    int RenderBuffer = scene_depth;
+    int RenderTexture = scene_color;
+>;
 
-
-uniform sampler2D color_buffer = sampler_state
+sampler2D color_buffer = sampler_state
 {
     MagFilter = Nearest;
     MinFilter = Nearest;
@@ -56,7 +61,7 @@ technique technique0
 {
     pass render_scene
     {
-    //    Target = main_fbo;
+    //    RenderTarget = scene_fbo;
 
         DepthTestEnable = true;
 
@@ -64,7 +69,7 @@ technique technique0
     }
     pass render_quad
     {
-        DepthTestEnable = false;
+        DepthTestEnable = true;
 
         RenderFullScreenQuad = true;
 
