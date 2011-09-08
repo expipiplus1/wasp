@@ -64,6 +64,10 @@ namespace NWasp
         // States
         //
         
+        static CGbool       StateRenderTargetSet         ( CGstateassignment state_assignment );
+        static CGbool       StateRenderTargetReset       ( CGstateassignment state_assignment );
+        static CGbool       StateRenderTargetValidate    ( CGstateassignment state_assignment );
+        
         static CGbool       StateRenderSceneSet         ( CGstateassignment state_assignment );
         static CGbool       StateRenderSceneReset       ( CGstateassignment state_assignment );
         static CGbool       StateRenderSceneValidate    ( CGstateassignment state_assignment );

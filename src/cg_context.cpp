@@ -66,6 +66,9 @@ namespace NWasp
             return false;
         }
         
+        CGstate render_target_state = cgCreateState( s_instance->m_cgContext, "RenderTarget", CG_INT );
+        cgSetStateCallbacks( render_target_state, StateRenderTargetSet, StateRenderTargetReset, StateRenderTargetValidate );
+        
         CGstate render_scene_state = cgCreateState( s_instance->m_cgContext, "RenderScene", CG_BOOL );
         cgSetStateCallbacks( render_scene_state, StateRenderSceneSet, StateRenderSceneReset, StateRenderSceneValidate );
 
@@ -104,6 +107,32 @@ namespace NWasp
     //
     // States
     //
+    
+    //
+    // Render target
+    //
+
+    CGbool          CgContext::StateRenderTargetSet         ( CGstateassignment state_assignment )
+    {
+        int num_values = 0;
+        const int* render_target = cgGetIntStateAssignmentValues( state_assignment, &num_values );
+        
+        Scene::Instance()->SetRenderTarget( *render_target );
+        
+        return CG_TRUE;
+    }
+
+    CGbool          CgContext::StateRenderTargetReset       ( CGstateassignment state_assignment )
+    {
+        Scene::Instance()->ResetRenderTarget();
+        
+        return CG_TRUE;
+    }
+    
+    CGbool          CgContext::StateRenderTargetValidate    ( CGstateassignment state_assignment )
+    {
+        return Scene::Instance()->ValidateRenderTarget();
+    }
     
     //
     // Render scene
