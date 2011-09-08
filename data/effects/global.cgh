@@ -36,6 +36,6 @@ uniform float3      g_cameraPosition    :   ENV4    :   CAMERAPOSITION;
 
 uniform float       g_time              :   ENV5    :   TIME;
 
-uniform int2        g_screenSize        :   ENV6    :   SCREENSIZE;
+const   int2        g_screenSize        :   ENV6    :   SCREENSIZE;
 
 #endif // GLOBAL_CGH
