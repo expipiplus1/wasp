@@ -42,7 +42,7 @@
 // Formats
 //
 
-#define DEPTH32 0
-#define RGBA8 1
+const int DEPTH32 = 0;
+const int RGBA32F = 1;
 
 #endif // ATTRIBUTE_INDICES_HPP
