@@ -176,6 +176,24 @@ namespace NWasp
     // Cg State
     //
     
+    void            Scene::SetRenderTarget      ( u32 fbo )
+    {
+        m_fbo = fbo;
+    }
+    
+    void            Scene::ResetRenderTarget    ( )
+    {
+        //TODO this should work for other places besides the top leve
+        //TODO should this be popping the top off the stack?
+        m_fbo = 0;
+    }
+    
+    bool            Scene::ValidateRenderTarget ( )
+    {
+        return true;
+    }
+    
+
     void            Scene::SetRenderScene      ( bool render_scene )
     {
         m_renderScene = render_scene;

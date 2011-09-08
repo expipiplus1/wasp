@@ -68,6 +68,10 @@ namespace NWasp
         //
         // Cg State
         //
+        void            SetRenderTarget     ( u32 fbo );
+        void            ResetRenderTarget   ( );
+        bool            ValidateRenderTarget( );
+        
         void            SetRenderScene      ( bool render_scene );
         void            ResetRenderScene    ( );
         bool            ValidateRenderScene ( );
