@@ -26,70 +26,35 @@
     or implied, of Joe Hermaszewski.
 */
 
-#include "global.cgh"
-#include "passthrough.cgfx"
+#include "render_target.hpp"
 
-int scene_depth : RENDERBUFFER
-<
-    int2 Size = int2(100,100);
-    int Format = DEPTH32;
->;
+#include <iostream>
+#include <joemath/joemath.hpp>
+#include "wasp_gl.hpp"
 
-int scene_color : RENDERTEXTURE
-<
-    int2 Size = int2(100,100);
-    int Format = RGBA32F;
->;
-sampler2D scene_color_sampler
-<
-    int RenderTexture = scene_color;
-> = sampler_state
+using namespace NJoeMath;
+
+namespace NWasp
 {
-    MagFilter = Nearest;
-    MinFilter = Nearest;
-};
-
-int scene_fbo : FBO
-<
-    int RenderBuffer = scene_depth;
-    int RenderTexture = scene_color;
-    int2 Size = int2(100,100);
->;
-
-sampler2D hu
-<
-    int RenderTexture = 9999;
-> = sampler_state
-{
-    MagFilter = Nearest;
-    MinFilter = Nearest;
-};
-
-technique technique0
-{
-    pass render_scene
+    RenderTarget::RenderTarget                  ( GLuint fbo, GLuint render_texture, GLuint render_buffer, int2 size )
+    :m_fbo( fbo )
+    ,m_renderTexture( render_texture )
+    ,m_renderBuffer( render_buffer )
+    ,m_size( size )
     {
-        RenderTarget = scene_fbo;
-        ClearColor = float4( 0.2, 0.2, 0.9, 1.0f );
-        Clear = true;
-        DepthTestEnable = false;
-
-        RenderScene = true;
     }
-    /*pass q
+        
+    RenderTarget::~RenderTarget                 ( )
     {
-        RenderTarget = boo;
-        RenderFullScreenQuad = true;
-    }*/
-    pass render_quad
-    {
-        DepthTestEnable = false;
-        Clear = true;
-
-        RenderFullScreenQuad = true;
-
-        VertexProgram   = compile latest Passthrough_VS();
-        //FragmentProgram = compile latest Passthrough_PS( hu );
-        FragmentProgram = compile latest Passthrough_PS( scene_color_sampler );
+        //TODO should this free the buffers?
     }
-}
+
+    void RenderTarget::Bind() const
+    {
+        std::cout << "Binding fbo " << m_fbo << " size: " << m_size.x() << ":" << m_size.y() << "\n";
+
+        glBindTexture( GL_TEXTURE_2D, 0 );
+        glBindFramebuffer( GL_FRAMEBUFFER, m_fbo );
+        glViewport( 0,0, m_size.x(),m_size.y() );
+    }
+};

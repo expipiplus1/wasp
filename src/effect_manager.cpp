@@ -115,6 +115,12 @@ namespace NWasp
                 ConnectParameters( scene_effect, material_effect );
             }
         }
+
+        //
+        // Create required textures and render targets
+        //
+
+        effect->AllocateBuffers();
         
         return effect;
     }

@@ -33,7 +33,7 @@
 #include "wasp_gl.hpp"
 #include <Cg/cg.h>
 #include <Cg/cgGL.h>
-#include "scene.hpp"
+#include "state_manager.hpp"
 
 namespace NWasp
 {
@@ -67,13 +67,19 @@ namespace NWasp
         }
         
         CGstate render_target_state = cgCreateState( s_instance->m_cgContext, "RenderTarget", CG_INT );
-        cgSetStateCallbacks( render_target_state, StateRenderTargetSet, StateRenderTargetReset, StateRenderTargetValidate );
+        cgSetStateCallbacks( render_target_state, SetStateRenderTarget, ResetStateRenderTarget, ValidateStateRenderTarget );
+
+        CGstate clear_color_state = cgCreateState( s_instance->m_cgContext, "ClearColor", CG_FLOAT4 );
+        cgSetStateCallbacks( clear_color_state, SetStateClearColor, ResetStateClearColor, ValidateStateClearColor );
+
+        CGstate clear_state = cgCreateState( s_instance->m_cgContext, "Clear", CG_BOOL );
+        cgSetStateCallbacks( clear_state, SetStateClear, ResetStateClear, ValidateStateClear );
         
         CGstate render_scene_state = cgCreateState( s_instance->m_cgContext, "RenderScene", CG_BOOL );
-        cgSetStateCallbacks( render_scene_state, StateRenderSceneSet, StateRenderSceneReset, StateRenderSceneValidate );
+        cgSetStateCallbacks( render_scene_state, SetStateRenderScene, ResetStateRenderScene, ValidateStateRenderScene );
 
         CGstate render_fullscreen_quad_state = cgCreateState( s_instance->m_cgContext, "RenderFullscreenQuad", CG_BOOL );
-        cgSetStateCallbacks( render_fullscreen_quad_state, StateRenderFullscreenQuadSet, StateRenderFullscreenQuadReset, StateRenderFullscreenQuadValidate );
+        cgSetStateCallbacks( render_fullscreen_quad_state, SetStateRenderFullscreenQuad, ResetStateRenderFullscreenQuad, ValidateStateRenderFullscreenQuad );
 
 
         cgGLRegisterStates( s_instance->m_cgContext );
@@ -109,81 +115,147 @@ namespace NWasp
     //
     
     //
-    // Render target
+    // Clear
     //
 
-    CGbool          CgContext::StateRenderTargetSet         ( CGstateassignment state_assignment )
+    CGbool          CgContext::SetStateClear              ( CGstateassignment state_assignment )
     {
-        int num_values = 0;
-        const int* render_target = cgGetIntStateAssignmentValues( state_assignment, &num_values );
+        int num_values;
+        const CGbool* clear = cgGetBoolStateAssignmentValues( state_assignment, &num_values );
         
-        Scene::Instance()->SetRenderTarget( *render_target );
+        assert( clear != NULL );
+            
+        StateManager::Instance()->SetClear( *clear == CG_TRUE );
         
         return CG_TRUE;
     }
 
-    CGbool          CgContext::StateRenderTargetReset       ( CGstateassignment state_assignment )
+    CGbool          CgContext::ResetStateClear            ( CGstateassignment state_assignment )
     {
-        Scene::Instance()->ResetRenderTarget();
+        StateManager::Instance()->ResetClear();
         
         return CG_TRUE;
     }
     
-    CGbool          CgContext::StateRenderTargetValidate    ( CGstateassignment state_assignment )
+    CGbool          CgContext::ValidateStateClear         ( CGstateassignment state_assignment )
     {
-        return Scene::Instance()->ValidateRenderTarget();
+        return StateManager::Instance()->ValidateClear();
+    }
+    
+    //
+    // Clear Color
+    //
+
+    CGbool          CgContext::SetStateClearColor         ( CGstateassignment state_assignment )
+    {
+        int num_values;
+        const float4* clear_color = reinterpret_cast<const float4*>( cgGetFloatStateAssignmentValues( state_assignment, &num_values ) );
+        
+        assert( num_values == 4 );
+        assert( clear_color != NULL );
+            
+        StateManager::Instance()->SetClearColor( *clear_color );
+        
+        return CG_TRUE;
+    }
+
+    CGbool          CgContext::ResetStateClearColor       ( CGstateassignment state_assignment )
+    {
+        StateManager::Instance()->ResetClearColor();
+        
+        return CG_TRUE;
+    }
+    
+    CGbool          CgContext::ValidateStateClearColor    ( CGstateassignment state_assignment )
+    {
+        return StateManager::Instance()->ValidateClearColor();
+    }
+    
+    //
+    // Render target
+    //
+
+    CGbool          CgContext::SetStateRenderTarget         ( CGstateassignment state_assignment )
+    {
+        int num_values = 0;
+        const int* render_target = cgGetIntStateAssignmentValues( state_assignment, &num_values );
+        
+        assert( num_values == 1 );
+        assert( render_target != NULL );
+
+        StateManager::Instance()->SetRenderTarget( *render_target );
+        
+        return CG_TRUE;
+    }
+
+    CGbool          CgContext::ResetStateRenderTarget       ( CGstateassignment state_assignment )
+    {
+        StateManager::Instance()->ResetRenderTarget();
+        
+        return CG_TRUE;
+    }
+    
+    CGbool          CgContext::ValidateStateRenderTarget    ( CGstateassignment state_assignment )
+    {
+        return StateManager::Instance()->ValidateRenderTarget();
     }
     
     //
     // Render scene
     //
 
-    CGbool          CgContext::StateRenderSceneSet         ( CGstateassignment state_assignment )
+    CGbool          CgContext::SetStateRenderScene         ( CGstateassignment state_assignment )
     {
         int num_values = 0;
         const CGbool* render_scene = cgGetBoolStateAssignmentValues( state_assignment, &num_values );
         
-        Scene::Instance()->SetRenderScene( *render_scene == CG_TRUE );
+        assert( num_values == 1 );
+        assert( render_scene != NULL );
+        
+        StateManager::Instance()->SetRenderScene( *render_scene == CG_TRUE );
         
         return CG_TRUE;
     }
 
-    CGbool          CgContext::StateRenderSceneReset       ( CGstateassignment state_assignment )
+    CGbool          CgContext::ResetStateRenderScene       ( CGstateassignment state_assignment )
     {
-        Scene::Instance()->ResetRenderScene();
+        StateManager::Instance()->ResetRenderScene();
         
         return CG_TRUE;
     }
     
-    CGbool          CgContext::StateRenderSceneValidate    ( CGstateassignment state_assignment )
+    CGbool          CgContext::ValidateStateRenderScene    ( CGstateassignment state_assignment )
     {
-        return Scene::Instance()->ValidateRenderScene();
+        return StateManager::Instance()->ValidateRenderScene();
     }
 
     //
     // Render fullscreen quad
     //
 
-    CGbool          CgContext::StateRenderFullscreenQuadSet   ( CGstateassignment state_assignment )
+    CGbool          CgContext::SetStateRenderFullscreenQuad   ( CGstateassignment state_assignment )
     {
         int num_values = 0;
         const CGbool* render_fullscreen_quad = cgGetBoolStateAssignmentValues( state_assignment, &num_values );
         
-        Scene::Instance()->SetRenderFullscreenQuad( *render_fullscreen_quad == CG_TRUE );
+        assert( num_values == 1 );
+        assert( render_fullscreen_quad != NULL );
+        
+        StateManager::Instance()->SetRenderFullscreenQuad( *render_fullscreen_quad == CG_TRUE );
         
         return CG_TRUE;
     }
 
-    CGbool          CgContext::StateRenderFullscreenQuadReset       ( CGstateassignment state_assignment )
+    CGbool          CgContext::ResetStateRenderFullscreenQuad       ( CGstateassignment state_assignment )
     {
-        Scene::Instance()->ResetRenderFullscreenQuad();
+        StateManager::Instance()->ResetRenderFullscreenQuad();
         
         return CG_TRUE;
     }
     
-    CGbool          CgContext::StateRenderFullscreenQuadValidate    ( CGstateassignment state_assignment )
+    CGbool          CgContext::ValidateStateRenderFullscreenQuad    ( CGstateassignment state_assignment )
     {
-        return Scene::Instance()->ValidateRenderFullscreenQuad();
+        return StateManager::Instance()->ValidateRenderFullscreenQuad();
     }
     
     //

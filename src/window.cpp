@@ -84,6 +84,7 @@ namespace NWasp
         glfwGetWindowSize( s_instance->m_window, &s_instance->m_width, &s_instance->m_height );
 
         glfwEnable( s_instance->m_window, GLFW_STICKY_KEYS );
+        glEnable( GL_TEXTURE_2D );
         glDisable( GL_DEPTH_TEST );
         
         glfwSwapInterval( 1 );
@@ -119,8 +120,6 @@ namespace NWasp
         // Swap buffers
         //
         glfwSwapBuffers( );
-        
-        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         
         //
         // Poll for keypresses

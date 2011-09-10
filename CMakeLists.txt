@@ -40,40 +40,44 @@ add_subdirectory( model_compiler )
 
 set( wasp_sources       src/main.cpp
                         src/attribute_indices.hpp
-                        src/camera.hpp
                         src/camera.cpp
-                        src/camera_manager.hpp
+                        src/camera.hpp
                         src/camera_manager.cpp
-                        src/cg_context.hpp
+                        src/camera_manager.hpp
                         src/cg_context.cpp
-                        src/effect.hpp
+                        src/cg_context.hpp
                         src/effect.cpp
-                        src/effect_manager.hpp
+                        src/effect.hpp
                         src/effect_manager.cpp
-                        src/fly_camera.hpp
+                        src/effect_manager.hpp
                         src/fly_camera.cpp
-                        src/input.hpp
+                        src/fly_camera.hpp
                         src/input.cpp
-                        src/input_stream.hpp
+                        src/input.hpp
                         src/input_stream.cpp
+                        src/input_stream.hpp
                         src/input_stream-inl.hpp
-                        src/mesh.hpp
                         src/mesh.cpp
-                        src/model.hpp
+                        src/mesh.hpp
                         src/model.cpp
-                        src/quad.hpp
+                        src/model.hpp
                         src/quad.cpp
+                        src/quad.hpp
+                        src/render_target.hpp
+                        src/render_target.cpp
                         src/renderable.hpp
-                        src/scene.hpp
                         src/scene.cpp 
-                        src/time.hpp
+                        src/scene.hpp
+                        src/state_manager.cpp
+                        src/state_manager.hpp
                         src/time.cpp
-                        src/timer.hpp
+                        src/time.hpp
                         src/timer.cpp
+                        src/timer.hpp
                         src/updatable.hpp
                         src/wasp_gl.hpp
-                        src/window.hpp
-                        src/window.cpp )
+                        src/window.cpp
+                        src/window.hpp )
 
 set( wasp_data_dir data )
 

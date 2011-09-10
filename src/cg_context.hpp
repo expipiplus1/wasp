@@ -64,17 +64,25 @@ namespace NWasp
         // States
         //
         
-        static CGbool       StateRenderTargetSet         ( CGstateassignment state_assignment );
-        static CGbool       StateRenderTargetReset       ( CGstateassignment state_assignment );
-        static CGbool       StateRenderTargetValidate    ( CGstateassignment state_assignment );
+        static CGbool       SetStateClearColor         ( CGstateassignment state_assignment );
+        static CGbool       ResetStateClearColor       ( CGstateassignment state_assignment );
+        static CGbool       ValidateStateClearColor    ( CGstateassignment state_assignment );
         
-        static CGbool       StateRenderSceneSet         ( CGstateassignment state_assignment );
-        static CGbool       StateRenderSceneReset       ( CGstateassignment state_assignment );
-        static CGbool       StateRenderSceneValidate    ( CGstateassignment state_assignment );
+        static CGbool       SetStateClear         ( CGstateassignment state_assignment );
+        static CGbool       ResetStateClear       ( CGstateassignment state_assignment );
+        static CGbool       ValidateStateClear    ( CGstateassignment state_assignment );
         
-        static CGbool       StateRenderFullscreenQuadSet         ( CGstateassignment state_assignment );
-        static CGbool       StateRenderFullscreenQuadReset       ( CGstateassignment state_assignment );
-        static CGbool       StateRenderFullscreenQuadValidate    ( CGstateassignment state_assignment );
+        static CGbool       SetStateRenderTarget         ( CGstateassignment state_assignment );
+        static CGbool       ResetStateRenderTarget       ( CGstateassignment state_assignment );
+        static CGbool       ValidateStateRenderTarget    ( CGstateassignment state_assignment );
+        
+        static CGbool       SetStateRenderScene         ( CGstateassignment state_assignment );
+        static CGbool       ResetStateRenderScene       ( CGstateassignment state_assignment );
+        static CGbool       ValidateStateRenderScene    ( CGstateassignment state_assignment );
+        
+        static CGbool       SetStateRenderFullscreenQuad         ( CGstateassignment state_assignment );
+        static CGbool       ResetStateRenderFullscreenQuad       ( CGstateassignment state_assignment );
+        static CGbool       ValidateStateRenderFullscreenQuad    ( CGstateassignment state_assignment );
         
     private:
         CGcontext           m_cgContext;

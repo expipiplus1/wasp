@@ -28,58 +28,64 @@
 
 #pragma once
 
-#include <list>
 #include <stack>
+#include <vector>
+#include <joemath/joemath.hpp>
+#include "render_target.hpp"
 #include "wasp_gl.hpp"
-#include "quad.hpp"
-#include "renderable.hpp"
-#include "updatable.hpp"
 
 namespace NWasp
 {
-    class Effect;
-    
-    class Scene : public Renderable
-                , public Updatable
+    class StateManager
     {
-        friend class CgContext;
     private:
-                        Scene               ( );
-        virtual         ~Scene              ( );
-                        Scene               ( const Scene&  )                   = delete;
-        Scene&          operator =          ( const Scene&  )                   = delete;
+                        StateManager               ( );
+        virtual         ~StateManager              ( );
+                        StateManager               ( const StateManager&  )                   = delete;
+        StateManager&   operator =                 ( const StateManager&  )                   = delete;
         
-        static Scene*   s_instance;
+        static StateManager*   s_instance;
     public:
         //
         // Singleton methods
         //
         
         static bool     Create              ( );
-        static Scene*   Instance            ( );
+        static StateManager*   Instance            ( );
         static void     Destroy             ( );
+
+        void ApplyState();
+
+        u32 AddRenderTarget( RenderTarget render_target );
+
+        bool GetRenderScene() const;
+        bool GetRenderFullscreenQuad() const;
         
-        virtual void    Update              ( );
-        virtual void    Render              ( ) const;
-
-        void            AddRenderable       ( Renderable*  renderable );
-        void            AddUpdatable        ( Updatable*   updatable  );
-
     private:
         //
         // Cg State
         //
-        void            SetRenderTarget     ( u32 fbo );
+        friend class CgContext;
+
+        void            SetClearColor     ( const float4& clear_color );
+        void            ResetClearColor   ( );
+        bool            ValidateClearColor( ) const;
+
+        void            SetClear     ( bool clear );
+        void            ResetClear   ( );
+        bool            ValidateClear( ) const;
+
+        void            SetRenderTarget     ( const u32 render_target );
         void            ResetRenderTarget   ( );
-        bool            ValidateRenderTarget( );
+        bool            ValidateRenderTarget( ) const;
         
-        void            SetRenderScene      ( bool render_scene );
+        void            SetRenderScene      ( const bool render_scene );
         void            ResetRenderScene    ( );
-        bool            ValidateRenderScene ( );
+        bool            ValidateRenderScene ( ) const;
         
-        void            SetRenderFullscreenQuad      ( bool render_fullscreen_quad );
+        void            SetRenderFullscreenQuad      ( const bool render_fullscreen_quad );
         void            ResetRenderFullscreenQuad    ( );
-        bool            ValidateRenderFullscreenQuad ( );
+        bool            ValidateRenderFullscreenQuad ( ) const;
         
         //
         // States
@@ -87,11 +93,13 @@ namespace NWasp
         bool                    m_renderScene = false;
         bool                    m_renderFullscreenQuad = false;
         
-        std::list<Updatable*>   m_updatables;
-        std::list<Renderable*>  m_renderables;
+        std::vector<RenderTarget>   m_renderTargets;
+        std::stack<u32>             m_currentRenderTargetIndices;
+        bool                        m_newRenderTarget = true;
 
-        Quad*                   m_quad;
+        float4                      m_clearColor = float4( 0.0f, 0.0f, 0.0f, 0.0f );
+        bool                        m_newClearColor = true;
 
-        Effect*                 m_effect;
+        bool                        m_clear = false;
     };
 };

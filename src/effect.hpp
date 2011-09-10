@@ -29,8 +29,10 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <Cg/cg.h>
 #include <joemath/joemath.hpp>
+#include "render_target.hpp"
 
 using namespace NJoeMath;
 
@@ -61,9 +63,12 @@ namespace NWasp
         void            SetParameterBySemantic  ( const float     v,
                                                   const char*     semantic ) const;
         
+        void            AllocateBuffers         ( );
     private:
-        std::string     m_name;
-        std::string     m_filename;
-        CGeffect        m_cgEffect;
+        std::string                 m_name;
+        std::string                 m_filename;
+        CGeffect                    m_cgEffect;
+
+        std::vector<RenderTarget>   m_renderTargets;
     };
 };

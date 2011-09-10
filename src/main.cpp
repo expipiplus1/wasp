@@ -36,6 +36,7 @@
 #include "input.hpp"
 #include "model.hpp"
 #include "scene.hpp"
+#include "state_manager.hpp"
 #include "time.hpp"
 #include "window.hpp"
 
@@ -48,15 +49,15 @@ int main (int argc, char** argv)
 
     if ( !NWasp::CgContext::Create() )
         return 2;
+
+    if ( !NWasp::StateManager::Create() )
+        return 7;
     
     if ( !NWasp::EffectManager::Create() )
         return 3;
     
     if ( !NWasp::Input::Create() )
         return 4;
-
-    NWasp::Model model;
-    model.Load( "data/models/bunny.joe" );
 
     if ( !NWasp::Scene::Create() )
         return 5;
@@ -77,6 +78,8 @@ int main (int argc, char** argv)
     NWasp::CameraManager::Instance()->SetCurrentCamera( &camera );
     NWasp::Scene::Instance()->AddUpdatable( &camera );
     
+    NWasp::Model model;
+    model.Load( "data/models/bunny.joe" );
     NWasp::Scene::Instance()->AddRenderable( &model );
     
     double old_time = NTime::GetApplicationTime();
@@ -100,6 +103,7 @@ int main (int argc, char** argv)
     NWasp::Scene::Destroy();
     NWasp::Input::Destroy();
     NWasp::EffectManager::Destroy();
+    NWasp::StateManager::Destroy();
     NWasp::CgContext::Destroy();
     NWasp::Window::Destroy();
     

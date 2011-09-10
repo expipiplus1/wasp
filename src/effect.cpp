@@ -28,12 +28,19 @@
 
 #include "effect.hpp"
 
+#include <cassert>
 #include <iostream>
+#include <queue>
 #include <string>
+#include "wasp_gl.hpp"
 #include <Cg/cg.h>
+#include <Cg/cgGL.h>
 #include <joemath/joemath.hpp>
+#include "attribute_indices.hpp"
 #include "cg_context.hpp"
+#include "render_target.hpp"
 #include "renderable.hpp"
+#include "state_manager.hpp"
 
 using namespace NJoeMath;
 
@@ -80,7 +87,8 @@ namespace NWasp
     {
         return std::string( cgGetEffectName( m_cgEffect ) );
     }        
-
+    
+    //TODO removeme
     void            Effect::Bind    ( ) const
     {
         CGtechnique technique = cgGetFirstTechnique( m_cgEffect );
@@ -101,6 +109,7 @@ namespace NWasp
         while( pass != NULL )
         {
             cgSetPassState( pass );
+            StateManager::Instance()->ApplyState();
             
             primitive->Render();
             
@@ -131,5 +140,256 @@ namespace NWasp
     {
         CGparameter param = cgGetEffectParameterBySemantic( m_cgEffect, semantic );
         cgSetParameter1f( param, v );
+    }
+
+    void            Effect::AllocateBuffers           ()
+    {
+        //TODO this could probably be moved to scene manager
+
+        std::queue<CGparameter> pending_render_buffers;
+        std::queue<CGparameter> pending_render_textures;
+        std::queue<CGparameter> pending_fbos;
+        std::queue<CGparameter> pending_samplers;
+
+        CGparameter p = cgGetFirstEffectParameter( m_cgEffect );
+        while( p != NULL )
+        {
+            std::string semantic = cgGetParameterSemantic( p );
+            CGtype type = cgGetParameterType( p );
+            if( type == CG_SAMPLER2D )
+                pending_samplers.push( p );  
+            else if( semantic == "RENDERTEXTURE" )
+                pending_render_textures.push( p );
+            else if( semantic == "RENDERBUFFER" )
+                pending_render_buffers.push( p );
+            else if( semantic == "FBO" )
+                pending_fbos.push( p );
+
+            p = cgGetNextParameter( p );
+        }
+
+        while( !pending_render_textures.empty() )
+        {
+            CGparameter p = pending_render_textures.front();
+            pending_render_textures.pop();
+
+            int2 size;
+            u32 format;
+            bool have_size = false;
+            bool have_format = true;
+
+            CGannotation a = cgGetFirstParameterAnnotation( p );
+            while( a != NULL )
+            {
+                std::string annotation_name = cgGetAnnotationName( a );
+
+                if( annotation_name == "Size" )
+                {
+                    int num_values;
+                    const int* values = cgGetIntAnnotationValues( a, &num_values ); 
+                    assert( num_values == 2 );
+                    size = int2( values[0], values[1] );
+                    have_size = true; 
+                }
+                else if( annotation_name == "Format" )
+                {
+                    int num_values;
+                    const int* values = cgGetIntAnnotationValues( a, &num_values ); 
+                    assert( num_values == 1 );
+                    switch( values[0] )
+                    {
+                        case RGBA32F:
+                            format = GL_RGBA32F; 
+                            break;
+                    }
+                    have_format = true;
+                }
+
+                a = cgGetNextAnnotation( a );
+            }
+
+            assert( have_format && have_size );
+
+            GLuint render_texture;
+            glGenTextures( 1, &render_texture );
+
+            glBindTexture( GL_TEXTURE_2D, render_texture );
+            glTexImage2D( GL_TEXTURE_2D, 0, format, size.x(), size.y(), 0,
+                          GL_RGBA, GL_FLOAT, nullptr );
+
+            cgSetParameter1i( p, render_texture );
+            glBindTexture( GL_TEXTURE_2D, 0 );
+        }
+        
+        while( !pending_render_buffers.empty() )
+        {
+            CGparameter p = pending_render_buffers.front();
+            pending_render_buffers.pop(); 
+            int2 size;
+            u32 format;
+            bool have_size = false;
+            bool have_format = false;
+
+            CGannotation a = cgGetFirstParameterAnnotation( p );
+            while( a != NULL )
+            {
+                std::string annotation_name = cgGetAnnotationName( a );
+
+                if( annotation_name == "Size" )
+                {
+                    int num_values;
+                    const int* values = cgGetIntAnnotationValues( a, &num_values ); 
+                    assert( num_values == 2 );
+                    size = int2( values[0], values[1] );
+                    have_size = true; 
+                }
+                else if( annotation_name == "Format" )
+                {
+                    int num_values;
+                    const int* values = cgGetIntAnnotationValues( a, &num_values ); 
+                    assert( num_values == 1 );
+                    switch( values[0] )
+                    {
+                        case DEPTH32:
+                            format = GL_DEPTH_COMPONENT32; 
+                            break;
+                    }
+                    have_format = true;
+                }
+
+                a = cgGetNextAnnotation( a );
+            }
+
+            assert( have_format && have_size );
+
+            GLuint render_buffer;
+            glGenRenderbuffersEXT( 1, &render_buffer );
+            
+            cgSetParameter1i( p, render_buffer );
+
+            glBindRenderbuffer( GL_RENDERBUFFER, render_buffer);
+            glRenderbufferStorage( GL_RENDERBUFFER_EXT,
+                                   format, size.x(), size.y() );
+             
+            glBindRenderbuffer( GL_RENDERBUFFER, 0 );
+        }
+        
+        while( !pending_fbos.empty() )
+        {
+            CGparameter p = pending_fbos.front();
+            pending_fbos.pop();
+            u32 render_texture = 0;
+            u32 render_buffer  = 0;
+            int2 size;
+
+            CGannotation a = cgGetFirstParameterAnnotation( p );
+            while( a != NULL )
+            {
+                std::string annotation_name = cgGetAnnotationName( a );
+
+                if( annotation_name == "RenderTexture" )
+                {
+                    int num_values;
+                    const int* values = cgGetIntAnnotationValues( a, &num_values ); 
+                    assert( num_values == 1 );
+                    render_texture = values[0];
+                }
+                else if( annotation_name == "RenderBuffer" )
+                {
+                    int num_values;
+                    const int* values = cgGetIntAnnotationValues( a, &num_values ); 
+                    assert( num_values == 1 );
+                    render_buffer = values[0];
+                }
+                else if( annotation_name == "Size" )
+                {
+                    int num_values;
+                    const int* values = cgGetIntAnnotationValues( a, &num_values ); 
+                    assert( num_values == 2 );
+                    size = int2( values[0], values[1] );
+                }
+
+                a = cgGetNextAnnotation( a );
+            }
+
+            GLuint fbo;
+            glGenFramebuffers(1, &fbo);
+
+            u32 render_target_index = StateManager::Instance()->AddRenderTarget( RenderTarget( fbo, render_texture, render_buffer, size ) );
+
+            cgSetParameter1i( p, render_target_index );
+
+            glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+            glBindRenderbuffer( GL_RENDERBUFFER, render_buffer );
+            glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT,
+                                       GL_DEPTH_ATTACHMENT_EXT,
+                                       GL_RENDERBUFFER_EXT, render_buffer );
+
+            glBindTexture( GL_TEXTURE_2D, render_texture );
+            glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT,
+                                    GL_COLOR_ATTACHMENT0_EXT,
+                                    GL_TEXTURE_2D, render_texture, 0);
+
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glBindRenderbuffer( GL_RENDERBUFFER, 0 );
+            glBindTexture( GL_TEXTURE_2D, 0 );
+        }
+        
+        while( !pending_samplers.empty() )
+        {
+            CGparameter p = pending_samplers.front();
+            pending_samplers.pop();
+
+            u32 texture = 0;
+
+            CGannotation a = cgGetFirstParameterAnnotation( p );
+            while( a != NULL )
+            {
+                std::string annotation_name = cgGetAnnotationName( a );
+
+                if( annotation_name == "RenderTexture" )
+                {
+                    int num_values;
+                    const int* values = cgGetIntAnnotationValues( a, &num_values ); 
+                    assert( num_values == 1 );
+                    texture = values[0];
+                }
+
+                a = cgGetNextAnnotation( a );
+            }
+
+            std::cout << "creating sampler with texture: " << texture << "\n";
+
+            if( texture == 9999 )
+            {
+                glGenTextures( 1, &texture );
+
+                float* data = new float[100*100*3];
+                for( u32 x = 0; x < 100; ++x )
+                {
+                    for( u32 y = 0; y < 100; ++y )
+                    {
+                        u32 index = x * 100 + y;
+                        float color = (x*x + y*y < 100*100)?100.0f:0.0f;
+                        data[index * 3 + 0] = color;
+                        data[index * 3 + 1] = color;
+                        data[index * 3 + 2] = color;
+                    }
+                }
+
+                glBindTexture( GL_TEXTURE_2D, texture );
+
+                glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA32F, 100, 100, 0,
+                          GL_RGB, GL_FLOAT, data );
+
+                
+            }
+            std::cout << "setupsampler: " << texture << "\n";
+            cgGLSetupSampler( p, texture );
+            glBindTexture( GL_TEXTURE_2D, 0 );
+            //cgGLSetTextureParameter( p, texture ); 
+            //cgSetSamplerState( p );
+        }
     }
 };

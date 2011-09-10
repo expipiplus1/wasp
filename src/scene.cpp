@@ -39,6 +39,7 @@
 #include "effect_manager.hpp"
 #include "quad.hpp"
 #include "renderable.hpp"
+#include "state_manager.hpp"
 
 namespace NWasp
 {
@@ -64,44 +65,6 @@ namespace NWasp
         s_instance->m_effect = EffectManager::Instance()->LoadEffect( "data/effects/scene.cgfx", true);
 
         s_instance->m_quad = new Quad;
-
-        glGenTextures(1, &s_instance->m_colorTex);
-
-        glBindTexture( GL_TEXTURE_2D, s_instance->m_colorTex );
-        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA32F, 100, 100, 0,
-                      GL_RGBA, GL_FLOAT, NULL );
-        glBindTexture( GL_TEXTURE_2D, 0 );
-                      
-
-        glGenRenderbuffers( 1, &s_instance->m_depthRB );
-        glBindRenderbuffer( GL_RENDERBUFFER, s_instance->m_depthRB );
-        glRenderbufferStorage( GL_RENDERBUFFER,
-                               GL_DEPTH_COMPONENT32, 100, 100 );
-        glBindRenderbuffer( GL_RENDERBUFFER, 0 );
-
-        // generate namespace for the frame buffer, colorbuffer and depthbuffer
-        glGenFramebuffers(1, &s_instance->m_fbo);
-        //switch to our fbo so we can bind stuff to it
-        glBindFramebuffer(GL_FRAMEBUFFER, s_instance->m_fbo);
-        //create the colorbuffer texture and attach it to the frame buffer
-        glFramebufferTexture2D( GL_FRAMEBUFFER,
-                                GL_COLOR_ATTACHMENT0,
-                                GL_TEXTURE_2D, s_instance->m_colorTex, 0);
-        // create a render buffer as our depthbuffer and attach it
-        glFramebufferRenderbuffer( GL_FRAMEBUFFER,
-                                   GL_DEPTH_ATTACHMENT,
-                                   GL_RENDERBUFFER, s_instance->m_depthRB);
-        // Go back to regular frame buffer rendering
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        
-        CGeffect    effect      = s_instance->m_effect->GetCgEffect();
-        
-        CGparameter param; 
-        param = cgGetNamedEffectParameter( effect, "color_buffer" ); 
-        cgGLSetupSampler( param, s_instance->m_colorTex );
-        //cgGLSetTextureParameter( param, s_instance->m_colorTex ); 
-        //cgSetSamplerState( param );
 
         return true;
     }
@@ -143,87 +106,36 @@ namespace NWasp
         CGeffect    effect      = m_effect->GetCgEffect();
         CGtechnique technique   = cgGetFirstTechnique( effect );
         CGpass      pass        = cgGetFirstPass( technique );
+
+        StateManager* state_manager = StateManager::Instance();
         
         while( pass != NULL )
         {
             cgSetPassState( pass );
+            state_manager->ApplyState();
             
-            if( m_renderScene )
+            if( state_manager->GetRenderScene() )
             {
-                //glBindTexture(GL_TEXTURE_2D, 0);
-                glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
-                glViewport( 0, 0, 100,100 );
-
-                glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
                 for( auto r : m_renderables )
                     r->Render();
-
-                glBindFramebuffer(GL_FRAMEBUFFER, 0);
-                glViewport( 0, 0, 640, 640 );
+                std::cout << "rendering scene\n";
             }
 
-            if( m_renderFullscreenQuad )
+            if( state_manager->GetRenderFullscreenQuad() )
             {
+                glBindTexture( GL_TEXTURE_2D, 1 );
+                GLint ttt;
+                glGetIntegerv( GL_TEXTURE_BINDING_2D, &ttt );
+                std::cout << "textuer binding: " <<  ttt << "\n";
                 m_quad->Render();
+                std::cout << "rendering quad\n";
             }
+
             cgResetPassState( pass );
-            
             pass = cgGetNextPass( pass );
+
+            std::cout << glGetError() << " " << GL_NO_ERROR << "\n"; 
         }
-    }
-    
-    //
-    // Cg State
-    //
-    
-    void            Scene::SetRenderTarget      ( u32 fbo )
-    {
-        m_fbo = fbo;
-    }
-    
-    void            Scene::ResetRenderTarget    ( )
-    {
-        //TODO this should work for other places besides the top leve
-        //TODO should this be popping the top off the stack?
-        m_fbo = 0;
-    }
-    
-    bool            Scene::ValidateRenderTarget ( )
-    {
-        return true;
-    }
-    
-
-    void            Scene::SetRenderScene      ( bool render_scene )
-    {
-        m_renderScene = render_scene;
-    }
-    
-    void            Scene::ResetRenderScene    ( )
-    {
-        //TODO should this be popping the top off the stack?
-        m_renderScene = false;
-    }
-    
-    bool            Scene::ValidateRenderScene ( )
-    {
-        return true;
-    }
-
-    void            Scene::SetRenderFullscreenQuad      ( bool render_fullscreen_quad )
-    {
-        m_renderFullscreenQuad = render_fullscreen_quad;
-    }
-    
-    void            Scene::ResetRenderFullscreenQuad    ( )
-    {
-        //TODO should this be popping the top off the stack?
-        m_renderFullscreenQuad = false;
-    }
-    
-    bool            Scene::ValidateRenderFullscreenQuad ( )
-    {
-        return true;
+        std::cout << "\n";
     }
 };
