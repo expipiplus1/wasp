@@ -47,13 +47,13 @@ namespace NWasp
     RenderTarget::~RenderTarget                 ( )
     {
         //TODO should this free the buffers?
+        //TODO yes
     }
 
     void RenderTarget::Bind() const
     {
         std::cout << "Binding fbo " << m_fbo << " size: " << m_size.x() << ":" << m_size.y() << "\n";
 
-        glBindTexture( GL_TEXTURE_2D, 0 );
         glBindFramebuffer( GL_FRAMEBUFFER, m_fbo );
         glViewport( 0,0, m_size.x(),m_size.y() );
     }
