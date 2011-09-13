@@ -63,6 +63,7 @@ namespace NWasp
         void            SetParameterBySemantic  ( const float     v,
                                                   const char*     semantic ) const;
         
+        void            InitializeConstants     ( ) const;
         void            AllocateBuffers         ( );
     private:
         std::string                 m_name;

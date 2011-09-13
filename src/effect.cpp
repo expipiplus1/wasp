@@ -41,6 +41,7 @@
 #include "render_target.hpp"
 #include "renderable.hpp"
 #include "state_manager.hpp"
+#include "window.hpp"
 
 using namespace NJoeMath;
 
@@ -140,6 +141,23 @@ namespace NWasp
     {
         CGparameter param = cgGetEffectParameterBySemantic( m_cgEffect, semantic );
         cgSetParameter1f( param, v );
+    }
+
+    void            Effect::InitializeConstants       () const
+    {
+        CGparameter p = cgGetFirstEffectParameter( m_cgEffect );
+        while( p != NULL )
+        {
+            std::string semantic = cgGetParameterSemantic( p );
+            if( semantic == "SCREENSIZE" )
+            {
+                CGtype type = cgGetParameterType( p );
+                assert( type == CG_INT2 );
+                int2 size = Window::Instance()->GetSize();
+                cgSetParameter2iv( p, reinterpret_cast<int*>( &size ) );
+            }
+            p = cgGetNextParameter( p );
+        }
     }
 
     void            Effect::AllocateBuffers           ()
