@@ -116,6 +116,11 @@ namespace NWasp
             }
         }
 
+        if( is_scene_effect )
+        {
+            effect->InitializeConstants();
+        }
+
         //
         // Create required textures and render targets
         //
