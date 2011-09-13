@@ -7,7 +7,7 @@ project( model_compiler )
 
 add_subdirectory( assimp EXCLUDE_FROM_ALL )
 
-set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -stdlib=libc++ -Wall -g" )
+set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall" )
 
 set( model_compiler_sources src/main.cpp 
                             src/compiler.hpp
@@ -19,8 +19,10 @@ set( model_compiler_sources src/main.cpp
 add_executable( model_compiler    ${model_compiler_sources} ) 
 target_link_libraries( model_compiler assimp )
 
+set_target_properties( model_compiler PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -stdlib=libc++" )
+
 include_directories( ${joemath_INCLUDE_DIR} )
 include_directories( assimp/include )
 
-target_link_libraries( model_compiler ${joemath_LIBRARY} )
+target_link_libraries( model_compiler ${joemath_LIBRARY} c++ )
 

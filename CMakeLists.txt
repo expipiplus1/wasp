@@ -13,6 +13,8 @@ project( wasp )
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake/Modules/")
 include(${CMAKE_MODULE_PATH}/DetermineProcessor.cmake)
 
+set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall" )
+
 #
 # load libraries
 #
@@ -91,7 +93,7 @@ set( wasp_model_sources     ${wasp_data_dir}/models/bunny.ply )
 
 add_executable( wasp    ${wasp_sources} ) 
 
-set_target_properties( wasp PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -stdlib=libc++ -Wall -g" )
+set_target_properties( wasp PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -stdlib=libc++" )
 
 include_directories( ${joemath_INCLUDE_DIR} ${glfw_INCLUDE_DIR} ${glee_INCLUDE_DIR} ${CG_INCLUDE_DIR} )
 
