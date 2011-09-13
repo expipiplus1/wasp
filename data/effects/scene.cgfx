@@ -31,13 +31,13 @@
 
 int scene_depth : RENDERBUFFER
 <
-    int2 Size = int2(100,100);
+    int2 Size = g_screenSize;
     int Format = DEPTH32;
 >;
 
 int scene_color : RENDERTEXTURE
 <
-    int2 Size = int2(100,100);
+    int2 Size = g_screenSize;
     int Format = RGBA32F;
 >;
 sampler2D scene_color_sampler
@@ -53,34 +53,19 @@ int scene_fbo : FBO
 <
     int RenderBuffer = scene_depth;
     int RenderTexture = scene_color;
-    int2 Size = int2(100,100);
+    int2 Size = g_screenSize;
 >;
-
-sampler2D hu
-<
-    int RenderTexture = 9999;
-> = sampler_state
-{
-    MagFilter = Nearest;
-    MinFilter = Nearest;
-};
 
 technique technique0
 {
     pass render_scene
     {
         RenderTarget = scene_fbo;
-        ClearColor = float4( 0.2, 0.2, 0.9, 1.0f );
         Clear = true;
         DepthTestEnable = false;
 
         RenderScene = true;
     }
-    /*pass q
-    {
-        RenderTarget = boo;
-        RenderFullScreenQuad = true;
-    }*/
     pass render_quad
     {
         DepthTestEnable = false;
@@ -89,7 +74,6 @@ technique technique0
         RenderFullScreenQuad = true;
 
         VertexProgram   = compile latest Passthrough_VS();
-        //FragmentProgram = compile latest Passthrough_PS( hu );
         FragmentProgram = compile latest Passthrough_PS( scene_color_sampler );
     }
 }
