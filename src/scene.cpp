@@ -123,18 +123,12 @@ namespace NWasp
 
             if( state_manager->GetRenderFullscreenQuad() )
             {
-                glBindTexture( GL_TEXTURE_2D, 1 );
-                GLint ttt;
-                glGetIntegerv( GL_TEXTURE_BINDING_2D, &ttt );
-                std::cout << "textuer binding: " <<  ttt << "\n";
                 m_quad->Render();
                 std::cout << "rendering quad\n";
             }
 
             cgResetPassState( pass );
             pass = cgGetNextPass( pass );
-
-            std::cout << glGetError() << " " << GL_NO_ERROR << "\n"; 
         }
         std::cout << "\n";
     }
