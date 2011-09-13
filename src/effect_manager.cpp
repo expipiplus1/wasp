@@ -134,7 +134,7 @@ namespace NWasp
     {
         CGparameter param = cgGetFirstEffectParameter( scene );
         
-        while( param != NULL )
+        while( param != nullptr )
         {
             CGtype      type = cgGetParameterNamedType( param );
             std::string name = cgGetParameterName( param );
@@ -142,13 +142,13 @@ namespace NWasp
             
             CGparameter sub_param = cgGetFirstEffectParameter( material );
             
-            while( sub_param != NULL )
+            while( sub_param != nullptr )
             {
                 if( name == cgGetParameterName( sub_param ) &&
                     semantic == cgGetParameterSemantic( sub_param ) &&
                     type == cgGetParameterType( sub_param ) )
                 {
-                    if( cgGetConnectedParameter( sub_param ) == NULL )
+                    if( cgGetConnectedParameter( sub_param ) == nullptr )
                         cgDisconnectParameter( sub_param );
                     
                     cgConnectParameter( param, sub_param );

@@ -123,7 +123,7 @@ namespace NWasp
         int num_values;
         const CGbool* clear = cgGetBoolStateAssignmentValues( state_assignment, &num_values );
         
-        assert( clear != NULL );
+        assert( clear != nullptr );
             
         StateManager::Instance()->SetClear( *clear == CG_TRUE );
         
@@ -152,7 +152,7 @@ namespace NWasp
         const float4* clear_color = reinterpret_cast<const float4*>( cgGetFloatStateAssignmentValues( state_assignment, &num_values ) );
         
         assert( num_values == 4 );
-        assert( clear_color != NULL );
+        assert( clear_color != nullptr );
             
         StateManager::Instance()->SetClearColor( *clear_color );
         
@@ -181,7 +181,7 @@ namespace NWasp
         const int* render_target = cgGetIntStateAssignmentValues( state_assignment, &num_values );
         
         assert( num_values == 1 );
-        assert( render_target != NULL );
+        assert( render_target != nullptr );
 
         StateManager::Instance()->SetRenderTarget( *render_target );
         
@@ -210,7 +210,7 @@ namespace NWasp
         const CGbool* render_scene = cgGetBoolStateAssignmentValues( state_assignment, &num_values );
         
         assert( num_values == 1 );
-        assert( render_scene != NULL );
+        assert( render_scene != nullptr );
         
         StateManager::Instance()->SetRenderScene( *render_scene == CG_TRUE );
         
@@ -239,7 +239,7 @@ namespace NWasp
         const CGbool* render_fullscreen_quad = cgGetBoolStateAssignmentValues( state_assignment, &num_values );
         
         assert( num_values == 1 );
-        assert( render_fullscreen_quad != NULL );
+        assert( render_fullscreen_quad != nullptr );
         
         StateManager::Instance()->SetRenderFullscreenQuad( *render_fullscreen_quad == CG_TRUE );
         

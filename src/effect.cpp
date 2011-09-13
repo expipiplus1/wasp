@@ -107,7 +107,7 @@ namespace NWasp
         CGtechnique technique = cgGetFirstTechnique( m_cgEffect );
         CGpass      pass      = cgGetFirstPass( technique );
         
-        while( pass != NULL )
+        while( pass != nullptr )
         {
             cgSetPassState( pass );
             StateManager::Instance()->ApplyState();
@@ -146,7 +146,7 @@ namespace NWasp
     void            Effect::InitializeConstants       () const
     {
         CGparameter p = cgGetFirstEffectParameter( m_cgEffect );
-        while( p != NULL )
+        while( p != nullptr )
         {
             std::string semantic = cgGetParameterSemantic( p );
             if( semantic == "SCREENSIZE" )
@@ -170,7 +170,7 @@ namespace NWasp
         std::queue<CGparameter> pending_samplers;
 
         CGparameter p = cgGetFirstEffectParameter( m_cgEffect );
-        while( p != NULL )
+        while( p != nullptr )
         {
             std::string semantic = cgGetParameterSemantic( p );
             CGtype type = cgGetParameterType( p );
@@ -197,7 +197,7 @@ namespace NWasp
             bool have_format = true;
 
             CGannotation a = cgGetFirstParameterAnnotation( p );
-            while( a != NULL )
+            while( a != nullptr )
             {
                 std::string annotation_name = cgGetAnnotationName( a );
 
@@ -249,7 +249,7 @@ namespace NWasp
             bool have_format = false;
 
             CGannotation a = cgGetFirstParameterAnnotation( p );
-            while( a != NULL )
+            while( a != nullptr )
             {
                 std::string annotation_name = cgGetAnnotationName( a );
 
@@ -301,7 +301,7 @@ namespace NWasp
             int2 size;
 
             CGannotation a = cgGetFirstParameterAnnotation( p );
-            while( a != NULL )
+            while( a != nullptr )
             {
                 std::string annotation_name = cgGetAnnotationName( a );
 
@@ -362,7 +362,7 @@ namespace NWasp
             u32 texture = 0;
 
             CGannotation a = cgGetFirstParameterAnnotation( p );
-            while( a != NULL )
+            while( a != nullptr )
             {
                 std::string annotation_name = cgGetAnnotationName( a );
 

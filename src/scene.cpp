@@ -109,7 +109,7 @@ namespace NWasp
 
         StateManager* state_manager = StateManager::Instance();
         
-        while( pass != NULL )
+        while( pass != nullptr )
         {
             cgSetPassState( pass );
             state_manager->ApplyState();
