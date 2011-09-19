@@ -87,7 +87,9 @@ set( wasp_effect_sources    ${wasp_data_dir}/effects/blue.cgfx
                             ${wasp_data_dir}/effects/global.cgh
                             ${wasp_data_dir}/effects/passthrough.cgfx
                             ${wasp_data_dir}/effects/phong.cgfx 
-                            ${wasp_data_dir}/effects/scene.cgfx )
+                            ${wasp_data_dir}/effects/scene.cgfx
+                            ${wasp_data_dir}/effects/simplex.cgfx )
+
 
 set( wasp_model_sources     ${wasp_data_dir}/models/bunny.ply )
 

@@ -29,6 +29,7 @@
 #include "effect.hpp"
 
 #include <cassert>
+#include <algorithm>
 #include <iostream>
 #include <queue>
 #include <string>
@@ -61,6 +62,7 @@ namespace NWasp
         m_cgEffect = cgCreateEffectFromFile( CgContext::Instance( )->GetCgContext( ), filename.c_str(), nullptr );
 
         CGtechnique technique = cgGetFirstTechnique( m_cgEffect );
+
         CGbool valid;
         valid = cgValidateTechnique( technique );
         
@@ -114,7 +116,7 @@ namespace NWasp
             
             primitive->Render();
             
-            //cgResetPassState( pass );
+            cgResetPassState( pass );
             pass = cgGetNextPass( pass );
         }
     }
@@ -156,6 +158,16 @@ namespace NWasp
                 int2 size = Window::Instance()->GetSize();
                 cgSetParameter2iv( p, reinterpret_cast<int*>( &size ) );
             }
+            if( cgGetParameterName( p ) == std::string( "a" ) )
+            {
+                u8* data = new u8[512];
+                for( u32 i = 0; i < 512; ++i )
+                    data[i] = i;
+                CGbuffer buffer = cgGLCreateBuffer( CgContext::Instance()->GetCgContext(), 512, data, GL_STATIC_DRAW );
+                //CGbuffer buffer = cgCreateBuffer( CgContext::Instance()->GetCgContext(), 512, data, CG_BUFFER_USAGE_STATIC_DRAW );
+                cgSetEffectParameterBuffer( p, buffer );
+                std::cout << semantic << "\n";
+            }
             p = cgGetNextParameter( p );
         }
     }
@@ -168,6 +180,7 @@ namespace NWasp
         std::queue<CGparameter> pending_render_textures;
         std::queue<CGparameter> pending_fbos;
         std::queue<CGparameter> pending_samplers;
+        std::queue<CGparameter> pending_samplers_1D;
 
         CGparameter p = cgGetFirstEffectParameter( m_cgEffect );
         while( p != nullptr )
@@ -176,6 +189,8 @@ namespace NWasp
             CGtype type = cgGetParameterType( p );
             if( type == CG_SAMPLER2D )
                 pending_samplers.push( p );  
+            if( type == CG_SAMPLER1D )
+                pending_samplers_1D.push( p );
             else if( semantic == "RENDERTEXTURE" )
                 pending_render_textures.push( p );
             else if( semantic == "RENDERBUFFER" )
@@ -408,6 +423,63 @@ namespace NWasp
             glBindTexture( GL_TEXTURE_2D, 0 );
             //cgGLSetTextureParameter( p, texture ); 
             //cgSetSamplerState( p );
+        }
+
+        while( !pending_samplers_1D.empty() )
+        {
+            CGparameter p = pending_samplers_1D.front();
+            pending_samplers_1D.pop();
+
+            GLuint texture;
+            u32 size = 0;
+            bool shuffle = false;
+
+            CGannotation a = cgGetFirstParameterAnnotation( p );
+            while( a != nullptr )
+            {
+                std::string annotation_name = cgGetAnnotationName( a );
+
+                if( annotation_name == "Size" )
+                {
+                    int num_values;
+                    const int* values = cgGetIntAnnotationValues( a, &num_values ); 
+                    assert( num_values == 1 );
+                    size = values[0];
+                }
+                else if( annotation_name == "Shuffle" )
+                {
+                    int num_values;
+                    const CGbool* values = cgGetBoolAnnotationValues( a, &num_values );
+                    assert( num_values == 1 );
+                    shuffle = values[0] == CG_TRUE;
+                }
+
+                a = cgGetNextAnnotation( a );
+            }
+
+            std::cout << "creating 1d texture, size: " << size << "\n";
+
+            glGenTextures( 1, &texture );
+
+            //TODO allow any data type
+            unsigned char* data = nullptr;
+            if( shuffle )
+            {
+                data = new unsigned char[size*3];
+                for( u32 x = 0; x < size; ++x )
+                {
+                    data[x] = x;
+                }
+                std::random_shuffle( data, data + size );
+            }
+
+            glBindTexture( GL_TEXTURE_1D, texture );
+
+            glTexImage1D( GL_TEXTURE_1D, 0, GL_R8, size, 0, GL_RED, GL_UNSIGNED_BYTE, data );
+                
+            std::cout << "setupsampler1: " << texture << "\n";
+            cgGLSetupSampler( p, texture );
+            glBindTexture( GL_TEXTURE_1D, 0 );
         }
     }
 };

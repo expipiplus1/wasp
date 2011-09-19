@@ -81,8 +81,10 @@ namespace NWasp
         {
             Effect& new_effect = m_effects[filename];
             new_effect = Effect();
-            new_effect.Load( filename );
-            
+            bool valid;
+            valid = new_effect.Load( filename );
+            assert( valid ); 
+
             effect = &new_effect;
         }
         

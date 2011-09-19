@@ -39,8 +39,8 @@ uniform float4x4    g_model                     : MODEL;
 
 struct VertexInput 
 {
-    float4 position : ATTR[POSITION_INDEX];
-    float3 normal   : ATTR[NORMAL_INDEX];
+    float4 position : POSITION_ATTRIBUTE;
+    float3 normal   : NORMAL_ATTRIBUTE;
 };  
 
 struct VertexOutput
@@ -54,6 +54,8 @@ struct VertexOutput
 VertexOutput    phong_vs    ( VertexInput input )
 {
     VertexOutput output;
+
+    //float4 p = float4(  - input.normal * 0.001 * g_time, 1.0f );
 
     output.position       = mul( input.position, g_modelViewProjection );
     output.normal         = mul( input.normal, float3x3( g_model ) );
@@ -89,7 +91,7 @@ technique technique0
         //CullFace = back;
         DepthTestEnable = true;
 
-        VertexProgram   = compile latest phong_vs( );
-        FragmentProgram = compile latest phong_ps( );
+        VertexProgram   = compile glslv phong_vs( );
+        FragmentProgram = compile glslf phong_ps( );
     }
 }

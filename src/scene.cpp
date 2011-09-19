@@ -40,6 +40,7 @@
 #include "quad.hpp"
 #include "renderable.hpp"
 #include "state_manager.hpp"
+#include "time.hpp"
 
 namespace NWasp
 {
@@ -102,6 +103,7 @@ namespace NWasp
     void     Scene::Render          ( ) const
     {
         m_effect->SetParameterBySemantic( CameraManager::Instance()->GetCurrentCamera()->GetPosition(),    "CAMERAPOSITION" );
+        m_effect->SetParameterBySemantic( NTime::GetApplicationTime(),    "TIME" );
         
         CGeffect    effect      = m_effect->GetCgEffect();
         CGtechnique technique   = cgGetFirstTechnique( effect );
@@ -130,6 +132,7 @@ namespace NWasp
             cgResetPassState( pass );
             pass = cgGetNextPass( pass );
         }
+        std::cout << "error: " <<  glGetError() << "\n";
         std::cout << "\n";
     }
 };

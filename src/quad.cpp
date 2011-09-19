@@ -47,12 +47,12 @@ namespace NWasp
                              -1.0f, 1.0f,  0.0f, 1.0f };
 
         u32   indices[]  = { 0, 1, 2, 3 };
+
+        glGenVertexArraysWASP( 1, &m_vao ); 
+        glBindVertexArrayWASP( m_vao );
         
         glGenBuffers( 1, &m_vbo );
         glGenBuffers( 1, &m_ibo );
-        glGenVertexArraysWASP( 1, &m_vao ); 
-
-        glBindVertexArrayWASP( m_vao );
             
         glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
         glBufferData( GL_ARRAY_BUFFER, num_vertices * vertex_size, vertices, GL_STATIC_DRAW );
@@ -67,6 +67,7 @@ namespace NWasp
         glEnableVertexAttribArray( TEXCOORD_INDEX );
         
         glBindVertexArrayWASP( 0 );
+
         glBindBuffer( GL_ARRAY_BUFFER, 0 );
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
     }

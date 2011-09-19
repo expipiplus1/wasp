@@ -27,54 +27,56 @@
 */
 
 #include "global.cgh"
-#include "passthrough.cgfx"
 
-int scene_depth : RENDERBUFFER
+const int hash_size = 256;
+uniform sampler1D hash_texture
 <
-    int2 Size = g_screenSize;
-    int Format = DEPTH32;
->;
-
-int scene_color : RENDERTEXTURE
-<
-    int2 Size = g_screenSize;
-    int Format = RGBA32F;
->;
-sampler2D scene_color_sampler
-<
-    int RenderTexture = scene_color;
+    int Size = hash_size;
+    bool Shuffle = true;
 > = sampler_state
 {
-    MagFilter = Nearest;
-    MinFilter = Nearest;
+    MinFilter = Linear;
+    MagFilter = Linear;
 };
 
-int scene_fbo : FBO
-<
-    int RenderBuffer = scene_depth;
-    int RenderTexture = scene_color;
-    int2 Size = g_screenSize;
->;
-
-technique technique0
+int Hash( float p )
 {
-    pass render_scene
-    {
-        RenderTarget = scene_fbo;
-        Clear = true;
-        DepthTestEnable = false;
+    return tex1D( hash_texture, p / hash_size ).x * 0xFF;
+}
 
-        RenderScene = true;
-    }
-    pass render_quad
-    {
-        DepthTestEnable = false;
-        ClearColor = float4( 1,1,1,1);
-        Clear = true;
+float Gradient( int hash, float x )
+{
+    int h = hash & 0xF;
+    float grad = 1.0f + ( h & 0x7 );
+    if( h & 0x8 )
+        grad = -grad;
+    return ( grad * x );
+}
 
-        RenderFullScreenQuad = true;
+float Noise1D( float x )
+{
+    //
+    // find which simplex we are in
+    //
+    float2 s;
+    s.x = floor( x );
+    s.y = s.x + 1;
+    
+    //
+    // Where in this simplex are we
+    //
+    float2 q = x.xx - s;
 
-        VertexProgram   = compile glslv Passthrough_VS();
-        FragmentProgram = compile glslf Passthrough_PS( scene_color_sampler );
-    }
+    //
+    // Calculate the values at either end of the simplex
+    //
+    float2 blend = float2( 1.0f, 1.0f );
+    blend -= q * q;
+    blend *= blend;
+    blend *= blend;
+    
+    float2 noise = float2( Gradient( Hash( s.x ), q.x ), Gradient( Hash( s.y ), q.y ) );
+    noise *= blend;
+
+    return 0.395 * ( noise.x + noise.y );
 }

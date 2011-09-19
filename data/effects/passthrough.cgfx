@@ -27,11 +27,12 @@
 */
 
 #include "global.cgh"
+#include "simplex.cgfx"
 
 struct VertexInput
 {
-    float4 position : ATTR[POSITION_INDEX];
-    float4 texcoord : ATTR[TEXCOORD_INDEX];
+    float4 position : POSITION_ATTRIBUTE;
+    float4 texcoord : TEXCOORD0_ATTRIBUTE;
 };  
 
 struct VertexOutput
@@ -44,13 +45,13 @@ VertexOutput    Passthrough_VS  ( VertexInput input )
 {
     VertexOutput output;
 
-    output.position = float4( input.position.xy, 0.0f, 1.0f );
-    output.texcoord = float4( input.texcoord.xy, 0.0f, 1.0f );
+    output.position = float4( input.position.xy , 0.0f, 1.0f );
+    output.texcoord = float4( input.texcoord.xy, 0.5f, 1.0f );
     
     return output;
 }
 
 float4          Passthrough_PS        ( VertexOutput input, uniform sampler2D tex ) : COLOR
 {
-    return tex2D( tex, input.texcoord.xy );
+    return float4( ( Noise1D( ( input.texcoord.x + g_time * 0.5 ) * 6.0f ) + 1.0f ) * 0.5f, 0.0f, 0.0f, 1.0f);
 }

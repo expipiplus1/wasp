@@ -95,7 +95,7 @@ namespace NWasp
     {   
         for( auto& r : m_renderSets )
         {
-            float4x4 modelMatrix = RotateZXY<float,4>( 0.0f, NTime::GetApplicationTime() / 2.0, 0.0f )
+            float4x4 modelMatrix = RotateZXY<float,4>( 0.0f, NTime::GetApplicationTime() * 0.5f, 0.0f )
                        * (Scale( float4(-10.0f, -10.0f, 10.0f, 1.0f) ) 
                        * Translate( float3(0.0f, 1.25f, 0.3f) ) );
                         
