@@ -31,8 +31,11 @@
 #include <iostream>
 #include "wasp_gl.hpp"
 #include <joemath/joemath.hpp>
+#include <joefile/input_stream.hpp>
 #include "attribute_indices.hpp"
-#include "input_stream.hpp"
+
+using namespace NJoeMath;
+using namespace JoeFile;
 
 namespace NWasp
 {

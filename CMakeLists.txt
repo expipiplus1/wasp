@@ -25,6 +25,9 @@ find_package(                       Cg          REQUIRED )
 set( joemath_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/joemath/include" )
 set( joemath_LIBRARY      libjoemathStatic )
 
+set( joefile_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/joefile/include" )
+set( joefile_LIBRARY      libjoefileStatic )
+
 set( glfw_INCLUDE_DIR    "${CMAKE_SOURCE_DIR}/glfw/include")
 set( glfw_LIBRARY         libglfwStatic )
 
@@ -56,9 +59,6 @@ set( wasp_sources       src/main.cpp
                         src/fly_camera.hpp
                         src/input.cpp
                         src/input.hpp
-                        src/input_stream.cpp
-                        src/input_stream.hpp
-                        src/input_stream-inl.hpp
                         src/mesh.cpp
                         src/mesh.hpp
                         src/model.cpp
@@ -97,7 +97,7 @@ add_executable( wasp    ${wasp_sources} )
 
 set_target_properties( wasp PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -stdlib=libc++" )
 
-include_directories( ${joemath_INCLUDE_DIR} ${glfw_INCLUDE_DIR} ${glee_INCLUDE_DIR} ${CG_INCLUDE_DIR} )
+include_directories( ${joemath_INCLUDE_DIR} ${joefile_INCLUDE_DIR} ${glfw_INCLUDE_DIR} ${glee_INCLUDE_DIR} ${CG_INCLUDE_DIR} )
 
 set( GL_LIBS ${OPENGL_LIBRARY} ${glfw_LIBRARY} ${glee_LIBRARY} ${CG_LIBRARY} ${CG_GL_LIBRARY} )
 
@@ -114,7 +114,7 @@ if( WINDOWS )
     list( APPEND GL_LIBS opengl32 )
 endif()
 
-target_link_libraries( wasp ${joemath_LIBRARY} ${GL_LIBS} c++ )
+target_link_libraries( wasp ${joemath_LIBRARY} ${joefile_LIBRARY} ${GL_LIBS} c++ )
 
 #
 # Copy shaders
@@ -178,6 +178,8 @@ endif( )
 #
 
 add_subdirectory( joemath EXCLUDE_FROM_ALL )
+
+add_subdirectory( joefile EXCLUDE_FROM_ALL )
 
 add_subdirectory( glfw EXCLUDE_FROM_ALL )
 

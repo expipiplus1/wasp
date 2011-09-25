@@ -28,9 +28,13 @@
 
 #pragma once
 
+#include <joemath/joemath.hpp>
+#include <joefile/input_stream.hpp>
 #include "wasp_gl.hpp"
-#include "input_stream.hpp"
 #include "renderable.hpp"
+
+using namespace JoeFile;
+using namespace NJoeMath;
 
 namespace NWasp
 {

@@ -10,3 +10,9 @@
 [submodule "model_compiler/assimp"]
 	path = model_compiler/assimp
 	url = git://github.com/assimp/assimp.git
+[submodule "joefx"]
+	path = joefx
+	url = git://github.com/expipiplus1/joefx.git
+[submodule "joefile"]
+	path = joefile
+	url = git://github.com/expipiplus1/joefile.git

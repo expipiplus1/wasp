@@ -28,10 +28,11 @@
 
 #include <iostream>
 #include <joemath/joemath.hpp>
+#include <joefile/output_stream.hpp>
 #include "compiler.hpp"
-#include "output_stream.hpp"
 
 using namespace NJoeMath;
+using namespace JoeFile;
 
 int main (int argc, char** argv)
 {

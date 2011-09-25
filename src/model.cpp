@@ -33,15 +33,16 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <joefile/input_stream.hpp>
 #include <joemath/joemath.hpp>
 #include "camera.hpp"
 #include "camera_manager.hpp"
 #include "effect_manager.hpp"
-#include "input_stream.hpp"
 #include "mesh.hpp"
 #include "time.hpp"
 
 using namespace NJoeMath;
+using namespace JoeFile;
 
 namespace NWasp
 {

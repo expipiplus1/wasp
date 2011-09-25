@@ -35,9 +35,10 @@
 #include <aiScene.h>
 #include <assimp.hpp>
 #include <joemath/joemath.hpp>
-#include "output_stream.hpp"
+#include <joefile/output_stream.hpp>
 
 using namespace NJoeMath;
+using namespace JoeFile;
 
 const u32 WASP_FILE_MAGIC = 0x57415350;
 const u32 WASP_FILE_VERSION = 1;
@@ -79,7 +80,7 @@ namespace NWaspModelCompiler
         if( !scene->HasMeshes() )
             return false;
         
-        NWaspModelCompiler::OutputStream output_stream;
+        OutputStream output_stream;
         
         output_stream << WASP_FILE_MAGIC;
         output_stream << WASP_FILE_VERSION;
