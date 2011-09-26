@@ -1,3 +1,5 @@
 -Ijoemath/include
+-Ijoefile/include
+-Ijoefx/include
 -Iglfw/include
 -Iglee/include
