@@ -33,7 +33,7 @@
 #include "wasp_gl.hpp"
 #include <joemath/joemath.hpp>
 
-using namespace NJoeMath;
+using namespace JoeMath;
 
 namespace NWasp
 {

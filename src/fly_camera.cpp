@@ -31,7 +31,7 @@
 #include <joemath/joemath.hpp>
 #include "input.hpp"
 
-using namespace NJoeMath;
+using namespace JoeMath;
 
 namespace NWasp
 

@@ -41,7 +41,7 @@
 #include "mesh.hpp"
 #include "time.hpp"
 
-using namespace NJoeMath;
+using namespace JoeMath;
 using namespace JoeFile;
 
 namespace NWasp

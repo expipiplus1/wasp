@@ -34,7 +34,7 @@
 #include <joemath/joemath.hpp>
 #include "renderable.hpp"
 
-using namespace NJoeMath;
+using namespace JoeMath;
 
 namespace NWasp
 {

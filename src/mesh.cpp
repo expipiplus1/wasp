@@ -34,7 +34,7 @@
 #include <joefile/input_stream.hpp>
 #include "attribute_indices.hpp"
 
-using namespace NJoeMath;
+using namespace JoeMath;
 using namespace JoeFile;
 
 namespace NWasp

@@ -32,7 +32,7 @@
 #include "camera.hpp"
 #include "updatable.hpp"
 
-using namespace NJoeMath;
+using namespace JoeMath;
 
 namespace NWasp
 {

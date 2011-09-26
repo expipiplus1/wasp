@@ -44,7 +44,7 @@
 #include "state_manager.hpp"
 #include "window.hpp"
 
-using namespace NJoeMath;
+using namespace JoeMath;
 
 namespace NWasp
 {

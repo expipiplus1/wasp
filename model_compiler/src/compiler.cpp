@@ -37,7 +37,7 @@
 #include <joemath/joemath.hpp>
 #include <joefile/output_stream.hpp>
 
-using namespace NJoeMath;
+using namespace JoeMath;
 using namespace JoeFile;
 
 const u32 WASP_FILE_MAGIC = 0x57415350;

@@ -29,6 +29,7 @@
 #include <cstdio>
 #include <iostream>
 #include <joemath/joemath.hpp>
+#include <joefx/context.hpp>
 #include "camera_manager.hpp"
 #include "cg_context.hpp"
 #include "effect_manager.hpp"
@@ -40,10 +41,21 @@
 #include "time.hpp"
 #include "window.hpp"
 
-using namespace NJoeMath;
+using namespace JoeMath;
 
 int main (int argc, char** argv)
 {
+    JoeFx::Context context;
+    context.Init();
+
+    JoeFx::Effect* effect;
+    effect = context.LoadCompiledEffect( "/Users/jophish/projects/wasp/joefx/passthrough.jfxc" );
+
+    if( effect == nullptr )
+        return 1;
+    
+    return 0;
+
     if ( !NWasp::Window::Create() )
         return 1;
 

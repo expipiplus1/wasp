@@ -31,7 +31,7 @@
 #include <joefile/output_stream.hpp>
 #include "compiler.hpp"
 
-using namespace NJoeMath;
+using namespace JoeMath;
 using namespace JoeFile;
 
 int main (int argc, char** argv)

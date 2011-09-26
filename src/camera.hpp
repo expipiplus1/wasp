@@ -30,7 +30,7 @@
 
 #include <joemath/joemath.hpp>
 
-using namespace NJoeMath;
+using namespace JoeMath;
 
 namespace NWasp
 {
