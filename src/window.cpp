@@ -71,7 +71,11 @@ namespace NWasp
             return false;
         }
 
-        glfwOpenWindowHint( GLFW_DEPTH_BITS, 32 );
+         glfwOpenWindowHint( GLFW_DEPTH_BITS, 32 );
+
+         glfwOpenWindowHint( GLFW_OPENGL_VERSION_MAJOR, 3 );
+         glfwOpenWindowHint( GLFW_OPENGL_VERSION_MINOR, 2 );
+         glfwOpenWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
         
         s_instance->m_window = glfwOpenWindow( INIT_WIDTH, INIT_HEIGHT, GLFW_WINDOWED, INIT_WINDOW_TITLE, nullptr );
         if ( !s_instance->m_window )
