@@ -62,6 +62,8 @@ set( wasp_sources       src/main.cpp
                         src/fly_camera.hpp
                         src/input.cpp
                         src/input.hpp
+                        src/jfx_context.cpp
+                        src/jfx_context.hpp
                         src/mesh.cpp
                         src/mesh.hpp
                         src/model.cpp
