@@ -1,4 +1,4 @@
-/*/Users/jophish/projects/wasp/build/wasp.xcodeproj
+/*
     Copyright 2011 Joe Hermaszewski. All rights reserved.
 
     Redistribution and use in source and binary forms, with or without modification, are
@@ -31,7 +31,6 @@
 #include <joemath/joemath.hpp>
 #include <joefx/context.hpp>
 #include "camera_manager.hpp"
-#include "cg_context.hpp"
 #include "effect_manager.hpp"
 #include "fly_camera.hpp"
 #include "input.hpp"
@@ -48,9 +47,6 @@ int main (int argc, char** argv)
 {
     if ( !NWasp::Window::Create() )
         return 1;
-
-    if ( !NWasp::CgContext::Create() )
-        return 2;
 
     if ( !NWasp::JfxContext::Create() )
         return 2;
@@ -109,7 +105,7 @@ int main (int argc, char** argv)
     NWasp::Input::Destroy();
     NWasp::EffectManager::Destroy();
     NWasp::StateManager::Destroy();
-    NWasp::CgContext::Destroy();
+    NWasp::JfxContext::Destroy();
     NWasp::Window::Destroy();
     
     return 0;
