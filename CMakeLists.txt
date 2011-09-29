@@ -20,8 +20,6 @@ set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall" )
 #
 find_package(                       OpenGL      REQUIRED )
 
-find_package(                       Cg          REQUIRED )
-
 set( joemath_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/joemath/include" )
 set( joemath_LIBRARY      libjoemathStatic )
 
@@ -38,11 +36,6 @@ set( glee_INCLUDE_DIR    "${CMAKE_SOURCE_DIR}/glee/include")
 set( glee_LIBRARY         libgleeStatic )
 
 #
-# Create the model_compiler
-#
-add_subdirectory( model_compiler )
-
-#
 # Create the main engine
 #
 
@@ -52,8 +45,8 @@ set( wasp_sources       src/main.cpp
                         src/camera.hpp
                         src/camera_manager.cpp
                         src/camera_manager.hpp
-                        src/cg_context.cpp
-                        src/cg_context.hpp
+                        #src/cg_context.cpp
+                        #src/cg_context.hpp
                         src/effect.cpp
                         src/effect.hpp
                         src/effect_manager.cpp
@@ -100,14 +93,20 @@ set( wasp_model_sources     ${wasp_data_dir}/models/bunny.ply )
 
 add_executable( wasp    ${wasp_sources} ) 
 
-set_target_properties( wasp PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -stdlib=libc++" )
+if( ${CMAKE_CXX_COMPILER_ID} MATCHES "clang" )
+  set( CXX11_FLAGS -std=c++0x -stdlib=libc++ )
+else()
+  set( CXX11_FLAGS -std=c++0x )
+endif()
 
-include_directories( ${joemath_INCLUDE_DIR} ${joefile_INCLUDE_DIR} ${joefx_INCLUDE_DIR} ${glfw_INCLUDE_DIR} ${glee_INCLUDE_DIR} ${CG_INCLUDE_DIR} )
+set_target_properties( wasp PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS} ${CXX11_FLAGS}" )
 
-set( GL_LIBS ${OPENGL_LIBRARY} ${glfw_LIBRARY} ${glee_LIBRARY} ${CG_LIBRARY} ${CG_GL_LIBRARY} )
+include_directories( ${joemath_INCLUDE_DIR} ${joefile_INCLUDE_DIR} ${joefx_INCLUDE_DIR} ${glfw_INCLUDE_DIR} ${glee_INCLUDE_DIR} )
+
+set( GL_LIBS ${OPENGL_LIBRARY} ${glfw_LIBRARY} ${glee_LIBRARY} )
 
 if( UNIX AND NOT APPLE AND NOT CYGWIN )
-    list( APPEND GL_LIBS X11 Xrandr Xxf86vm )
+    list( APPEND GL_LIBS rt X11 Xrandr Xxf86vm )
 endif()
 
 if( UNIX AND APPLE )
@@ -119,28 +118,32 @@ if( WINDOWS )
     list( APPEND GL_LIBS opengl32 )
 endif()
 
-target_link_libraries( wasp ${joemath_LIBRARY} ${joefile_LIBRARY} ${joefx_LIBRARY} ${GL_LIBS} c++ )
+target_link_libraries( wasp ${joemath_LIBRARY} ${joefile_LIBRARY} ${joefx_LIBRARY} ${GL_LIBS} )
+
+if( ${CMAKE_CXX_COMPILER_ID} MATCHES "clang" )
+  target_link_libraries( wasp c++ )
+endif()  
 
 #
 # Copy shaders
 #
 
-foreach( FILENAME ${wasp_effect_sources} )
-    set( SRC "${CMAKE_SOURCE_DIR}/${FILENAME}" )
-    set( DST "${CMAKE_BINARY_DIR}/${FILENAME}" )
-    
-    add_custom_command( OUTPUT ${FILENAME}
-                        COMMAND ${CG_COMPILER} -noentry -strict -glslWerror -I ${CMAKE_SOURCE_DIR}/src ${SRC}
-                        COMMAND ${CMAKE_COMMAND} -E copy ${SRC} ${DST}
-                        DEPENDS ${SRC}
-                        IMPLICIT_DEPENDS CXX ${SRC}
-                        COMMENT "Checking ${FILENAME}" )
-endforeach( )
-
-add_custom_target( wasp_effects
-                   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/src/attribute_indices.hpp ${CMAKE_BINARY_DIR}/${wasp_data_dir}/effects/attribute_indices.hpp
-                   DEPENDS  ${wasp_effect_sources} )
-add_dependencies( wasp wasp_effects )
+#foreach( FILENAME ${wasp_effect_sources} )
+    #set( SRC "${CMAKE_SOURCE_DIR}/${FILENAME}" )
+    #set( DST "${CMAKE_BINARY_DIR}/${FILENAME}" )
+#    
+    #add_custom_command( OUTPUT ${FILENAME}
+                        #COMMAND ${CG_COMPILER} -noentry -strict -glslWerror -I ${CMAKE_SOURCE_DIR}/src ${SRC}
+                        #COMMAND ${CMAKE_COMMAND} -E copy ${SRC} ${DST}
+                        #DEPENDS ${SRC}
+                        #IMPLICIT_DEPENDS CXX ${SRC}
+                        #COMMENT "Checking ${FILENAME}" )
+#endforeach( )
+#
+#add_custom_target( wasp_effects
+                   #COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/src/attribute_indices.hpp ${CMAKE_BINARY_DIR}/${wasp_data_dir}/effects/attribute_indices.hpp
+                   #DEPENDS  ${wasp_effect_sources} )
+#add_dependencies( wasp wasp_effects )
 
 #
 # Compile models
@@ -191,3 +194,9 @@ add_subdirectory( joefx EXCLUDE_FROM_ALL )
 add_subdirectory( glfw EXCLUDE_FROM_ALL )
 
 add_subdirectory( glee EXCLUDE_FROM_ALL )
+
+#
+# Create the model_compiler
+#
+
+add_subdirectory( model_compiler )
