@@ -35,6 +35,7 @@
 #include "effect_manager.hpp"
 #include "fly_camera.hpp"
 #include "input.hpp"
+#include "jfx_context.hpp"
 #include "model.hpp"
 #include "scene.hpp"
 #include "state_manager.hpp"
@@ -45,21 +46,13 @@ using namespace JoeMath;
 
 int main (int argc, char** argv)
 {
-    JoeFx::Context context;
-    context.Init();
-
-    JoeFx::Effect* effect;
-    effect = context.LoadCompiledEffect( "/Users/jophish/projects/wasp/joefx/passthrough.jfxc" );
-
-    if( effect == nullptr )
-        return 1;
-    
-    return 0;
-
     if ( !NWasp::Window::Create() )
         return 1;
 
     if ( !NWasp::CgContext::Create() )
+        return 2;
+
+    if ( !NWasp::JfxContext::Create() )
         return 2;
 
     if ( !NWasp::StateManager::Create() )
