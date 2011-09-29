@@ -37,7 +37,6 @@
 #include <joefx/effect.hpp>
 #include <joemath/joemath.hpp>
 #include "attribute_indices.hpp"
-#include "cg_context.hpp"
 #include "jfx_context.hpp"
 #include "render_target.hpp"
 #include "renderable.hpp"
@@ -91,22 +90,9 @@ namespace NWasp
 
     std::string     Effect::GetName ( ) const
     {
-        return std::string( cgGetEffectName( m_cgEffect ) );
+	return "ImplementMe";
     }        
     
-    //TODO removeme
-    void            Effect::Bind    ( ) const
-    {
-        CGtechnique technique = cgGetFirstTechnique( m_cgEffect );
-        CGpass      pass = cgGetFirstPass( technique );
-        cgSetPassState( pass );
-    }
-    
-    CGeffect        Effect::GetCgEffect()
-    {
-        return m_cgEffect;
-    }
-
     JoeFx::Effect* Effect::GetJfxEffect()
     {
         return m_jfxEffect;
@@ -114,6 +100,7 @@ namespace NWasp
     
     void            Effect::RenderPrimitive( Renderable* primitive ) const
     {
+      /*
         CGtechnique technique = cgGetFirstTechnique( m_cgEffect );
         CGpass      pass      = cgGetFirstPass( technique );
         
@@ -127,34 +114,36 @@ namespace NWasp
             cgResetPassState( pass );
             pass = cgGetNextPass( pass );
         }
+        */
     }
 
     void            Effect::SetModelViewProjection ( const float4x4& modelViewProjection ) const
     {
-        CGparameter param = cgGetEffectParameterBySemantic( m_cgEffect, "MODELVIEWPROJECTION" );
-        cgSetMatrixParameterfr( param, reinterpret_cast<const float*>(&modelViewProjection) );
+        //CGparameter param = cgGetEffectParameterBySemantic( m_cgEffect, "MODELVIEWPROJECTION" );
+        //cgSetMatrixParameterfr( param, reinterpret_cast<const float*>(&modelViewProjection) );
     }
 
     void            Effect::SetModel               ( const float4x4& model ) const
     {
-        CGparameter param = cgGetEffectParameterBySemantic( m_cgEffect, "MODEL" );
-        cgSetMatrixParameterfr( param, reinterpret_cast<const float*>(&model) );
+        //CGparameter param = cgGetEffectParameterBySemantic( m_cgEffect, "MODEL" );
+        //cgSetMatrixParameterfr( param, reinterpret_cast<const float*>(&model) );
     }
 
     void            Effect::SetParameterBySemantic    ( const float3& v, const char* semantic ) const
     {
-        CGparameter param = cgGetEffectParameterBySemantic( m_cgEffect, semantic );
-        cgSetParameter3fv( param, reinterpret_cast<const float*>(&v) );
+        //CGparameter param = cgGetEffectParameterBySemantic( m_cgEffect, semantic );
+        //cgSetParameter3fv( param, reinterpret_cast<const float*>(&v) );
     }
 
     void            Effect::SetParameterBySemantic    ( const float v, const char* semantic ) const
     {
-        CGparameter param = cgGetEffectParameterBySemantic( m_cgEffect, semantic );
-        cgSetParameter1f( param, v );
+        //CGparameter param = cgGetEffectParameterBySemantic( m_cgEffect, semantic );
+        //cgSetParameter1f( param, v );
     }
 
     void            Effect::InitializeConstants       () const
     {
+      /*
         CGparameter p = cgGetFirstEffectParameter( m_cgEffect );
         while( p != nullptr )
         {
@@ -178,10 +167,12 @@ namespace NWasp
             }
             p = cgGetNextParameter( p );
         }
+        */
     }
 
     void            Effect::AllocateBuffers           ()
     {
+      /*
         //TODO this could probably be moved to scene manager
 
         std::queue<CGparameter> pending_render_buffers;
@@ -489,5 +480,6 @@ namespace NWasp
             //cgGLSetupSampler( p, texture );
             glBindTexture( GL_TEXTURE_1D, 0 );
         }
+        */
     }
 };

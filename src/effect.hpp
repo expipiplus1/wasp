@@ -30,9 +30,8 @@
 
 #include <string>
 #include <vector>
-#include <Cg/cg.h>
 #include <joemath/joemath.hpp>
-#include <joefx/Effect.hpp>
+#include <joefx/effect.hpp>
 #include "render_target.hpp"
 
 using namespace JoeMath;
@@ -50,7 +49,6 @@ namespace NWasp
         bool            Load                    ( std::string     filename );
         bool            Reload                  ( );
 
-        CGeffect        GetCgEffect             ( );
         JoeFx::Effect*  GetJfxEffect            ( );
         std::string     GetName                 ( ) const;
         
@@ -70,7 +68,6 @@ namespace NWasp
     private:
         std::string                 m_name;
         std::string                 m_filename;
-        CGeffect                    m_cgEffect;
         JoeFx::Effect*              m_jfxEffect;
 
         std::vector<RenderTarget>   m_renderTargets;

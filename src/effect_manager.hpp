@@ -30,7 +30,6 @@
 
 #include <string>
 #include <unordered_map>
-#include "Cg/cg.h"
 #include "effect.hpp"
 
 namespace NWasp
@@ -56,7 +55,7 @@ namespace NWasp
         Effect*                 LoadEffect          ( std::string filename, bool is_scene_effect = false );
 
     private:
-        void                    ConnectParameters   ( CGeffect scene, CGeffect material ) const;
+        //void                    ConnectParameters   ( CGeffect scene, CGeffect material ) const;
         
         std::unordered_map<std::string, Effect> m_effects;
         Effect*                                 m_sceneEffect;

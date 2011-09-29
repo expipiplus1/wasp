@@ -97,12 +97,13 @@ namespace NWasp
             
             for( auto i : m_effects )
             {
-                if( i.second.GetCgEffect() != m_sceneEffect->GetCgEffect() )
-                {
-                    CGeffect scene_effect = effect->GetCgEffect();
-                    CGeffect material_effect = i.second.GetCgEffect();
-                    ConnectParameters( scene_effect, material_effect );
-                }
+                //TODO
+                //if( i.second.GetCgEffect() != m_sceneEffect->GetCgEffect() )
+                //{
+                    //CGeffect scene_effect = effect->GetCgEffect();
+                    //CGeffect material_effect = i.second.GetCgEffect();
+                    //ConnectParameters( scene_effect, material_effect );
+                //}
             }
         }
         else
@@ -112,9 +113,10 @@ namespace NWasp
             //
             if( m_sceneEffect != nullptr )
             {
-                CGeffect scene_effect = m_sceneEffect->GetCgEffect();
-                CGeffect material_effect = effect->GetCgEffect();
-                ConnectParameters( scene_effect, material_effect );
+                //TODO 
+                //CGeffect scene_effect = m_sceneEffect->GetCgEffect();
+                //CGeffect material_effect = effect->GetCgEffect();
+                //ConnectParameters( scene_effect, material_effect );
             }
         }
 
@@ -132,6 +134,7 @@ namespace NWasp
         return effect;
     }
     
+    /*
     void EffectManager::ConnectParameters(CGeffect scene, CGeffect material) const
     {
         CGparameter param = cgGetFirstEffectParameter( scene );
@@ -163,4 +166,5 @@ namespace NWasp
             param = cgGetNextParameter( param );
         }
     }
+    */
 };

@@ -32,8 +32,6 @@
 #include <iostream>
 #include <stack>
 #include <vector>
-#include <Cg/cg.h>
-#include <Cg/cgGL.h>
 #include <joemath/joemath.hpp>
 #include "camera.hpp"
 #include "camera_manager.hpp"
@@ -47,6 +45,12 @@ namespace NWasp
     StateManager* StateManager::s_instance = nullptr;
 
     StateManager::StateManager          ( )
+    :m_renderScene( false )
+    ,m_renderFullscreenQuad( false )
+    ,m_clearColor( float4( 0.0f, 0.0f, 0.0f, 0.0f ) )
+    ,m_clear( false )
+    ,m_newRenderTarget( true )
+    ,m_newClearColor( true )
     {
     }
 

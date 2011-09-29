@@ -90,16 +90,16 @@ namespace NWasp
         //
         // States
         //
-        bool                    m_renderScene = false;
-        bool                    m_renderFullscreenQuad = false;
+        bool                    m_renderScene;
+        bool                    m_renderFullscreenQuad;
         
         std::vector<RenderTarget>   m_renderTargets;
         std::stack<u32>             m_currentRenderTargetIndices;
-        bool                        m_newRenderTarget = true;
+        bool                        m_newRenderTarget;
 
-        float4                      m_clearColor = float4( 0.0f, 0.0f, 0.0f, 0.0f );
-        bool                        m_newClearColor = true;
+        float4                      m_clearColor;
+        bool                        m_newClearColor;
 
-        bool                        m_clear = false;
+        bool                        m_clear;
     };
 };

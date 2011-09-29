@@ -31,8 +31,6 @@
 #include <cassert>
 #include <iostream>
 #include <list>
-#include <Cg/cg.h>
-#include <Cg/cgGL.h>
 #include <joemath/joemath.hpp>
 #include "camera.hpp"
 #include "camera_manager.hpp"
@@ -105,33 +103,34 @@ namespace NWasp
         m_effect->SetParameterBySemantic( CameraManager::Instance()->GetCurrentCamera()->GetPosition(),    "CAMERAPOSITION" );
         m_effect->SetParameterBySemantic( NTime::GetApplicationTime(),    "TIME" );
         
-        CGeffect    effect      = m_effect->GetCgEffect();
-        CGtechnique technique   = cgGetFirstTechnique( effect );
-        CGpass      pass        = cgGetFirstPass( technique );
+        //TODO
+        //CGeffect    effect      = m_effect->GetCgEffect();
+        //CGtechnique technique   = cgGetFirstTechnique( effect );
+        //CGpass      pass        = cgGetFirstPass( technique );
 
         StateManager* state_manager = StateManager::Instance();
         
-        while( pass != nullptr )
-        {
-            cgSetPassState( pass );
-            state_manager->ApplyState();
-            
-            if( state_manager->GetRenderScene() )
-            {
-                for( auto r : m_renderables )
-                    r->Render();
-                std::cout << "rendering scene\n";
-            }
-
-            if( state_manager->GetRenderFullscreenQuad() )
-            {
-                m_quad->Render();
-                std::cout << "rendering quad\n";
-            }
-
-            cgResetPassState( pass );
-            pass = cgGetNextPass( pass );
-        }
+        //while( pass != nullptr )
+        //{
+            //cgSetPassState( pass );
+            //state_manager->ApplyState();
+//            
+            //if( state_manager->GetRenderScene() )
+            //{
+                //for( auto r : m_renderables )
+                    //r->Render();
+                //std::cout << "rendering scene\n";
+            //}
+//
+            //if( state_manager->GetRenderFullscreenQuad() )
+            //{
+                //m_quad->Render();
+                //std::cout << "rendering quad\n";
+            //}
+//
+            //cgResetPassState( pass );
+            //pass = cgGetNextPass( pass );
+        //}
         std::cout << "error: " <<  glGetError() << "\n";
         std::cout << "\n";
     }

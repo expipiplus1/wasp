@@ -84,8 +84,8 @@ namespace NWasp
         //
         // States
         //
-        bool                    m_renderScene = false;
-        bool                    m_renderFullscreenQuad = false;
+        bool                    m_renderScene;
+        bool                    m_renderFullscreenQuad;
         
         std::list<Updatable*>   m_updatables;
         std::list<Renderable*>  m_renderables;
