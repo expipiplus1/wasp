@@ -14,9 +14,13 @@ set( model_compiler_sources src/main.cpp
                             src/compiler.cpp )
 
 add_executable( model_compiler    ${model_compiler_sources} ) 
-target_link_libraries( model_compiler assimp ${joefile_LIBRARY} ${joemath_LIBRARY} c++ )
+target_link_libraries( model_compiler assimp ${joefile_LIBRARY} ${joemath_LIBRARY} )
 
-set_target_properties( model_compiler PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -stdlib=libc++" )
+if( ${CMAKE_CXX_COMPILER_ID} MATCHES "clang" )
+  target_link_libraries( model_compiler c++ )
+endif()
+
+set_target_properties( model_compiler PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS} ${CXX11_FLAGS}" )
 
 include_directories( ${joemath_INCLUDE_DIR} )
 include_directories( ${joefile_INCLUDE_DIR} )
