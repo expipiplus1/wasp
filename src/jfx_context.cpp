@@ -96,7 +96,7 @@ namespace NWasp
         s_instance = nullptr;
     }
     
-    const JoeFx::Context&       JfxContext::GetJfxContext    ( ) const
+    JoeFx::Context&       JfxContext::GetJfxContext    ( )
     {
         return m_jfxContext;
     }
@@ -113,7 +113,7 @@ namespace NWasp
     {
         int num_values;
         const CGbool* clear = cgGetBoolStateAssignmentValues( state_assignment, &num_values );
-        
+
         assert( clear != nullptr );
             
         StateManager::Instance()->SetClear( *clear == CG_TRUE );

@@ -34,11 +34,11 @@
 #include <queue>
 #include <string>
 #include "wasp_gl.hpp"
-#include <Cg/cg.h>
-#include <Cg/cgGL.h>
+#include <joefx/effect.hpp>
 #include <joemath/joemath.hpp>
 #include "attribute_indices.hpp"
 #include "cg_context.hpp"
+#include "jfx_context.hpp"
 #include "render_target.hpp"
 #include "renderable.hpp"
 #include "state_manager.hpp"
@@ -58,13 +58,16 @@ namespace NWasp
 
     bool            Effect::Load    ( std::string filename )
     {        
+        filename = "passthrough.jfxc";
         m_filename = filename;
-        m_cgEffect = cgCreateEffectFromFile( CgContext::Instance( )->GetCgContext( ), filename.c_str(), nullptr );
+        m_jfxEffect = JfxContext::Instance()->GetJfxContext().LoadCompiledEffect( filename );
+        //m_cgEffect = cgCreateEffectFromFile( CgContext::Instance( )->GetCgContext( ), filename.c_str(), nullptr );
 
-        CGtechnique technique = cgGetFirstTechnique( m_cgEffect );
+        bool valid = m_jfxEffect->begin()->Validate();
+        //CGtechnique technique = cgGetFirstTechnique( m_cgEffect );
 
-        CGbool valid;
-        valid = cgValidateTechnique( technique );
+        //CGbool valid;
+        //valid = cgValidateTechnique( technique );
         
         if (!valid)
         {
@@ -77,10 +80,10 @@ namespace NWasp
     
     bool            Effect::Reload  ( )
     {
-        CGeffect old_effect = m_cgEffect;
+        //CGeffect old_effect = m_cgEffect;
         if( !Load( m_filename ) )
         {
-            m_cgEffect = old_effect;
+            //m_cgEffect = old_effect;
             return false;
         }
         return true;
@@ -102,6 +105,11 @@ namespace NWasp
     CGeffect        Effect::GetCgEffect()
     {
         return m_cgEffect;
+    }
+
+    JoeFx::Effect* Effect::GetJfxEffect()
+    {
+        return m_jfxEffect;
     }
     
     void            Effect::RenderPrimitive( Renderable* primitive ) const
@@ -163,8 +171,8 @@ namespace NWasp
                 u8* data = new u8[512];
                 for( u32 i = 0; i < 512; ++i )
                     data[i] = i;
-                CGbuffer buffer = cgGLCreateBuffer( CgContext::Instance()->GetCgContext(), 512, data, GL_STATIC_DRAW );
-                //CGbuffer buffer = cgCreateBuffer( CgContext::Instance()->GetCgContext(), 512, data, CG_BUFFER_USAGE_STATIC_DRAW );
+                //CGbuffer buffer = cgGLCreateBuffer( CgContext::Instance()->GetCgContext(), 512, data, GL_STATIC_DRAW );
+                CGbuffer buffer = cgCreateBuffer( CgContext::Instance()->GetCgContext(), 512, data, CG_BUFFER_USAGE_STATIC_DRAW );
                 cgSetEffectParameterBuffer( p, buffer );
                 std::cout << semantic << "\n";
             }
@@ -419,7 +427,7 @@ namespace NWasp
                 
             }
             std::cout << "setupsampler: " << texture << "\n";
-            cgGLSetupSampler( p, texture );
+            //cgGLSetupSampler( p, texture );
             glBindTexture( GL_TEXTURE_2D, 0 );
             //cgGLSetTextureParameter( p, texture ); 
             //cgSetSamplerState( p );
@@ -478,7 +486,7 @@ namespace NWasp
             glTexImage1D( GL_TEXTURE_1D, 0, GL_R8, size, 0, GL_RED, GL_UNSIGNED_BYTE, data );
                 
             std::cout << "setupsampler1: " << texture << "\n";
-            cgGLSetupSampler( p, texture );
+            //cgGLSetupSampler( p, texture );
             glBindTexture( GL_TEXTURE_1D, 0 );
         }
     }

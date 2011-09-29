@@ -57,7 +57,7 @@ namespace NWasp
         //
         // Getters
         //
-        const JoeFx::Context&           GetJfxContext                ( ) const;
+        JoeFx::Context&           GetJfxContext                ( );
 
     private:
         /*

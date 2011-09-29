@@ -32,6 +32,7 @@
 #include <vector>
 #include <Cg/cg.h>
 #include <joemath/joemath.hpp>
+#include <joefx/Effect.hpp>
 #include "render_target.hpp"
 
 using namespace JoeMath;
@@ -50,6 +51,7 @@ namespace NWasp
         bool            Reload                  ( );
 
         CGeffect        GetCgEffect             ( );
+        JoeFx::Effect*  GetJfxEffect            ( );
         std::string     GetName                 ( ) const;
         
         void            RenderPrimitive         ( Renderable* primitive ) const;
@@ -69,6 +71,7 @@ namespace NWasp
         std::string                 m_name;
         std::string                 m_filename;
         CGeffect                    m_cgEffect;
+        JoeFx::Effect*              m_jfxEffect;
 
         std::vector<RenderTarget>   m_renderTargets;
     };
