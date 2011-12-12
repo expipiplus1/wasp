@@ -85,7 +85,7 @@ namespace NTime
         if(m_running)
             gettimeofday(&m_endTime, nullptr);
         
-        return (m_endTime.tv_sec - m_startTime.tv_sec) + double(m_endTime.tv_usec - m_startTime.tv_usec) * 0.0000001;
+        return (m_endTime.tv_sec - m_startTime.tv_sec) + double(m_endTime.tv_usec - m_startTime.tv_usec) * 0.000001;
     #endif
     }
 };
